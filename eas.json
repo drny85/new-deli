@@ -1,0 +1,41 @@
+{
+   "cli": {
+      "version": ">= 9.1.0"
+   },
+   "build": {
+      "development": {
+         "channel": "development",
+         "developmentClient": true,
+         "distribution": "internal",
+         "env": {
+            "GOOGLE_SERVICES_FILE": "./GoogleService-Info.plist"
+         },
+         "ios": {
+            "resourceClass": "medium"
+         }
+      },
+      "simulator": {
+         "extends": "development",
+         "ios": {
+            "simulator": true
+         }
+      },
+
+      "preview": {
+         "distribution": "internal",
+         "channel": "preview"
+      },
+      "production": {
+         "channel": "production",
+         "env": {
+            "GOOGLE_SERVICES_FILE": "./GoogleService-Info.plist"
+         },
+         "ios": {
+            "resourceClass": "medium"
+         }
+      }
+   },
+   "submit": {
+      "production": {}
+   }
+}

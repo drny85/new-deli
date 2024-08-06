@@ -1,0 +1,7 @@
+{
+   "projects": {
+      "default": "deli-8cd19",
+      "dev": "deli-8cd19",
+      "prod": "deli-8cd19"
+   }
+}
