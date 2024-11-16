@@ -8,6 +8,7 @@ const config: ExpoConfig = {
    icon: './assets/images/icon.png',
    scheme: 'new-deli',
    userInterfaceStyle: 'automatic',
+   newArchEnabled: true,
    splash: {
       image: './assets/images/splash.png',
       resizeMode: 'cover',
@@ -17,6 +18,7 @@ const config: ExpoConfig = {
       supportsTablet: true,
       bundleIdentifier: 'net.robertdev.new-deli',
       buildNumber: '1.0.3',
+
       usesAppleSignIn: true,
       associatedDomains: ['applinks:yourdeliapp.com'],
       infoPlist: {
@@ -59,7 +61,7 @@ const config: ExpoConfig = {
    plugins: [
       'expo-router',
       'expo-apple-authentication',
-
+      'expo-build-properties',
       'expo-font',
       [
          'expo-location',
