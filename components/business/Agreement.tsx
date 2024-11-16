@@ -1,5 +1,5 @@
 import { SIZES } from '@/constants/Colors'
-
+import Constants from 'expo-constants'
 import { ScrollView, StyleSheet, Button, Alert } from 'react-native'
 import { View } from '../ThemedView'
 import { Text } from '../ThemedText'
@@ -30,7 +30,7 @@ const TermsOfUse = ({ onPressDisagree }: Props) => {
       })
       router.dismissAll()
       if (returnUrl) {
-         router.push(returnUrl)
+         router.push(returnUrl as any)
       } else {
          router.back()
       }
@@ -59,11 +59,11 @@ const TermsOfUse = ({ onPressDisagree }: Props) => {
             </Text>
             <Text style={styles.subHeader}>Last Updated: 07/05/2024</Text>
             <Text style={styles.text}>
-               Welcome to [Your App Name], a food delivery service provided by [Your Company Name]
-               ("we," "our," or "us"). These Terms of Use ("Terms") govern the relationship between
-               [Your Company Name] and the restaurant ("Restaurant" or "you") regarding the use of
-               our platform and services. By signing up and using our services, you agree to these
-               Terms.
+               Welcome to {Constants.expoConfig?.name}, a food delivery service provided by [Your
+               Company Name] ("we," "our," or "us"). These Terms of Use ("Terms") govern the
+               relationship between [Your Company Name] and the restaurant ("Restaurant" or "you")
+               regarding the use of our platform and services. By signing up and using our services,
+               you agree to these Terms.
             </Text>
          </View>
          <View style={styles.section}>

@@ -59,18 +59,7 @@ const config: ExpoConfig = {
    plugins: [
       'expo-router',
       'expo-apple-authentication',
-      [
-         'expo-build-properties',
-         {
-            ios: {
-               deploymentTarget: '14.0',
-               newArchEnabled: true
-            },
-            android: {
-               newArchEnabled: true
-            }
-         }
-      ],
+
       'expo-font',
       [
          'expo-location',

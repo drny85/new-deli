@@ -5,10 +5,9 @@ import { Cart, useCartsStore } from '@/stores/cartsStore'
 import Row from '../Row'
 import { Text } from '../ThemedText'
 import { useRestaurant } from '@/hooks/restaurants/useRestaurant'
-import { Image } from 'expo-image'
 import { View } from '../ThemedView'
 import Button from '../Button'
-import { Alert, Platform, Pressable, TouchableOpacity, useColorScheme } from 'react-native'
+import { Alert, Image, Platform, Pressable, TouchableOpacity, useColorScheme } from 'react-native'
 import { SymbolView } from 'expo-symbols'
 import { router } from 'expo-router'
 import { toastMessage } from '@/utils/toast'
@@ -71,7 +70,7 @@ const CartListItemView = ({ cart }: Props) => {
                <Pressable onPress={goToStore}>
                   <Image
                      source={{ uri: restaurant?.image! }}
-                     transition={300}
+                     //transition={300}
                      style={{
                         width: IMAGE_HEIGHT,
                         height: IMAGE_HEIGHT,

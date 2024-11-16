@@ -175,7 +175,7 @@ const Restaurants = () => {
                showsVerticalScrollIndicator={false}
                ListFooterComponent={<View style={{ height: SIZES.md }} />}
                keyExtractor={(item) => item.id!}
-               estimatedItemSize={SIZES.height * 0.22}
+               estimatedItemSize={210}
                ListEmptyComponent={
                   <View style={{ marginTop: 60 }}>
                      <Text style={{ textAlign: 'center' }} type="defaultSemiBold">
