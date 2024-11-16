@@ -10,25 +10,27 @@ const ThemeToogle = () => {
    const bgColor = useThemeColor('primary')
    const dark = useColorScheme() === 'dark'
    const animateState = useAnimationState({
-      off: {
+      from: {
          translateX: containerWidth - innerWidth
       },
-      on: {
+      to: {
          translateX: 0
       }
    })
+   console.log(animateState.current)
    return (
       <TouchableOpacity
          onPress={() =>
             animateState.transitionTo((state) => {
-               if (state === 'off') {
-                  Appearance.setColorScheme('dark')
-
-                  return 'on'
-               } else {
+               console.log(state)
+               if (state === 'from') {
                   Appearance.setColorScheme('light')
 
-                  return 'off'
+                  return 'from'
+               } else {
+                  Appearance.setColorScheme('dark')
+
+                  return 'to'
                }
             })
          }>
