@@ -1,5 +1,12 @@
 import { SIZES } from '@/constants/Colors'
-import { StyleProp, StyleSheet, TextInput, TextInputProps, ViewStyle } from 'react-native'
+import {
+   StyleProp,
+   StyleSheet,
+   TextInput,
+   TextInputProps,
+   ViewStyle,
+   TextStyle
+} from 'react-native'
 import { View } from './ThemedView'
 import { Text } from './ThemedText'
 import NeoView from './NeoView'
@@ -9,7 +16,7 @@ import { forwardRef, ReactNode } from 'react'
 type Props = TextInputProps & {
    title?: string
    error?: string
-   containerStyle?: StyleProp<ViewStyle>
+   containerStyle?: TextStyle
    contentContainerStyle?: StyleProp<ViewStyle>
    RightIcon?: ReactNode
    LeftIcon?: ReactNode
@@ -47,9 +54,9 @@ const Input = forwardRef<TextInput, Props>(
                            borderColor: bgColor,
                            paddingLeft: LeftIcon ? SIZES.md * 1.3 : 12,
                            backgroundColor: background,
-                           shadowColor: 'transparent',
                            color: textColor
                         },
+
                         containerStyle
                      ]}
                      {...props}
@@ -70,9 +77,10 @@ const styles = StyleSheet.create({
       height: 46,
       borderWidth: 1,
       padding: 10,
-      borderRadius: SIZES.lg,
+      borderRadius: SIZES.sm,
       width: '100%',
       fontSize: 18,
+      boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
       fontFamily: 'Montserrat'
    },
    title: {

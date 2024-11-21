@@ -1,5 +1,6 @@
 import { placePendingOrder } from '@/actions/orders'
 import BackButton from '@/components/BackButton'
+import Button from '@/components/Button'
 import AnimatedRestaurantMap from '@/components/checkout/AnimatedRestaurantMap'
 import CartItems from '@/components/checkout/CartItems'
 import TipsCalculator from '@/components/checkout/TipCalculator'
@@ -7,8 +8,8 @@ import TotalView from '@/components/checkout/TotalView'
 import Divider from '@/components/Divider'
 import Loading from '@/components/Loading'
 import NeoView from '@/components/NeoView'
-import InstructionBottomSheet from '@/components/restaurants/InstructionBottomSheet'
 import Row from '@/components/Row'
+import { Sheet, useSheetRef } from '@/components/Sheet'
 import StripeProviderComponent from '@/components/StripeProvider'
 import { Text } from '@/components/ThemedText'
 import { View } from '@/components/ThemedView'
@@ -24,12 +25,13 @@ import { extractZipCode } from '@/utils/extractZipcode'
 import { getDistanceFromLatLonInMeters } from '@/utils/getDistanceInMeters'
 import { toastAlert, toastMessage } from '@/utils/toast'
 import { Feather } from '@expo/vector-icons'
-import BottomSheet from '@gorhom/bottom-sheet'
+import BottomSheet, { BottomSheetTextInput } from '@gorhom/bottom-sheet'
 import { useNetInfo } from '@react-native-community/netinfo'
 import { Image } from 'expo-image'
 import { Redirect, router, useLocalSearchParams } from 'expo-router'
+import { AnimatePresence, MotiView } from 'moti'
 import { useEffect, useRef, useState } from 'react'
-import { Alert, ScrollView, TouchableOpacity } from 'react-native'
+import { Alert, Keyboard, ScrollView, StyleSheet, TouchableOpacity } from 'react-native'
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
@@ -39,9 +41,10 @@ type Params = {
 const Checkout = () => {
    const { user } = useAuth()
    const { isInternetReachable } = useNetInfo()
-   const bottomSheetRef = useRef<BottomSheet>(null)
+   const bottomSheetRef = useSheetRef()
    const bottomSheetRefTip = useRef<BottomSheet>(null)
    const ascent = useThemeColor('icon')
+   const textColor = useThemeColor('text')
    const backgroundColor = useThemeColor('background')
    const { top } = useSafeAreaInsets()
    const { restaurantId } = useLocalSearchParams<Params>()
@@ -348,7 +351,7 @@ const Checkout = () => {
                         <Divider size="small" />
                         <TouchableOpacity
                            onPress={() => {
-                              bottomSheetRef.current?.snapToIndex(2)
+                              bottomSheetRef.current?.present()
                            }}>
                            <Text type="defaultSemiBold">Delivery Instructions</Text>
                            <Row align="between">
@@ -398,11 +401,15 @@ const Checkout = () => {
                         />
                      </Row>
                   </TouchableOpacity>
-                  {showItems && (
-                     <Animated.View entering={FadeIn} exiting={FadeOut}>
-                        <CartItems items={cart.items} showAddMoreItemsButton={false} />
-                     </Animated.View>
-                  )}
+                  <AnimatePresence>
+                     {showItems && (
+                        <MotiView
+                           from={{ opacity: 0, translateY: -20 }}
+                           animate={{ opacity: 1, translateY: 0 }}>
+                           <CartItems items={cart.items} showAddMoreItemsButton={false} />
+                        </MotiView>
+                     )}
+                  </AnimatePresence>
                </ScrollView>
                <View>
                   <TotalView
@@ -416,12 +423,36 @@ const Checkout = () => {
                   />
                </View>
             </View>
-            <InstructionBottomSheet
-               instructions={deliveryInstruction}
-               setInstructions={setDeliveryInstruction}
-               bottomSheetRef={bottomSheetRef}
-               placeholder="Any note for the delivery person"
-            />
+            <Sheet snapPoints={['50%']} ref={bottomSheetRef} topInset={SIZES.statusBarHeight}>
+               <View
+                  style={{
+                     padding: SIZES.md,
+                     marginTop: 20
+                  }}>
+                  <Text type="defaultSemiBold">Special Instructions</Text>
+                  <BottomSheetTextInput
+                     style={[styles.container, { color: textColor }]}
+                     placeholder="Any note for the delivery person"
+                     value={deliveryInstruction}
+                     multiline
+                     maxLength={160}
+                     onChangeText={setDeliveryInstruction}
+                     //placeholderTextColor={theme.TEXT_COLOR + 90}
+                  />
+                  <View style={{ width: '60%', alignSelf: 'center', marginVertical: SIZES.lg }}>
+                     <Button
+                        type="soft"
+                        title={'Done'}
+                        onPress={() => {
+                           Keyboard.dismiss()
+                           bottomSheetRef.current?.close()
+                        }}
+                        containerStyle={{ borderRadius: SIZES.lg * 1.5 }}
+                     />
+                  </View>
+               </View>
+            </Sheet>
+
             <TipsCalculator bottomSheetRef={bottomSheetRefTip} orderTotal={cart.total} />
          </View>
       </StripeProviderComponent>
@@ -429,3 +460,16 @@ const Checkout = () => {
 }
 
 export default Checkout
+
+const styles = StyleSheet.create({
+   container: {
+      marginTop: 10,
+      marginBottom: 10,
+      borderRadius: 10,
+      minHeight: 70,
+      fontSize: 16,
+      lineHeight: 20,
+      padding: SIZES.md,
+      backgroundColor: 'rgba(151, 151, 151, 0.25)'
+   }
+})

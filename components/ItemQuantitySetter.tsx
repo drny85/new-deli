@@ -43,14 +43,14 @@ const ItemQuantitySetter = ({
                      style={{ paddingLeft: SIZES.sm }}
                   />
                ) : (
-                  <Feather name="minus-circle" size={26} color={ascent} />
+                  <Feather name="minus-circle" size={30} color={ascent} />
                )}
             </TouchableOpacity>
-            <Text type="title" fontSize="medium">
+            <Text type="title" fontSize="large">
                {quantity}
             </Text>
             <TouchableOpacity onPress={onPressAdd}>
-               <Feather name="plus-circle" size={26} color={ascent} />
+               <Feather name="plus-circle" size={30} color={ascent} />
                {/* <SymbolView name="plus.circle.fill" size={30} tintColor={ascent}  type="monochrome" /> */}
             </TouchableOpacity>
          </Row>

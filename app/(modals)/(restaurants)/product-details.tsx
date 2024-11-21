@@ -4,10 +4,11 @@ import AddonsSelector from '@/components/cart/MultipleAddonsSelection'
 import ItemQuantitySetter from '@/components/ItemQuantitySetter'
 import Loading from '@/components/Loading'
 import NeoView from '@/components/NeoView'
-import InstructionBottomSheet from '@/components/restaurants/InstructionBottomSheet'
+
 import SizePicker from '@/components/restaurants/SizePicker'
 import Row from '@/components/Row'
 import ShareButton from '@/components/ShareLink'
+import { Sheet, useSheetRef } from '@/components/Sheet'
 import { Text } from '@/components/ThemedText'
 import { View } from '@/components/ThemedView'
 import { ADDONS, CART_ALLOWED } from '@/constants'
@@ -19,11 +20,11 @@ import { useOrderFlowStore } from '@/stores/orderFlowStore'
 import { ORDER_TYPE, P_Size } from '@/typing'
 import { toastAlert, toastMessage } from '@/utils/toast'
 import { FontAwesome } from '@expo/vector-icons'
-import BottomSheet from '@gorhom/bottom-sheet'
+import { BottomSheetTextInput } from '@gorhom/bottom-sheet'
 import { router, useLocalSearchParams } from 'expo-router'
 import { Image } from 'moti'
-import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { ScrollView, TouchableOpacity } from 'react-native'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { Keyboard, ScrollView, StyleSheet, TouchableOpacity } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 const PIC_DIMENSIONS = SIZES.height * 0.5
@@ -39,6 +40,8 @@ const ProductDetail = () => {
    const backgroundColor = useThemeColor('background')
    const ascent = useThemeColor('ascent')
    const secondary = useThemeColor('secondary')
+   const textColor = useThemeColor('text')
+   const snapPoints = useMemo(() => ['60%'], [])
    const { bottom } = useSafeAreaInsets()
    const { createNewCart, carts, addToCart, updateCart } = useCartsStore()
    const { orderType, deliveryAddress } = useOrderFlowStore()
@@ -46,7 +49,7 @@ const ProductDetail = () => {
    const { product, loading } = useProduct(businessId!, productId!)
    const [selected, setSelected] = useState<P_Size | null>(null)
    const [quantity, setQuantity] = useState<number>(1)
-   const bottomSheetRef = useRef<BottomSheet>(null)
+   const bottomSheetRef = useSheetRef()
    const [instructions, setInstructions] = useState<string>('')
    const [showFullDescription, setShowFullDescription] = useState(false)
    const [selectedAddons, setSelectedAddons] = useState<string[]>([])
@@ -361,13 +364,13 @@ const ProductDetail = () => {
             <View>
                <Row align="between">
                   <Text type="defaultSemiBold">Special Instructions</Text>
-                  <TouchableOpacity onPress={() => bottomSheetRef.current?.snapToIndex(1)}>
+                  <TouchableOpacity onPress={() => bottomSheetRef.current?.present()}>
                      <FontAwesome name="edit" size={24} color={ascent} />
                   </TouchableOpacity>
                </Row>
 
                <TouchableOpacity
-                  onPress={() => bottomSheetRef.current?.snapToIndex(1)}
+                  onPress={() => bottomSheetRef.current?.present()}
                   style={{
                      backgroundColor: secondary + '90',
                      padding: SIZES.sm,
@@ -414,14 +417,62 @@ const ProductDetail = () => {
                />
             </View>
          </View>
-         <InstructionBottomSheet
+         <Sheet
+            snapPoints={snapPoints}
+            ref={bottomSheetRef}
+            topInset={SIZES.statusBarHeight}
+            backgroundStyle={{
+               backgroundColor
+            }}>
+            <View
+               style={{
+                  padding: SIZES.md,
+                  marginTop: 20
+               }}>
+               <Text type="defaultSemiBold">Special Instructions</Text>
+               <BottomSheetTextInput
+                  style={[styles.container, { color: textColor }]}
+                  placeholder="Dressing on the side, another request."
+                  value={instructions}
+                  multiline
+                  maxLength={160}
+                  onChangeText={setInstructions}
+                  //placeholderTextColor={theme.TEXT_COLOR + 90}
+               />
+               <View style={{ width: '60%', alignSelf: 'center', marginVertical: SIZES.lg }}>
+                  <Button
+                     type="soft"
+                     title={'Done'}
+                     onPress={() => {
+                        Keyboard.dismiss()
+                        bottomSheetRef.current?.close()
+                     }}
+                     containerStyle={{ borderRadius: SIZES.lg * 1.5 }}
+                  />
+               </View>
+            </View>
+         </Sheet>
+         {/* <InstructionBottomSheet
             instructions={instructions}
             setInstructions={setInstructions}
             bottomSheetRef={bottomSheetRef}
             placeholder="Dressing on the side, another request."
-         />
+         /> */}
       </View>
    )
 }
 
 export default ProductDetail
+
+const styles = StyleSheet.create({
+   container: {
+      marginTop: 10,
+      marginBottom: 10,
+      borderRadius: 10,
+      minHeight: 70,
+      fontSize: 16,
+      lineHeight: 20,
+      padding: SIZES.md,
+      backgroundColor: 'rgba(151, 151, 151, 0.25)'
+   }
+})

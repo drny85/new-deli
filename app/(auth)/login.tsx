@@ -31,7 +31,7 @@ const Login = () => {
    const { signIn, user } = useAuth()
    const bgColor = useThemeColor('icon')
    const [showPassword, setShowPassword] = useState(false)
-   console.log(params)
+   console.log(params, user)
 
    const {
       control,

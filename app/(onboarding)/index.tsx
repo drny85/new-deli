@@ -155,19 +155,9 @@ const Onboarding = () => {
                </TouchableOpacity>
             </Row>
             <View style={{ padding: SIZES.md }}>
-               <Animated.Text
-                  style={{
-                     fontSize: 18,
-                     fontFamily: 'Montserrat',
-                     color: textColor,
-                     textAlign: 'center'
-                  }}
-                  entering={SlideInUp.delay(600).duration(800)}>
-                  Lets get you ready for business
-               </Animated.Text>
                {progress && <ProgressBar progress={progress} />}
                {user?.emailVerified && (
-                  <View style={{ marginTop: SIZES.lg }}>
+                  <View>
                      <NeoView
                         innerStyleContainer={{
                            borderRadius: SIZES.md
@@ -387,9 +377,33 @@ const Onboarding = () => {
             </View>
             {!user?.emailVerified && (
                <View center style={{ gap: SIZES.md }}>
-                  <Text>First thing we need to do is to verify your email</Text>
-                  <Text>Please check your inbox / junk mail / spam folder</Text>
+                  <Animated.Text
+                     style={{
+                        fontSize: 18,
+                        fontFamily: 'Montserrat-Bold',
+                        color: textColor,
+                        textAlign: 'center'
+                     }}
+                     entering={SlideInUp.delay(600).duration(800)}>
+                     Lets get you ready for business
+                  </Animated.Text>
+                  <View
+                     style={{
+                        justifyContent: 'center',
+                        padding: SIZES.sm,
+                        gap: SIZES.md
+                     }}>
+                     <Text>First thing we need to do is to verify your email</Text>
+                     <Text>Please check your inbox / junk mail / spam folder</Text>
+                  </View>
                   <TouchableOpacity
+                     style={{
+                        boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
+                        paddingVertical: SIZES.sm,
+                        paddingHorizontal: SIZES.lg,
+                        backgroundColor: bgColor,
+                        borderRadius: 20
+                     }}
                      onPress={() => {
                         if (!userRecord) return
                         console.log('HERE')
@@ -406,7 +420,7 @@ const Onboarding = () => {
                            })
                         })
                      }}>
-                     <Text>I verified my email</Text>
+                     <Text type="header">I verified my email</Text>
                   </TouchableOpacity>
                </View>
             )}

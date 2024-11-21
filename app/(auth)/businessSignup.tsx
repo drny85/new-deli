@@ -78,7 +78,7 @@ const BusinessSignup = () => {
          //router.push('/(deli)/home')
          if (success) {
             mmk.set('email', values.email)
-            mmk.set('password', values.password)
+            console.log('success', success)
             router.replace('/login')
          }
       } catch (error) {
@@ -87,7 +87,7 @@ const BusinessSignup = () => {
       }
    }
 
-   if (user) return <Redirect href={params.returnUrl as any} />
+   //if (user) return <Redirect href={params.returnUrl as any} />
 
    if (isSubmitting) return <Loading />
 
