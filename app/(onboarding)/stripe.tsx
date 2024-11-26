@@ -7,9 +7,11 @@ import { useThemeColor } from '@/hooks/useThemeColor'
 import { useAuth } from '@/providers/authProvider'
 import { router, useLocalSearchParams } from 'expo-router'
 import { MotiView } from 'moti'
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { TouchableOpacity } from 'react-native'
 import WebView, { WebViewNavigation } from 'react-native-webview'
+import * as WebBrowser from 'expo-web-browser'
+WebBrowser.warmUpAsync()
 
 const StripeOnboarding = () => {
    const { url } = useLocalSearchParams<{ url: string }>()
@@ -75,6 +77,37 @@ const StripeOnboarding = () => {
          setLoading(false)
       }
    }
+
+   const init = async () => {
+      try {
+         const result = await WebBrowser.openAuthSessionAsync(url, '/account-success', {
+            createTask: true,
+            controlsColor: ascentColor,
+            dismissButtonStyle: 'close',
+            presentationStyle: WebBrowser.WebBrowserPresentationStyle.FULL_SCREEN,
+            toolbarColor: 'grey'
+         })
+         console.log('RESULT =>', result)
+         if (result.type === 'cancel') {
+            console.log('SUCCESS')
+            router.back()
+            // await checkForAccountSuccefullCreation(result.url)
+         }
+      } catch (error) {
+         console.log('Error init', error)
+      }
+   }
+
+   useEffect(() => {
+      if (!url) return
+      init()
+   }, [url])
+
+   useEffect(() => {
+      if (!restaurant?.charges_enabled) return
+      WebBrowser.dismissBrowser()
+      router.replace('/(deli)/(products)/products')
+   }, [restaurant])
    if (!url) return <Loading />
    return (
       <Container>
@@ -100,13 +133,13 @@ const StripeOnboarding = () => {
                </Text>
             </TouchableOpacity>
          </MotiView>
-         <WebView
+         {/* <WebView
             style={{ flex: 1, marginTop: SIZES.statusBarHeight }}
             ref={webViewRef}
             originWhitelist={['*']}
             source={{ uri: url }}
             onNavigationStateChange={handleNavigationChanges}
-            sharedCookiesEnabled={true}></WebView>
+            sharedCookiesEnabled={true}></WebView> */}
       </Container>
    )
 }

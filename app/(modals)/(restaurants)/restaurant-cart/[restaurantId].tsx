@@ -11,6 +11,8 @@ import { useRestaurant } from '@/hooks/restaurants/useRestaurant'
 import { useThemeColor } from '@/hooks/useThemeColor'
 import { useAuth } from '@/providers/authProvider'
 import { useCartsStore } from '@/stores/cartsStore'
+import { useOrderFlowStore } from '@/stores/orderFlowStore'
+import { ORDER_TYPE } from '@/typing'
 import { toastAlert } from '@/utils/toast'
 import { router, useLocalSearchParams } from 'expo-router'
 import { useEffect } from 'react'
@@ -24,7 +26,8 @@ const RestaurantCart = () => {
    const user = useAuth().user
    const { restaurantId } = useLocalSearchParams<Params>()
    const { restaurant, loading } = useRestaurant(restaurantId!)
-   const { getCart, removeCart } = useCartsStore()
+   const { getCart, removeCart, updateCart } = useCartsStore()
+   const setOrderType = useOrderFlowStore((s) => s.setOrderType)
    const cart = getCart(restaurantId!)
 
    const backgroundColor = useThemeColor('background')
@@ -46,6 +49,11 @@ const RestaurantCart = () => {
             })
             return
          }
+      }
+      if (restaurant?.ordersMethod === 'pickup-only') {
+         if (!cart) return
+         setOrderType('pickup')
+         updateCart(restaurantId!, { ...cart!, orderType: ORDER_TYPE.pickup })
       }
       router.push({
          pathname: '/checkout',

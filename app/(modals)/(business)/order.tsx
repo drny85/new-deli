@@ -11,6 +11,7 @@ import NeoView from '@/components/NeoView'
 import OTP from '@/components/Otp'
 import PhoneCall from '@/components/PhoneCall'
 import Row from '@/components/Row'
+import { Sheet, useSheetRef } from '@/components/Sheet'
 import { Text } from '@/components/ThemedText'
 import { View } from '@/components/ThemedView'
 import { SIZES } from '@/constants/Colors'
@@ -23,7 +24,7 @@ import { dayjsFormat } from '@/utils/dayjs'
 import { generateRandomNumbers } from '@/utils/generateRandomNumber'
 import { STATUS_NAME } from '@/utils/orderStatus'
 import { Redirect, router, Stack, useLocalSearchParams } from 'expo-router'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Alert, ScrollView } from 'react-native'
 
 const BussinessOrder = () => {
@@ -32,10 +33,10 @@ const BussinessOrder = () => {
    const { order, loading } = useOrder(orderId!)
    const [isModalVisible, setModalVisible] = useState(false)
    const itemsCount = order?.items.reduce((acc, curr) => acc + curr.quantity, 0)
-   const [showOTP, setShowOTP] = useState(false)
    const [otp, setOPT] = useState<number | null>(null)
    const restaurant = useRestaurantsStore((s) => s.restaurant)
-   const orders = useBusinessOrdersStore((s) => s.orders)
+   const { orders, setShowOtp, showOtp } = useBusinessOrdersStore()
+   const bottomSheetRef = useSheetRef()
 
    const orderPlacedByCustomer = (): number => {
       return orders.filter((o) => o.contactPerson.userId === order?.contactPerson.userId).length
@@ -64,7 +65,7 @@ const BussinessOrder = () => {
             pickedUpOn: new Date().toISOString()
          })
          setOPT(null)
-         setShowOTP(false)
+         setShowOtp(false)
       } catch (error) {
          console.log(error)
       }
@@ -97,8 +98,10 @@ const BussinessOrder = () => {
             order.status === ORDER_STATUS.marked_ready_for_pickup &&
             restaurant?.requiredOTP
          ) {
+            console.log('Opening OTP')
             setOPT(order.otpPickup)
-            setShowOTP(true)
+
+            setShowOtp(true)
             return
          } else if (
             status === ORDER_STATUS.picked_up_by_client &&
@@ -133,6 +136,14 @@ const BussinessOrder = () => {
    const handleOrderCancel = () => {
       console.log('Order Cancelled')
    }
+
+   useEffect(() => {
+      if (!showOtp) {
+         bottomSheetRef.current?.dismiss()
+      } else {
+         bottomSheetRef.current?.present()
+      }
+   }, [showOtp])
 
    if (loading || !order) return <Loading />
 
@@ -299,18 +310,19 @@ const BussinessOrder = () => {
             onClose={() => setModalVisible(false)}
             onStatusChange={handleStatusChange}
          />
-
-         <OTP
-            lenght={4}
-            show={showOTP}
-            setShow={() => {
-               setShowOTP(false)
-               setOPT(null)
-            }}
-            code={otp!}
-            callBack={onCallBackSuccess}
-            title="Pick-Up PIN"
-         />
+         <Sheet
+            snapPoints={['100%']}
+            ref={bottomSheetRef}
+            enablePanDownToClose={false}
+            handleComponent={() => null}>
+            <OTP
+               lenght={4}
+               code={otp!}
+               callBack={onCallBackSuccess}
+               header="Ask the Customer for the PIN"
+               title="Pick-Up PIN"
+            />
+         </Sheet>
       </Container>
    )
 }

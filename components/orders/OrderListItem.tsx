@@ -27,7 +27,7 @@ const OrderListItem = ({ order, onPress }: Props) => {
    )
    const { setDeliveryAddress, setOrderType, setOrder, setTipAmount, setReOrder } =
       useOrderFlowStore()
-   const { addToCart, createNewCart } = useCartsStore()
+   const { addToCart, createNewCart, getCart, removeCart } = useCartsStore()
 
    const reOrder = useMemo(() => {
       return (
@@ -38,6 +38,10 @@ const OrderListItem = ({ order, onPress }: Props) => {
    const handleOnPress = useCallback(async () => {
       if (reOrder) {
          setReOrder(true)
+         const existingCart = getCart(order.businessId)
+         if (existingCart) {
+            removeCart(order.businessId)
+         }
          const cart = await createNewCart(order.businessId)
          if (!cart) return
 

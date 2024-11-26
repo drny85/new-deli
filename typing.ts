@@ -125,6 +125,7 @@ export interface Product {
    unitSold: number
    available: boolean
    multipleAddons?: number | null
+   keywords?: string[]
 }
 
 export type Category = {

@@ -11,9 +11,10 @@ type Props = {
 
 const BusinessOrderStatusView = ({ orders }: Props) => {
    const orientation = useOrientation()
+   console.log(orientation)
    return (
       <FlashList
-         key={orientation}
+         //key={orientation}
          data={orders}
          numColumns={2}
          ListEmptyComponent={

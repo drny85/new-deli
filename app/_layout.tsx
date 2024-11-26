@@ -1,45 +1,76 @@
-import 'react-native-gesture-handler'
+import { fonts } from '@/constants/fonts'
+import { useColorScheme } from '@/hooks/useColorScheme'
+import { useDevRoutes } from '@/hooks/useDevRoutes'
+import { useLinking } from '@/hooks/useLinking'
+import { useNotificationObserver } from '@/hooks/useNotificationObserver'
+import { useThemeColor } from '@/hooks/useThemeColor'
+import { AuthProvider } from '@/providers/authProvider'
+import { Feather, FontAwesome } from '@expo/vector-icons'
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native'
 import { useFonts } from 'expo-font'
 import { router, Stack } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
-import { useEffect } from 'react'
-
-import 'react-native-reanimated'
-
-import { useColorScheme } from '@/hooks/useColorScheme'
-import { AuthProvider } from '@/providers/authProvider'
-import { fonts } from '@/constants/fonts'
-import { TouchableOpacity } from 'react-native'
-import { FontAwesome } from '@expo/vector-icons'
-import { useThemeColor } from '@/hooks/useThemeColor'
+import { useEffect, useState } from 'react'
+import { StyleSheet, TouchableOpacity } from 'react-native'
+import 'react-native-gesture-handler'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
-import { useDevRoutes } from '@/hooks/useDevRoutes'
-import { useLinking } from '@/hooks/useLinking'
-import { useNotificationObserver } from '@/hooks/useNotificationObserver'
-import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
+import 'react-native-reanimated'
+import Animated, { FadeOut } from 'react-native-reanimated'
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync()
+SplashScreen.setOptions({
+   duration: 1000,
+   fade: true
+})
 
 export default function RootLayout() {
    const colorScheme = useColorScheme()
+   const [isReady, setIsReady] = useState(false)
    const iconColor = useThemeColor('text')
    const bgColor = useThemeColor('background')
    const [loaded] = useFonts(fonts)
+
    useLinking()
    useNotificationObserver()
    useDevRoutes()
 
    useEffect(() => {
-      if (loaded) {
-         SplashScreen.hideAsync()
-      }
-   }, [loaded])
+      async function prepare() {
+         try {
+            // Pre-load fonts, make any API calls you need to do here
 
-   if (!loaded) {
-      return null
-   }
+            // Artificially delay for two seconds to simulate a slow loading
+            // experience. Please remove this if you copy and paste the code!
+            await new Promise((resolve) => setTimeout(resolve, 2000))
+         } catch (e) {
+            console.warn(e)
+         } finally {
+            // Tell the application to render
+            // setAppIsReady(true);
+
+            setIsReady(true)
+            SplashScreen.hideAsync()
+         }
+      }
+
+      prepare()
+   }, [])
+
+   // if (!isReady || !loaded) {
+   //    return (
+   //       <Animated.View
+   //          style={StyleSheet.absoluteFill}
+   //          layout={FadeOut.springify(80).stiffness(200)}
+   //          exiting={FadeOut.duration(800).springify(80).stiffness(200)}>
+   //          <Animated.Image
+   //             source={require('@/assets/images/splash.png')}
+   //             style={{ height: '100%', width: '100%' }}
+   //          />
+   //       </Animated.View>
+   //    )
+   // }
 
    return (
       <GestureHandlerRootView style={{ flex: 1 }}>
@@ -86,9 +117,9 @@ export default function RootLayout() {
                               backgroundColor: bgColor
                            },
                            headerLeft: ({ canGoBack }) => (
-                              <FontAwesome
+                              <Feather
                                  name="chevron-left"
-                                 size={22}
+                                 size={26}
                                  color={iconColor}
                                  onPress={() => canGoBack && router.back()}
                               />
@@ -104,7 +135,7 @@ export default function RootLayout() {
                            headerLeft: ({ canGoBack }) => (
                               <FontAwesome
                                  name="chevron-left"
-                                 size={22}
+                                 size={26}
                                  color={iconColor}
                                  onPress={() => canGoBack && router.back()}
                               />
@@ -117,9 +148,9 @@ export default function RootLayout() {
                         name="privacy"
                         options={{
                            headerLeft: ({ canGoBack }) => (
-                              <FontAwesome
+                              <Feather
                                  name="chevron-left"
-                                 size={22}
+                                 size={28}
                                  color={iconColor}
                                  onPress={() => canGoBack && router.back()}
                               />
@@ -156,7 +187,7 @@ export default function RootLayout() {
                            headerStyle: { backgroundColor: bgColor },
                            headerLeft: () => (
                               <TouchableOpacity onPress={() => router.back()}>
-                                 <FontAwesome name="chevron-left" size={22} color={iconColor} />
+                                 <Feather name="chevron-left" size={28} color={iconColor} />
                               </TouchableOpacity>
                            )
                         }}

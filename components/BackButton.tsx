@@ -30,7 +30,7 @@ const BackButton = ({ onPress, containerStyle }: Props) => {
             <NeoView
                rounded
                size={50}
-               //containerStyle={{ backgroundColor: 'transparent' }}
+               containerStyle={{ shadowColor: 'transparent' }}
                innerStyleContainer={{ backgroundColor: 'transparent' }}>
                <FontAwesome name="chevron-left" size={28} color={ascent} />
             </NeoView>

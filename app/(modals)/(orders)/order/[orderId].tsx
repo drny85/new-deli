@@ -10,23 +10,26 @@ import ShareButton from '@/components/ShareLink'
 import { Text } from '@/components/ThemedText'
 import { View } from '@/components/ThemedView'
 import { SIZES } from '@/constants/Colors'
+import { getDurationFromGoogleMaps } from '@/helpers/getEtaInMinutes'
 import { useOrder } from '@/hooks/orders/useOrder'
+import { useDriverLocation } from '@/hooks/useDriverLocation'
 import { useThemeColor } from '@/hooks/useThemeColor'
-import { useAuth } from '@/providers/authProvider'
 import { useCartsStore } from '@/stores/cartsStore'
 import { useOrderFlowStore } from '@/stores/orderFlowStore'
 import { useRestaurantsStore } from '@/stores/restaurantsStore'
 import { ORDER_STATUS, ORDER_TYPE } from '@/typing'
+import { calculateETA } from '@/utils/calculateETA'
 import { dayjsFormat } from '@/utils/dayjs'
 import { STATUS_NAME } from '@/utils/orderStatus'
 import { useNavigationState } from '@react-navigation/native'
 import { Image } from 'expo-image'
-import { Redirect, router, useLocalSearchParams } from 'expo-router'
-import { useEffect, useMemo, useRef } from 'react'
+import { router, useLocalSearchParams } from 'expo-router'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { ScrollView } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 const OrderDetails = () => {
+   const [eta, setEta] = useState<number | null>(null)
    const routes = useNavigationState((s) => s.routes)
    const shouldReplace = useMemo(
       () => routes.findIndex((r) => r.name === 'order-success') !== -1,
@@ -46,6 +49,7 @@ const OrderDetails = () => {
    const { setOrderType, reOrder } = useOrderFlowStore()
    const { order, loading } = useOrder(orderId!)
    const restaurant = restaurants.find((r) => r.id === order?.businessId)
+   const location = useDriverLocation(order?.courier?.id!)
 
    useEffect(() => {
       if (!order || reOrder) return
@@ -65,6 +69,30 @@ const OrderDetails = () => {
          if (timeOut) clearTimeout(timeOut)
       }
    }, [order?.status, confettiRef])
+
+   const fetchEAT = useCallback(async () => {
+      if (!location?.location || !order?.address?.coords) return
+      try {
+         console.log('Fetching ETA')
+         const duration = await getDurationFromGoogleMaps(
+            location?.location!,
+            order?.address?.coords!,
+            process.env.EXPO_PUBLIC_GOOGLE_API!
+         )
+         if (duration !== null) {
+            console.log(`ETA: ${duration} minutes`)
+            setEta(duration)
+         } else {
+            console.log('Failed to fetch ETA')
+         }
+      } catch (error) {
+         console.log(error)
+      }
+   }, [])
+
+   useEffect(() => {
+      fetchEAT()
+   }, [])
 
    if (loading || !order) return <Loading />
 
@@ -116,6 +144,8 @@ const OrderDetails = () => {
                   )}
 
                   <OrderProgress
+                     eta={eta || 10}
+                     onRefresh={fetchEAT}
                      status={order?.status!}
                      orderType={order?.orderType!}
                      orderDate={order?.orderDate!}

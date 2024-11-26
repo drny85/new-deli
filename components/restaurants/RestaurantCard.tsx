@@ -92,7 +92,9 @@ const RestaurantCard = ({ item, onPress, contentContainerStyle }: Props) => {
                      <Text fontSize={'small'} type="defaultSemiBold" textColor="white">
                         {item.minimumDelivery && item.minimumDelivery > 0
                            ? `${item.minimumDelivery} Minimun Delivery`
-                           : 'Free Delivery'}
+                           : item.ordersMethod !== 'pickup-only'
+                             ? 'Free Delivery'
+                             : 'Pickup Only'}
                      </Text>
                      <Row>
                         {item.ordersMethod === 'both' && (

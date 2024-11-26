@@ -40,7 +40,7 @@ export const placeOrder = async (order: Order): Promise<OrderActionsReturnParams
       console.log('Order Placed', order.id)
       return { orderId: order.id, success: true }
    } catch (error) {
-      console.log(error)
+      console.log('Error placing order =>', error)
       return new Promise((resolve) => resolve({ orderId: undefined, success: false }))
    }
 }

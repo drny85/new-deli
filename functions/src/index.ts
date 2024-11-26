@@ -938,25 +938,36 @@ exports.createPaymentIntent = onCall<{ connectedId: string; total: number; order
       try {
          if (auth === undefined || auth.uid === undefined)
             return { result: 'no authorized', success: false }
+         const order = await getFirestore().collection('pendingOrders').doc(data.orderId).get()
+         const orderData = order.data() as Order
+         const stripe = new Stripe(orderData.mode === 'test' ? TEST_KEY : STRIPE_KEY.value(), {
+            apiVersion: '2024-04-10'
+         })
+         let customer_id
          const customer = await getFirestore().collection('stripe_customers').doc(auth.uid).get()
          if (!customer.exists) {
-            return { result: 'no customer', success: false }
+            const { id } = await stripe.customers.create({
+               email: auth.token.email,
+               metadata: {
+                  userId: auth.uid
+               }
+            })
+            await getFirestore()
+               .collection('stripe_customers')
+               .doc(auth.uid)
+               .set({ customer_id: id })
+            customer_id = id
+         } else {
+            customer_id = (customer.data() as { customer_id: string }).customer_id
          }
 
-         const { customer_id } = customer.data() as { customer_id: string }
          if (!customer_id) return { result: 'no customer id', success: false }
          const userData = await getFirestore().collection('users').doc(auth.uid).get()
          const { email } = userData.data() as AppUser
 
-         const order = await getFirestore().collection('pendingOrders').doc(data.orderId).get()
-         const orderData = order.data() as Order
-
          // const order = (
          //    await getFirestore().collection('pendingOrders').doc(data.orderId).get()
          // ).data() as Order
-         const stripe = new Stripe(orderData.mode === 'test' ? TEST_KEY : STRIPE_KEY.value(), {
-            apiVersion: '2024-04-10'
-         })
 
          const ephemeralKey = await stripe.ephemeralKeys.create(
             { customer: customer_id },

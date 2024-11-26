@@ -27,6 +27,16 @@ const AnimatedRestaurantMap: React.FC<AnimatedMarkerProps> = ({ restaurant }) =>
          <MapView
             style={styles.map}
             showsBuildings={false}
+            camera={{
+               center: {
+                  latitude: restaurant.latitude,
+                  longitude: restaurant.longitude
+               },
+               pitch: 20,
+               heading: 80,
+               altitude: 180,
+               zoom: 80
+            }}
             customMapStyle={customMapStyle}
             // mapType="mutedStandard"
             initialRegion={{

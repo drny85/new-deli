@@ -1,17 +1,17 @@
 import { SIZES } from '@/constants/Colors'
+import { useThemeColor } from '@/hooks/useThemeColor'
+import { forwardRef, ReactNode } from 'react'
 import {
    StyleProp,
    StyleSheet,
    TextInput,
    TextInputProps,
-   ViewStyle,
-   TextStyle
+   TextStyle,
+   ViewStyle
 } from 'react-native'
-import { View } from './ThemedView'
-import { Text } from './ThemedText'
 import NeoView from './NeoView'
-import { useThemeColor } from '@/hooks/useThemeColor'
-import { forwardRef, ReactNode } from 'react'
+import { Text } from './ThemedText'
+import { View } from './ThemedView'
 
 type Props = TextInputProps & {
    title?: string
@@ -85,7 +85,6 @@ const styles = StyleSheet.create({
    },
    title: {
       paddingLeft: SIZES.sm,
-
       textTransform: 'capitalize'
    },
 

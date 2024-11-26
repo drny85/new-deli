@@ -1,5 +1,6 @@
 import { placeOrder } from '@/actions/orders'
 import { ordersCollection } from '@/collections'
+import { SIZES } from '@/constants/Colors'
 import { fetchPaymentParams } from '@/firebase'
 import { useThemeColor } from '@/hooks/useThemeColor'
 import { useAuth } from '@/providers/authProvider'
@@ -83,12 +84,15 @@ const StripeProviderComponent = ({ children, cartTotal, businessName, connectedI
       try {
          setLoading(true)
          if (!order || !connectedId) return
+         console.log(order.id, total, connectedId)
          const func = fetchPaymentParams()
+
          const { data } = await func({
             orderId: order?.id!,
             total: total,
             connectedId: connectedId
          })
+         console.log(data)
 
          if (!data.success)
             return toastAlert({
@@ -101,7 +105,7 @@ const StripeProviderComponent = ({ children, cartTotal, businessName, connectedI
       } catch (error) {
          console.log(error)
          const err = error as Error
-         Alert.alert('Error', err.message)
+         Alert.alert('Error Fetching', err.message)
       } finally {
          setLoading(false)
       }
@@ -145,7 +149,15 @@ const StripeProviderComponent = ({ children, cartTotal, businessName, connectedI
                   colors: {
                      background: ascentColor,
                      text: '#ffffff'
+                  },
+                  shapes: {
+                     borderRadius: SIZES.md,
+                     borderWidth: 0
                   }
+               },
+               shapes: {
+                  borderRadius: SIZES.md,
+                  borderWidth: 0
                },
 
                colors: {
@@ -161,7 +173,7 @@ const StripeProviderComponent = ({ children, cartTotal, businessName, connectedI
             console.log('EEEE', error)
          }
       } catch (error) {
-         console.log(error)
+         console.log('Error initializing payment', error)
       } finally {
          setLoading(false)
       }

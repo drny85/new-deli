@@ -217,7 +217,7 @@ const ProductDetail = () => {
       <View style={{ flex: 1, backgroundColor, justifyContent: 'space-between' }}>
          <BackButton />
          <View style={{ position: 'absolute', right: 30, top: SIZES.statusBarHeight, zIndex: 99 }}>
-            <NeoView rounded size={50}>
+            <NeoView rounded size={50} containerStyle={{ shadowColor: 'transparent' }}>
                <ShareButton
                   id={productId}
                   type="product"

@@ -2,10 +2,10 @@ import { SIZES } from '@/constants/Colors'
 import { useThemeColor } from '@/hooks/useThemeColor'
 import { useOrderFlowStore } from '@/stores/orderFlowStore'
 import { SymbolView } from 'expo-symbols'
-import React, { useState } from 'react'
-import { Alert, Animated, StyleSheet, TouchableOpacity } from 'react-native'
+import { Alert, Animated, Platform, StyleSheet, TouchableOpacity } from 'react-native'
 import { View } from './ThemedView'
 import { useRestaurantsStore } from '@/stores/restaurantsStore'
+import FontAwesome5 from '@expo/vector-icons/FontAwesome5'
 
 interface ToggleDeliveryPickupProps {
    onOptionChange: (option: 'delivery' | 'pickup') => void
@@ -51,11 +51,19 @@ const ToggleDeliveryPickup: React.FC<ToggleDeliveryPickupProps> = ({ onOptionCha
                }
             }}>
             <Animated.View style={{ opacity: deliveryIconOpacity }}>
-               <SymbolView
-                  name="car.fill"
-                  weight="bold"
-                  tintColor={orderType === 'delivery' ? activeColor : 'gray'}
-               />
+               {Platform.OS === 'ios' ? (
+                  <SymbolView
+                     name="car.fill"
+                     weight="bold"
+                     tintColor={orderType === 'delivery' ? activeColor : 'gray'}
+                  />
+               ) : (
+                  <FontAwesome5
+                     name="car-alt"
+                     size={24}
+                     color={orderType === 'delivery' ? activeColor : 'gray'}
+                  />
+               )}
             </Animated.View>
          </TouchableOpacity>
          <TouchableOpacity
@@ -68,12 +76,20 @@ const ToggleDeliveryPickup: React.FC<ToggleDeliveryPickupProps> = ({ onOptionCha
                }
             }}>
             <Animated.View style={{ opacity: pickupIconOpacity }}>
-               <SymbolView
-                  name="figure.walk.motion"
-                  type="monochrome"
-                  weight="bold"
-                  tintColor={orderType === 'pickup' ? activeColor : 'gray'}
-               />
+               {Platform.OS === 'ios' ? (
+                  <SymbolView
+                     name="figure.walk.motion"
+                     type="monochrome"
+                     weight="bold"
+                     tintColor={orderType === 'pickup' ? activeColor : 'gray'}
+                  />
+               ) : (
+                  <FontAwesome5
+                     name="walking"
+                     size={24}
+                     color={orderType === 'pickup' ? activeColor : 'gray'}
+                  />
+               )}
             </Animated.View>
          </TouchableOpacity>
       </View>

@@ -1,11 +1,21 @@
 import { createCollection } from '@/firebase'
 import { Cart } from '@/stores/cartsStore'
-import { AppUser, Business, Category, Courier, Order, Product, StoreCourierData } from '@/typing'
+import {
+   AppUser,
+   Business,
+   Category,
+   Coords,
+   Courier,
+   Order,
+   Product,
+   StoreCourierData
+} from '@/typing'
 
 export const businessCollection = createCollection<Business>('business')
 export const ordersCollection = createCollection<Order>('orders')
 export const pendingOrdersCollection = createCollection<Order>('pendingOrders')
 export const usersCollection = createCollection<AppUser>('users')
+export const driversCollection = createCollection<{ location: Coords }>('drivers')
 export const userCouriersCollection = createCollection<Courier>('users')
 export const couriersCollection = createCollection<StoreCourierData>('couriers')
 export const productsCollection = (businessId: string) =>

@@ -20,6 +20,7 @@ android
 google-ios.plist
 GoogleService-Info.plist
 google-android.json
+google-services.json
 
 
 

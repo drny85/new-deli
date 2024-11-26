@@ -2,13 +2,14 @@ import { SIZES } from '@/constants/Colors'
 import { useThemeColor } from '@/hooks/useThemeColor'
 import { ORDER_STATUS, ORDER_TYPE, statusListForDelivery, statusListForPickup } from '@/typing'
 import { orderNameSwitch } from '@/utils/orderNameSwitch'
-import { Ionicons } from '@expo/vector-icons'
-import React, { useEffect, useState } from 'react'
-import { StyleSheet } from 'react-native'
+import { FontAwesome, Ionicons } from '@expo/vector-icons'
+import React, { useEffect, useMemo, useState } from 'react'
+import { StyleSheet, TouchableOpacity } from 'react-native'
 import NeoView from './NeoView'
 import { View } from './ThemedView'
 import { Text } from './ThemedText'
 import { dayjsFormat } from '@/utils/dayjs'
+import Row from './Row'
 
 const ICON_SIZE = 48
 
@@ -33,7 +34,9 @@ const OrderProgress: React.FC<{
    status: ORDER_STATUS
    orderType: ORDER_TYPE
    orderDate: string
-}> = ({ status, orderType, orderDate }) => {
+   eta: number
+   onRefresh: () => void
+}> = ({ status, orderType, eta, onRefresh }) => {
    const [currentStatus, setCurrentStatus] = useState<number>(0)
    const ascent = useThemeColor('ascent')
    const backgroundColor = useThemeColor('background')
@@ -42,6 +45,14 @@ const OrderProgress: React.FC<{
       orderType === ORDER_TYPE.delivery ? statusListForDelivery : statusListForPickup
 
    const Subtitle = orderType === ORDER_TYPE.delivery ? SubtitleForDelivery : SubtitleForPickup
+
+   const etaTime = useMemo(
+      () =>
+         dayjsFormat()
+            .add(eta || 10, 'minutes')
+            .format('LT'),
+      [eta]
+   )
 
    useEffect(() => {
       if (!status) return
@@ -115,23 +126,29 @@ const OrderProgress: React.FC<{
 
    return (
       <View style={[styles.container]}>
-         <View style={styles.eta}>
-            <Text style={styles.etaTitle}>
-               {orderType === ORDER_TYPE.delivery ? 'Estimated Delivery' : 'Estimated Pick-up Time'}
-            </Text>
-
-            <NeoView
-               innerStyleContainer={{
-                  borderRadius: SIZES.lg * 2,
-                  paddingHorizontal: SIZES.sm,
-                  paddingVertical: SIZES.sm * 0.5
-               }}
-               containerStyle={{ borderRadius: SIZES.lg * 2 }}>
-               <Text style={[styles.eatTime]}>
-                  {dayjsFormat(orderDate).add(11, 'minutes').format('LT')}
+         {status !== ORDER_STATUS.delivered && (
+            <View style={styles.eta}>
+               <Text style={styles.etaTitle}>
+                  {orderType === ORDER_TYPE.delivery
+                     ? 'Estimated Delivery'
+                     : 'Estimated Pick-up Time'}
                </Text>
-            </NeoView>
-         </View>
+               <Row containerStyle={{ gap: 16 }}>
+                  <NeoView
+                     innerStyleContainer={{
+                        borderRadius: SIZES.lg * 2,
+                        paddingHorizontal: SIZES.sm,
+                        paddingVertical: SIZES.sm * 0.5
+                     }}
+                     containerStyle={{ borderRadius: SIZES.lg * 2 }}>
+                     <Text style={[styles.eatTime]}>{etaTime}</Text>
+                  </NeoView>
+                  <TouchableOpacity onPress={onRefresh}>
+                     <FontAwesome name="refresh" size={26} color={ascent} />
+                  </TouchableOpacity>
+               </Row>
+            </View>
+         )}
          <View style={[styles.main, { backgroundColor }]}>{renderStatus()}</View>
       </View>
    )

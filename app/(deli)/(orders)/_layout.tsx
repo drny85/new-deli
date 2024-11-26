@@ -1,4 +1,3 @@
-import useNewOrderAlert from '@/hooks/orders/useNewOrderAlert'
 import { Stack } from 'expo-router'
 
 const _layout = () => {

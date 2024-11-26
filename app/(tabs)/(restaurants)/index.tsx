@@ -47,17 +47,13 @@ const Restaurants = () => {
       if (!currentLocationCoords && !deliveryAddress) return resultsAll
 
       if (currentLocationCoords && !deliveryAddress) {
-         return resultsAll
-            .map((r) => ({
-               ...r,
-               distance: getDistanceFromLatLonInMeters(r.coords!, {
-                  latitude: currentLocationCoords.latitude!,
-                  longitude: currentLocationCoords.longitude!
-               })
-            }))
-            .filter((r) =>
-               orderType === 'delivery' && r.ordersMethod === 'pickup-only' ? false : true
-            )
+         return resultsAll.map((r) => ({
+            ...r,
+            distance: getDistanceFromLatLonInMeters(r.coords!, {
+               latitude: currentLocationCoords.latitude!,
+               longitude: currentLocationCoords.longitude!
+            })
+         }))
       }
       return resultsAll
          .map((r) => ({
@@ -75,32 +71,37 @@ const Restaurants = () => {
    // }, [restaurantsByDistance, resultsAll, viewByDistance])
 
    const onValueChange = (value: string) => {
+      // Update the input value state
       setValue(value)
-      const newValue = value.replace(/[^a-z]/gi, '')
 
-      if (newValue.length > 0) {
-         setRestaurants([
-            ...restaurants.filter((res) => res.name.toLowerCase().includes(value.toLowerCase()))
-         ])
-         const results = restaurants.filter((b) =>
-            products.some((p) => {
-               const regex = new RegExp(`${newValue.toLowerCase()}`, 'gi')
-
-               return (
-                  (p.businessId === b.id && p.name.toLowerCase().match(regex)) ||
-                  b.name.toLowerCase().match(regex)
-               )
-            })
-         )
-         if (results.length > 0) {
-            setRestaurants(results)
-         } else {
-            setRestaurants([])
-         }
-      } else {
+      // Sanitize and prepare the search term
+      const searchTerm = value
+         .trim()
+         .replace(/[^a-z]/gi, '')
+         .toLowerCase()
+      if (!searchTerm) {
+         // Reset restaurants when search term is empty
          setRestaurants(res)
-         // Keyboard.dismiss()
+         return
       }
+
+      // Combine filters for restaurants and products
+      const filteredRestaurants = restaurants.filter((restaurant) => {
+         const restaurantMatch = restaurant.name.toLowerCase().includes(searchTerm)
+
+         // Check if any product matches for the current restaurant
+         const productMatch = products.some(
+            (product) =>
+               product.businessId === restaurant.id &&
+               (product.name.toLowerCase().includes(searchTerm) ||
+                  product.keywords?.some((keyword) => keyword.toLowerCase().includes(searchTerm)))
+         )
+
+         return restaurantMatch || productMatch
+      })
+
+      // Update the restaurant list with filtered results
+      setRestaurants(filteredRestaurants)
    }
 
    const onCategoryPress = (category: Category) => {
@@ -146,7 +147,6 @@ const Restaurants = () => {
                   value={search}
                   onValueChange={onValueChange}
                   placeholder="Search for food or restaurants"
-                  contentContainerStyle={{ borderRadius: 30 }}
                />
             </View>
             <View>

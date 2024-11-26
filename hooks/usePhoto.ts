@@ -91,7 +91,7 @@ export const usePhoto = () => {
          }
 
          const result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            mediaTypes: 'images',
             allowsMultipleSelection: false,
             aspect: [16, 9],
             quality: 0.3

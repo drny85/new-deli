@@ -120,7 +120,8 @@ const Header = ({
                containerStyle={{
                   //backgroundColor: 'transparent',
                   borderWidth: 0.5,
-                  borderColor: '#ffffff'
+                  borderColor: '#ffffff',
+                  shadowColor: 'transparent'
                }}>
                <FontAwesome name="chevron-left" size={22} color={textColor} />
             </NeoView>
@@ -135,7 +136,7 @@ const Header = ({
                   alignItems: 'center',
                   justifyContent: 'center'
                }}>
-               <Text numberOfLines={1} ellipsizeMode="tail" type="header">
+               <Text numberOfLines={1} adjustsFontSizeToFit ellipsizeMode="tail" type="header">
                   {title}
                </Text>
             </Animated.View>
@@ -147,7 +148,8 @@ const Header = ({
                containerStyle={{
                   // backgroundColor: 'transparent',
                   borderWidth: 0.5,
-                  borderColor: '#ffffff'
+                  borderColor: '#ffffff',
+                  shadowColor: 'transparent'
                }}>
                {/* <TouchableOpacity onPress={() => toggleFavorite(restaurantId, user!)}>
                   <FontAwesome name="share-alt-square" size={24} color={'#c1121f'} />
@@ -165,7 +167,8 @@ const Header = ({
                      containerStyle={{
                         //backgroundColor: 'transparent',
                         borderWidth: 0.5,
-                        borderColor: '#ffffff'
+                        borderColor: '#ffffff',
+                        shadowColor: 'transparent'
                      }}>
                      <FontAwesome name="shopping-cart" size={22} color={textColor} />
 

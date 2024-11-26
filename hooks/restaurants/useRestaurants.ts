@@ -16,6 +16,7 @@ export const useRestaurants = () => {
       )
       return onSnapshot(docsQuery, (snapshot) => {
          const data = snapshot.docs.map((data) => ({ id: data.id, ...data.data() }))
+
          setRestaurants(data)
          setRestaurantes(data)
          setLoading(false)

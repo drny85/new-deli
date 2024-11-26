@@ -9,21 +9,19 @@ const config: ExpoConfig = {
    scheme: 'new-deli',
    userInterfaceStyle: 'automatic',
    newArchEnabled: true,
-   splash: {
-      image: './assets/images/splash.png',
-      resizeMode: 'cover',
-      backgroundColor: '#8d0801'
-   },
+   // splash: {
+   //    image: './assets/images/splash.png',
+   //    resizeMode: 'cover',
+   //    backgroundColor: '#8d0801'
+   // },
    ios: {
       supportsTablet: true,
       bundleIdentifier: 'net.robertdev.new-deli',
       buildNumber: '1.0.3',
-
       usesAppleSignIn: true,
       associatedDomains: ['applinks:yourdeliapp.com'],
       infoPlist: {
          NSLocationWhenInUseUsageDescription: 'Allow $(PRODUCT_NAME) to use your location.',
-
          LSApplicationQueriesSchemes: ['tel'],
          UIBackgroundModes: ['audio']
          // CFBundleURLTypes: [
@@ -45,8 +43,8 @@ const config: ExpoConfig = {
          backgroundColor: '#ffffff'
       },
 
-      package: 'net.robertdev.new.deli',
-      googleServicesFile: './google-android.json',
+      package: 'net.robertdev.yourdeli',
+      googleServicesFile: './google-services.json',
       config: {
          googleMaps: {
             apiKey: process.env.EXPO_PUBLIC_GOOGLE_MAPS_KEY
@@ -63,6 +61,18 @@ const config: ExpoConfig = {
       'expo-apple-authentication',
       'expo-build-properties',
       'expo-font',
+      [
+         'expo-splash-screen',
+         {
+            backgroundColor: '#8d0801',
+            image: './assets/images/splash.png',
+            dark: {
+               backgroundColor: '#000000'
+            },
+            imageWidth: 400
+         }
+      ],
+
       [
          'expo-location',
          {

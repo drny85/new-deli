@@ -5,7 +5,6 @@ import BottomSheetModal, { BottomSheetModalRef } from '@/components/BottomSheetM
 import Button from '@/components/Button'
 import Input from '@/components/Input'
 import ItemQuantitySetter from '@/components/ItemQuantitySetter'
-import KeyboardAvoidingView from '@/components/KeyBoardAvoidingViewWrapper'
 import Loading from '@/components/Loading'
 import NeoView from '@/components/NeoView'
 import CategoryTitle from '@/components/restaurants/CategoryTitle'
@@ -137,7 +136,8 @@ const AddProduct = () => {
             console.log('Now has items')
             await updateBusiness({
                ...restaurant!,
-               hasItems: true
+               hasItems: true,
+               profileCompleted: true
             })
          }
 

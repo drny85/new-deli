@@ -28,10 +28,15 @@ const RestaurantSearch = ({
                color={'grey'}
             />
          }
-         containerStyle={[
-            { borderRadius: SIZES.lg * 2, height: 40, borderColor: 'transparent' },
+         contentContainerStyle={[
+            {
+               borderRadius: SIZES.lg * 3,
+               height: 40,
+               borderColor: 'transparent'
+            },
             contentContainerStyle
          ]}
+         containerStyle={{ borderRadius: SIZES.lg * 3 }}
          placeholder={placeholder}
          value={value}
          returnKeyType="done"

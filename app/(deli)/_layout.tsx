@@ -23,7 +23,6 @@ export default function TabLayout() {
       <>
          <PopopOver />
          <Tabs
-            initialRouteName="(restaurants)"
             screenOptions={{
                headerShadowVisible: false,
                tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,

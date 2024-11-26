@@ -32,7 +32,6 @@ import { Redirect, router, useLocalSearchParams } from 'expo-router'
 import { AnimatePresence, MotiView } from 'moti'
 import { useEffect, useRef, useState } from 'react'
 import { Alert, Keyboard, ScrollView, StyleSheet, TouchableOpacity } from 'react-native'
-import Animated, { FadeIn, FadeOut } from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 type Params = {
@@ -167,6 +166,7 @@ const Checkout = () => {
       }
       try {
          const { success, order: pendingOrder } = await placePendingOrder(order)
+         console.log(success)
          if (success && pendingOrder) {
             await setOrder(pendingOrder)
             setInitiatePayment(true)
@@ -244,7 +244,11 @@ const Checkout = () => {
    }, [])
 
    useEffect(() => {
+      console.log(orderType, restaurant?.ordersMethod)
       preventDeliveryOrder()
+      if (orderType === 'delivery' && restaurant?.ordersMethod === 'pickup-only') {
+         setOrderType('pickup')
+      }
    }, [restaurant, orderType])
 
    if (!user)
@@ -340,7 +344,7 @@ const Checkout = () => {
                                  <Text type="defaultSemiBold">{restaurant?.name}</Text>
                                  <Text type="subtitle">{restaurant?.address?.slice(0, -5)}</Text>
                               </View>
-                              <Feather name="chevron-right" size={26} color={ascent} />
+                              {/* <Feather name="chevron-right" size={26} color={ascent} /> */}
                            </Row>
                         </TouchableOpacity>
                      </View>

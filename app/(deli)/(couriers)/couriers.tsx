@@ -114,31 +114,37 @@ const Couriers = () => {
                         <Text>Phone: {item.phone}</Text>
                         <PhoneCall phone={item.phone!} />
                      </Row>
-                     <Row containerStyle={{ gap: SIZES.lg }}>
-                        <Text>
-                           Online:{' '}
-                           {item.isOnline ? (
-                              <View
-                                 style={{
-                                    width: 18,
-                                    height: 18,
-                                    borderRadius: 9,
-                                    backgroundColor: 'green'
-                                 }}
-                              />
-                           ) : (
-                              <View
-                                 style={{
-                                    width: 18,
-                                    height: 18,
-                                    borderRadius: 9,
-                                    backgroundColor: 'red'
-                                 }}
-                              />
-                           )}
-                        </Text>
-                        <Text>
-                           Is Busy:{' '}
+                     <Row
+                        containerStyle={{
+                           gap: SIZES.lg,
+                           alignItems: 'center'
+                        }}>
+                        <Row>
+                           <Text>Online: </Text>
+                           <View>
+                              {item.isOnline ? (
+                                 <View
+                                    style={{
+                                       width: 18,
+                                       height: 18,
+                                       borderRadius: 9,
+                                       backgroundColor: 'green'
+                                    }}
+                                 />
+                              ) : (
+                                 <View
+                                    style={{
+                                       width: 18,
+                                       height: 18,
+                                       borderRadius: 9,
+                                       backgroundColor: 'red'
+                                    }}
+                                 />
+                              )}
+                           </View>
+                        </Row>
+                        <Row>
+                           <Text>Is Busy: </Text>
                            {item.isOnline ? (
                               <View
                                  style={{
@@ -158,13 +164,13 @@ const Couriers = () => {
                                  }}
                               />
                            )}
-                        </Text>
+                        </Row>
                      </Row>
                   </View>
                   <Button
-                     disabled={submitting}
+                     disabled={true}
                      loading={submitting}
-                     containerStyle={{ paddingHorizontal: SIZES.lg }}
+                     contentTextStyle={{ paddingHorizontal: SIZES.lg }}
                      type="soft"
                      onPress={() => {}}
                      title={item.status === 'completed' ? 'Active' : 'Activate'}
@@ -259,7 +265,7 @@ const Couriers = () => {
                               <Button
                                  disabled={submitting}
                                  loading={submitting}
-                                 containerStyle={{ paddingHorizontal: SIZES.lg }}
+                                 contentTextStyle={{ paddingHorizontal: SIZES.lg }}
                                  type="soft"
                                  onPress={() => onHandleApprove(item.id!, item.courierId)}
                                  title={item.status === 'completed' ? 'Active' : 'Activate'}
