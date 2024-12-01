@@ -25,7 +25,6 @@ export const updateOrder = async (order: Order): Promise<boolean> => {
 export const updateETA = async (orders: Order[]) => {
    try {
       const eta = await calculateETA(orders)
-      console.log('ETA', eta)
 
       if (!orders || !eta) return
       if (eta === 0) return
@@ -33,7 +32,12 @@ export const updateETA = async (orders: Order[]) => {
       if (!businessId) return false
       const businessRef = doc(businessCollection, businessId)
       const business = await getDoc(businessRef)
-      if (!business.exists()) return false
+
+      if (!business.exists()) return
+      if (business.data().eta === eta) {
+         console.log('ETA is the same')
+         return
+      }
       console.log('Updating ETA', eta)
       await updateDoc(businessRef, { eta })
    } catch (error) {

@@ -2,10 +2,12 @@ import { updateOrder } from '@/actions/business'
 import CourierMap from '@/components/business/CouriersMap'
 import Loading from '@/components/Loading'
 import { View } from '@/components/ThemedView'
+import { db } from '@/firebase'
 import { useOrder } from '@/hooks/orders/useOrder'
 import { Courier, Order, ORDER_STATUS } from '@/typing'
 import { generateRandomNumbers } from '@/utils/generateRandomNumber'
 import { router, useLocalSearchParams } from 'expo-router'
+import { addDoc, collection } from 'firebase/firestore'
 
 const CourierAssigment = () => {
    const { orderId } = useLocalSearchParams<{ orderId: string }>()
@@ -23,7 +25,13 @@ const CourierAssigment = () => {
          }
 
          const updated = await updateOrder(newOrder)
+
          if (updated) {
+            await addDoc(collection(db, 'deliveries'), {
+               orderId,
+               courierId: courier.id,
+               orderDate: new Date().toISOString()
+            })
             router.dismissAll()
          }
       } catch (error) {

@@ -1,4 +1,4 @@
-import { SIZES } from '@/constants/Colors'
+import { Colors, SIZES } from '@/constants/Colors'
 import { useThemeColor } from '@/hooks/useThemeColor'
 import { ORDER_STATUS, ORDER_TYPE, statusListForDelivery, statusListForPickup } from '@/typing'
 import { orderNameSwitch } from '@/utils/orderNameSwitch'
@@ -106,7 +106,7 @@ const OrderProgress: React.FC<{
                         <View
                            style={{
                               width: 4,
-                              // backgroundColor: index <= currentStatus ? Colors.main : 'gray',
+                              backgroundColor: index <= currentStatus ? Colors.dark.ascent : 'gray',
                               borderWidth: 2,
                               height: 50,
                               borderStyle: 'dashed',

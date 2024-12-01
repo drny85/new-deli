@@ -11,7 +11,7 @@ type Props = {
 
 const BusinessOrderStatusView = ({ orders }: Props) => {
    const orientation = useOrientation()
-   console.log(orientation)
+
    return (
       <FlashList
          //key={orientation}
