@@ -13,7 +13,7 @@ export const useLinking = () => {
          try {
             const initialUrl = await Linking.getInitialURL()
             console.log('initialUrl', initialUrl)
-            if (!initialUrl) return
+            //if (!initialUrl) return
             const data = Linking.parse(event.url)
             // Handle deep link data
             console.log('deepLinks Data', JSON.stringify(data, null, 2))
@@ -24,7 +24,7 @@ export const useLinking = () => {
                if (cart) {
                   const added = await addCart(cart)
                   if (added) {
-                     router.push(`/restaurant-cart/${cartId}`)
+                     router.push(`/restaurant-cart/${cart.restaurantId}`)
                   }
                }
             } else if (data.hostname === 'order' && data.queryParams?.orderId) {

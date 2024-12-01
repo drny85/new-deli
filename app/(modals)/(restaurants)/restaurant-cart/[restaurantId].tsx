@@ -1,3 +1,4 @@
+import { getCartFromDatabase } from '@/actions/cart'
 import BackButton from '@/components/BackButton'
 import CartItems from '@/components/checkout/CartItems'
 import TotalView from '@/components/checkout/TotalView'
@@ -10,12 +11,13 @@ import { SIZES } from '@/constants/Colors'
 import { useRestaurant } from '@/hooks/restaurants/useRestaurant'
 import { useThemeColor } from '@/hooks/useThemeColor'
 import { useAuth } from '@/providers/authProvider'
-import { useCartsStore } from '@/stores/cartsStore'
+import { Cart, useCartsStore } from '@/stores/cartsStore'
 import { useOrderFlowStore } from '@/stores/orderFlowStore'
 import { ORDER_TYPE } from '@/typing'
+import { generateUniqueId } from '@/utils/generateUniqueId'
 import { toastAlert } from '@/utils/toast'
 import { router, useLocalSearchParams } from 'expo-router'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 type Params = {
@@ -25,10 +27,12 @@ type Params = {
 const RestaurantCart = () => {
    const user = useAuth().user
    const { restaurantId } = useLocalSearchParams<Params>()
-   const { restaurant, loading } = useRestaurant(restaurantId!)
+   const [sharedCart, setSharedCart] = useState<Cart | null>(null)
    const { getCart, removeCart, updateCart } = useCartsStore()
    const setOrderType = useOrderFlowStore((s) => s.setOrderType)
-   const cart = getCart(restaurantId!)
+   const cartT = getCart(restaurantId!)
+   const cart = sharedCart || cartT
+   const { restaurant, loading } = useRestaurant(cart?.restaurantId!)
 
    const backgroundColor = useThemeColor('background')
    const { top } = useSafeAreaInsets()
@@ -68,7 +72,17 @@ const RestaurantCart = () => {
       }
    }, [cart?.items.length])
 
-   if (loading) return <Loading />
+   useEffect(() => {
+      if (cart?.isShared && cart.id) {
+         getCartFromDatabase(cart.id!).then((cart) => {
+            if (cart) {
+               setSharedCart(cart)
+            }
+         })
+      }
+   }, [cart?.isShared])
+
+   if (loading || !restaurant || !cart) return <Loading />
    return (
       <View style={{ flex: 1, backgroundColor, paddingTop: top }}>
          <Row align="between" containerStyle={{ paddingHorizontal: SIZES.md }}>
@@ -87,7 +101,7 @@ const RestaurantCart = () => {
                {restaurant?.name}
             </Text>
 
-            <ShareButton id={restaurantId!} type="cart" />
+            <ShareButton id={restaurantId} cartId={generateUniqueId()} type="cart" />
          </Row>
          <View style={{ flex: 1, justifyContent: 'space-between' }}>
             {cart && cart?.items.length > 0 && (

@@ -2,7 +2,7 @@ import { SIZES } from '@/constants/Colors'
 import { CartItem, useCartsStore } from '@/stores/cartsStore'
 import { Image } from 'expo-image'
 import { router } from 'expo-router'
-import { StyleSheet, TextStyle, TouchableOpacity } from 'react-native'
+import { Alert, StyleSheet, TextStyle, TouchableOpacity } from 'react-native'
 import ItemQuantitySetter from '../ItemQuantitySetter'
 import NeoView from '../NeoView'
 import Row from '../Row'
@@ -12,6 +12,7 @@ import Divider from '../Divider'
 import { FontAwesome } from '@expo/vector-icons'
 import { letterSizes } from '@/helpers/lettersSizes'
 import { useAuth } from '@/providers/authProvider'
+import { toastAlert } from '@/utils/toast'
 
 type Props = {
    item: CartItem
@@ -188,9 +189,25 @@ const CartListItem = ({ item, showSetter = true, removable = false, onRemove }: 
                   <ItemQuantitySetter
                      quantity={item.quantity}
                      onPressAdd={() => {
+                        if (cart?.isShared) {
+                           return toastAlert({
+                              title: 'Cart is shared',
+                              message: 'You cannot add items to a shared cart',
+                              preset: 'error',
+                              duration: 4
+                           })
+                        }
                         handleInAdd(item)
                      }}
                      onPressSub={() => {
+                        if (cart?.isShared) {
+                           return toastAlert({
+                              title: 'Cart is shared',
+                              message: 'You cannot modify a shared cart',
+                              preset: 'error',
+                              duration: 4
+                           })
+                        }
                         handleRemove(item)
                      }}
                   />

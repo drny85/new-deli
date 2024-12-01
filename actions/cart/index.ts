@@ -3,21 +3,26 @@ import { Cart, useCartsStore } from '@/stores/cartsStore'
 import { doc, getDoc, setDoc } from 'firebase/firestore'
 import { Alert } from 'react-native'
 
-export const saveCartToDatabase = async (cartId: string): Promise<boolean> => {
+export const saveCartToDatabase = async (
+   restaurantId: string,
+   cartId: string
+): Promise<boolean> => {
    try {
-      if (!cartId) return false
-      const cart = useCartsStore.getState().getCart(cartId)
+      if (!cartId || !cartId) return false
+      const cart = useCartsStore.getState().getCart(restaurantId)
       if (!cart) {
          console.log('Cart not found')
          Alert.alert('Cart not found')
          return false
       }
       console.log('Saving cart to database')
+
       // Save cart to database
-      const savedCart: Cart = { ...cart, isShared: true }
+
+      const savedCart: Cart = { ...cart, isShared: true, id: cartId }
       const cartDoc = doc(cartsCollection, cartId)
       await setDoc(cartDoc, { ...savedCart })
-      useCartsStore.getState().updateCart(cartId, { ...savedCart })
+      useCartsStore.getState().updateCart(restaurantId, { ...savedCart })
       return true
    } catch (error) {
       console.log('Error saving cart to database', error)
@@ -31,7 +36,7 @@ export const getCartFromDatabase = async (cartId: string): Promise<Cart | null> 
       const cart = await getDoc(cartDoc)
       if (!cart.exists()) return null
 
-      const cartData = cart.data()
+      const cartData = { ...cart.data(), id: cart.id }
       return cartData as Cart
    } catch (error) {
       console.log('Error getting cart from database', error)

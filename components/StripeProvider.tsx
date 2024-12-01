@@ -14,28 +14,25 @@ import {
    StripeProvider,
    useStripe
 } from '@stripe/stripe-react-native'
-import Constants from 'expo-constants'
 import * as Linking from 'expo-linking'
 import { router } from 'expo-router'
 import { getDocs, query, where } from 'firebase/firestore'
 import LottieView from 'lottie-react-native'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Alert } from 'react-native'
-
-function getUrl(path = '') {
-   if (path === '') {
-      return Constants.appOwnership === 'expo'
-         ? Linking.createURL('/--/' + path)
-         : Linking.createURL(path)
-   }
-   return Linking.createURL(path)
-}
-
+import Constants from 'expo-constants'
 type Props = {
    children: React.ReactElement
    cartTotal: number
    businessName: string
    connectedId: string
+}
+
+function getUrl(path = '') {
+   if (path === '') {
+      Linking.createURL(path)
+   }
+   return Linking.createURL(path)
 }
 const ENV =
    process.env.NODE_ENV === 'production'
@@ -135,7 +132,7 @@ const StripeProviderComponent = ({ children, cartTotal, businessName, connectedI
                //     state: order.shippingAddress.state
                //  }
             },
-            returnURL: getUrl('new-deli://stripe-redirect'),
+            returnURL: getUrl('new-deli://'),
             applePay: {
                merchantCountryCode: 'US'
             },

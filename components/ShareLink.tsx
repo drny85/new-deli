@@ -10,13 +10,21 @@ type Props = {
    id: string
    type: 'order' | 'cart' | 'restaurant' | 'product'
    ascentColor?: boolean
+   cartId: string
    disabled?: boolean
    params?: {}
 }
 
 const SITE_URL = process.env.EXPO_PUBLIC_WEBSITE_URL
 
-const ShareButton: React.FC<Props> = ({ id, type, ascentColor, disabled = false, params }) => {
+const ShareButton: React.FC<Props> = ({
+   id,
+   cartId,
+   type,
+   ascentColor,
+   disabled = false,
+   params
+}) => {
    const ascent = useThemeColor(ascentColor ? 'ascent' : 'text')
    const { user } = useAuth()
    const shareUrl = async () => {
@@ -27,7 +35,7 @@ const ShareButton: React.FC<Props> = ({ id, type, ascentColor, disabled = false,
          let createdUrl
          if (type === 'cart') {
             createdUrl = Linking.createURL('restaurant-cart', {
-               queryParams: { restaurantId: id }
+               queryParams: { restaurantId: cartId }
             })
          }
          if (type === 'order') {
@@ -60,7 +68,7 @@ const ShareButton: React.FC<Props> = ({ id, type, ascentColor, disabled = false,
          )
          if (share.action === Share.sharedAction) {
             if (type === 'cart') {
-               const cartShared = await saveCartToDatabase(id)
+               const cartShared = await saveCartToDatabase(id, cartId)
                if (cartShared)
                   toastMessage({
                      title: 'Success',

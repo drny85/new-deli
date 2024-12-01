@@ -13,6 +13,7 @@ export interface CartItem extends Product {
 }
 
 export type Cart = {
+   id?: string
    items: CartItem[]
    quantity: number
    total: number
@@ -67,15 +68,25 @@ export const useCartsStore = create<CartStoreParams>()(
          updateCart: (restaurantId, cart) => {
             set((state) => ({
                carts: state.carts.map((c) => {
-                  if (c.restaurantId === restaurantId) {
-                     return cart
+                  if (c.id && c.isShared) {
+                     if (c.id === cart.id && c.isShared) {
+                        return cart
+                     }
+                  } else {
+                     if (c.restaurantId === restaurantId) {
+                        return cart
+                     }
                   }
+
                   return c
                })
             }))
          },
 
-         getCart: (restaurantId) => {
+         getCart: (restaurantId, isShared?: string) => {
+            if (isShared) {
+               return get().carts.find((c) => c.id === isShared) as Cart
+            }
             return get().carts.find((c) => c.restaurantId === restaurantId) as Cart
          },
          addToCart: async (item) => {

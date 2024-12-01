@@ -11,12 +11,11 @@ import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native
 import { useFonts } from 'expo-font'
 import { router, Stack } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
-import { useEffect, useState } from 'react'
-import { StyleSheet, TouchableOpacity } from 'react-native'
+import { useCallback, useEffect, useState } from 'react'
+import { TouchableOpacity } from 'react-native'
 import 'react-native-gesture-handler'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import 'react-native-reanimated'
-import Animated, { FadeOut } from 'react-native-reanimated'
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync()
@@ -27,7 +26,7 @@ SplashScreen.setOptions({
 
 export default function RootLayout() {
    const colorScheme = useColorScheme()
-   const [isReady, setIsReady] = useState(false)
+   const [appIsReady, setAppIsReady] = useState(false)
    const iconColor = useThemeColor('text')
    const bgColor = useThemeColor('background')
    const [loaded] = useFonts(fonts)
@@ -43,37 +42,35 @@ export default function RootLayout() {
 
             // Artificially delay for two seconds to simulate a slow loading
             // experience. Please remove this if you copy and paste the code!
-            await new Promise((resolve) => setTimeout(resolve, 2000))
+            await new Promise((resolve) => setTimeout(resolve, 1000))
          } catch (e) {
             console.warn(e)
          } finally {
             // Tell the application to render
-            // setAppIsReady(true);
-
-            setIsReady(true)
-            SplashScreen.hideAsync()
+            setAppIsReady(true)
          }
       }
 
       prepare()
    }, [])
 
-   // if (!isReady || !loaded) {
-   //    return (
-   //       <Animated.View
-   //          style={StyleSheet.absoluteFill}
-   //          layout={FadeOut.springify(80).stiffness(200)}
-   //          exiting={FadeOut.duration(800).springify(80).stiffness(200)}>
-   //          <Animated.Image
-   //             source={require('@/assets/images/splash.png')}
-   //             style={{ height: '100%', width: '100%' }}
-   //          />
-   //       </Animated.View>
-   //    )
-   // }
+   const onLayoutRootView = useCallback(() => {
+      if (appIsReady && loaded) {
+         // This tells the splash screen to hide immediately! If we call this after
+         // `setAppIsReady`, then we may see a blank screen while the app is
+         // loading its initial state and rendering its first pixels. So instead,
+         // we hide the splash screen once we know the root view has already
+         // performed layout.
+         SplashScreen.hide()
+      }
+   }, [appIsReady, loaded])
+
+   if (!appIsReady || !loaded) {
+      return null
+   }
 
    return (
-      <GestureHandlerRootView style={{ flex: 1 }}>
+      <GestureHandlerRootView style={{ flex: 1 }} onLayout={onLayoutRootView}>
          <BottomSheetModalProvider>
             <AuthProvider>
                <ThemeProvider
