@@ -10,7 +10,6 @@ export const useCouriers = () => {
    const [loading, setLoading] = useState(false)
    const { user } = useAuth()
    const { restaurant } = useRestaurant(user?.id!)
-   console.log(restaurant?.couriers)
 
    useEffect(() => {
       if (!user || !restaurant) return

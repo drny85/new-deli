@@ -41,8 +41,13 @@ const CustomCard: React.FC<CustomCardProps> = ({ courier, onPress, onCourierPres
          </TouchableOpacity>
          <View style={{ width: '60%', alignSelf: 'center' }}>
             <Button
+               disabled={assigned && assigned.id === courier.id ? true : false}
                title={assigned && assigned.id === courier.id ? 'Assigned' : 'Assign'}
+               containerStyle={{ opacity: assigned && assigned.id === courier.id ? 0.6 : 1 }}
                type={assigned && assigned.id === courier.id ? 'primary' : 'soft'}
+               contentTextStyle={{
+                  color: assigned && assigned.id === courier.id ? '#ffffff' : '#212121'
+               }}
                onPress={() => onCourierPress(courier)}
             />
          </View>

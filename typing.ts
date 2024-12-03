@@ -50,6 +50,8 @@ export const statusListForPickup: OrderStatus[] = [
    'Picked Up'
 ]
 
+export type Filter = 'thisWeek' | 'lastWeek' | 'monthToDate' | 'yearToDate' | 'today' | 'all'
+
 export interface Order {
    id?: string
    orderNumber?: number

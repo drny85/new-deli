@@ -17,7 +17,7 @@ const config: ExpoConfig = {
    ios: {
       supportsTablet: true,
       bundleIdentifier: 'net.robertdev.new-deli',
-      buildNumber: '1.0.3',
+      buildNumber: '1.0.4',
       usesAppleSignIn: true,
       associatedDomains: ['applinks:yourdeliapp.com'],
       infoPlist: {
@@ -44,6 +44,7 @@ const config: ExpoConfig = {
       },
 
       package: 'net.robertdev.yourdeli',
+      versionCode: 1,
       googleServicesFile: './google-services.json',
       config: {
          googleMaps: {

@@ -25,7 +25,7 @@ export const useNotifications = () => {
    const { user } = useAuth()
 
    useEffect(() => {
-      if (!user) return
+      if (!user || user.pushToken) return
 
       registerForPushNotificationsAsync()
 

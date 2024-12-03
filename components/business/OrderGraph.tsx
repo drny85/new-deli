@@ -1,38 +1,30 @@
 import { SIZES } from '@/constants/Colors'
 import { useThemeColor } from '@/hooks/useThemeColor'
-import { Order } from '@/typing'
+import { Filter, Order } from '@/typing'
 import { getRandomColor } from '@/utils/getRandomColor'
 import SegmentedControl from '@react-native-segmented-control/segmented-control'
-import dayjs from 'dayjs'
-import React, { useMemo, useState } from 'react'
-import { BarChart } from 'react-native-gifted-charts'
-import NeoView from '../NeoView'
+import { useState } from 'react'
+import { ColorValue, ScrollView, StyleSheet } from 'react-native'
+import { PieChart, pieDataItem } from 'react-native-gifted-charts'
+import Animated from 'react-native-reanimated'
+import { filterDataForGraph } from '../charts'
+import Row from '../Row'
 import { Text } from '../ThemedText'
 import { View } from '../ThemedView'
-import { ScrollView, useWindowDimensions } from 'react-native'
+import useOrientation from '@/hooks/useOrientation'
 
 interface GraphComponentProps {
    orders: Order[]
 }
 
-type filter = 'thisWeek' | 'lastWeek' | 'monthToDate' | 'yearToDate' | 'today'
+const SIZE = SIZES.width / 6 / 2.5
 
 const GraphComponent: React.FC<GraphComponentProps> = ({ orders }) => {
-   const ascentColor = useThemeColor('ascent')
    const textColor = useThemeColor('text')
-   const [filter, setFilter] = useState<filter>('thisWeek')
-   const { width, height } = useWindowDimensions()
+   const [filter, setFilter] = useState<Filter>('thisWeek')
+
    const [selectedIndex, setSelectedIndex] = useState(1)
 
-   const colors = useMemo(() => {
-      return [
-         getRandomColor(),
-         getRandomColor(),
-         getRandomColor(),
-         getRandomColor(),
-         getRandomColor()
-      ]
-   }, [])
    const title =
       selectedIndex === 0
          ? 'Last Week'
@@ -42,129 +34,189 @@ const GraphComponent: React.FC<GraphComponentProps> = ({ orders }) => {
              ? 'This Week'
              : selectedIndex === 3
                ? 'Month To Date'
-               : 'Year To Date'
-   const days =
-      (selectedIndex === 0 || selectedIndex) === 1
-         ? 'ddd'
-         : selectedIndex === 2
-           ? 'MMM'
-           : selectedIndex === 3
-             ? 'YYYY'
-             : 'ddd'
+               : selectedIndex === 4
+                 ? 'Year To Date'
+                 : 'All Time'
 
-   const filterData = (orders: Order[], filter: string) => {
-      const now = dayjs()
-      let startDate
+   const transformDataForPieChart = (values: any[]): pieDataItem[] => {
+      // Determine the maximum value in categorized data for the "focused" property
+      const maxValue = Math.max(...values?.map(({ value }) => value), 0)
 
-      switch (filter) {
-         case 'thisWeek':
-            startDate = now.startOf('week')
-            break
-         case 'lastWeek':
-            startDate = now.subtract(1, 'week').startOf('week')
-            break
-         case 'monthToDate':
-            startDate = now.startOf('month')
-            break
-         case 'yearToDate':
-            startDate = now.startOf('year')
-            break
-         case 'today':
-            startDate = now.startOf('day')
-            break
-         default:
-            startDate = now.startOf('year')
-      }
+      return values.map(({ label, value }) => ({
+         value,
+         color: getRandomColor(), // Generate random colors for the chart
+         text: label, // Use category (e.g., Morning, Afternoon, etc.) as text
+         focused: value === maxValue
 
-      const filteredOrders = orders.filter(
-         (order) =>
-            dayjs(order.orderDate).isAfter(startDate) || dayjs(order.orderDate).isSame(startDate)
-      )
-
-      const groupedData = filteredOrders.reduce(
-         (acc, order) => {
-            const dateLabel = dayjs(order.orderDate).format(days)
-            if (!acc[dateLabel]) {
-               acc[dateLabel] = 0
-            }
-            acc[dateLabel] += order.total
-            return acc
-         },
-         {} as Record<string, number>
-      )
-
-      const ordersData = Object.entries(groupedData).map(([label, total]) => ({
-         value: total,
-         label,
-         frontColor: getRandomColor()
+         // Mark the highest value as focused
       }))
-
-      const products = filteredOrders.reduce(
-         (acc, order) => {
-            order.items.forEach((item) => {
-               if (!acc[item.name]) {
-                  acc[item.name] = 0
-               }
-               acc[item.name] += item.quantity
-            })
-            return acc
-         },
-         {} as Record<string, number>
-      )
-
-      const productsData = Object.entries(products)
-         .map(([name, totalQuantity], index) => ({
-            value: totalQuantity,
-            label: name,
-            frontColor: colors[index]
-         }))
-         .sort((a, b) => (b.value > a.value ? 1 : -1))
-         .slice(0, 5)
-
-      return { ordersData, productsData }
    }
 
-   const { productsData, ordersData } = filterData(orders, filter)
+   const { productsData, ordersData } = filterDataForGraph(orders, filter)
+   const data = transformDataForPieChart(productsData)
+   const dataB = transformDataForPieChart(ordersData)
+   console.log(JSON.stringify(data, null, 2))
+   const orientation = useOrientation()
 
    return (
-      <ScrollView
-         contentContainerStyle={{ padding: SIZES.md, gap: SIZES.md }}
-         showsVerticalScrollIndicator={false}>
-         <View style={{ width: '60%', alignSelf: 'center', marginVertical: SIZES.md }}>
+      <View style={{ flex: 1 }}>
+         <View style={{ width: '80%', alignSelf: 'center', marginVertical: SIZES.md }}>
             <SegmentedControl
-               values={['LW', 'Today', 'This Week', 'MTD', 'YTD']}
+               values={['LW', 'Today', 'This Week', 'MTD', 'YTD', 'ALL']}
                selectedIndex={selectedIndex}
                activeFontStyle={{
-                  color: '#212121'
+                  color: '#212121',
+                  fontSize: 18
                }}
                fontStyle={{
-                  color: textColor
+                  color: textColor,
+                  fontSize: 16
                }}
+               style={{ height: 36 }}
                onChange={(e) => {
                   const index = e.nativeEvent.selectedSegmentIndex
                   setSelectedIndex(index)
-
-                  switch (index) {
-                     case 0:
-                        setFilter('lastWeek')
-                        return filterData(orders, 'lastWeek')
-                     case 1:
-                        setFilter('today')
-                        return filterData(orders, 'today')
-                     case 2:
-                        setFilter('thisWeek')
-                        return filterData(orders, 'thisWeek')
-                     case 3:
-                        setFilter('monthToDate')
-                        return filterData(orders, 'monthToDate')
-                     case 4:
-                        setFilter('yearToDate')
-                        return filterData(orders, 'yearToDate')
-                  }
+                  setFilter(
+                     index === 0
+                        ? 'lastWeek'
+                        : index === 1
+                          ? 'today'
+                          : index === 2
+                            ? 'thisWeek'
+                            : index === 3
+                              ? 'monthToDate'
+                              : index === 4
+                                ? 'yearToDate'
+                                : 'all'
+                  )
                }}
             />
          </View>
-         <NeoView
+         <ScrollView
+            horizontal={orientation === 'landscape'}
+            contentContainerStyle={{ padding: SIZES.md, gap: SIZES.md, width: '100%' }}
+            showsVerticalScrollIndicator={false}>
+            <View
+               style={{
+                  boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
+                  borderRadius: SIZES.lg,
+                  padding: SIZES.md,
+                  gap: SIZES.md,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+
+                  width: orientation === 'landscape' ? '50%' : '100%'
+               }}>
+               <Text
+                  type="header"
+                  style={{ textAlign: 'center', fontSize: 26, marginBottom: SIZES.lg }}>
+                  {title}
+               </Text>
+
+               <Row
+                  containerStyle={{
+                     width: orientation === 'landscape' ? '100%' : '70%',
+                     justifyContent: 'space-between',
+                     alignItems: 'center',
+                     alignSelf: 'center'
+                  }}>
+                  <PieChart
+                     data={dataB}
+                     donut
+                     innerRadius={SIZE}
+                     radius={SIZE * 2}
+                     focusOnPress
+                     sectionAutoFocus
+                     pieInnerComponentHeight={20}
+                     isAnimated
+                     showText
+                     textColor="#FFFFFF"
+                     centerLabelComponent={() => {
+                        return (
+                           <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                              <Text type="header" center fontSize="medium">
+                                 {title}
+                              </Text>
+                           </View>
+                        )
+                     }}
+                  />
+                  {dataB.length > 0 && (
+                     <Animated.View style={[styles.legendContainer]}>
+                        {dataB.map((item, index) => (
+                           <Animated.View key={index} style={[styles.legendItem]}>
+                              {renderDot(item.color!)}
+                              <Row containerStyle={{ gap: 4 }}>
+                                 <Text style={[styles.centerLabel, { fontWeight: '500' }]}>
+                                    ${item.value.toFixed(2)}
+                                    <Text style={{ fontWeight: 'condensed' }}> - {item.text}</Text>
+                                 </Text>
+                              </Row>
+                           </Animated.View>
+                        ))}
+                     </Animated.View>
+                  )}
+               </Row>
+            </View>
+            <View
+               style={{
+                  boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
+                  borderRadius: SIZES.lg,
+                  padding: SIZES.md,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: SIZES.md,
+                  width: orientation === 'landscape' ? '50%' : '100%'
+               }}>
+               <Text
+                  type="header"
+                  style={{ textAlign: 'center', fontSize: 26, marginBottom: SIZES.lg }}>
+                  5 Tops Products Sold
+               </Text>
+               <Row
+                  containerStyle={{
+                     width: orientation === 'landscape' ? '100%' : '70%',
+                     justifyContent: 'space-between',
+                     alignItems: 'center',
+                     alignSelf: 'center'
+                  }}>
+                  <PieChart
+                     data={data}
+                     donut
+                     innerRadius={SIZE}
+                     radius={SIZE * 2}
+                     focusOnPress
+                     sectionAutoFocus
+                     pieInnerComponentHeight={20}
+                     isAnimated
+                     centerLabelComponent={() => {
+                        return (
+                           <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                              <Text type="header" center fontSize="medium">
+                                 {title}
+                              </Text>
+                           </View>
+                        )
+                     }}
+                  />
+                  {data.length > 0 && (
+                     <Animated.View style={[styles.legendContainer]}>
+                        {data.map((item, index) => (
+                           <Animated.View key={index} style={[styles.legendItem]}>
+                              {renderDot(item.color!)}
+                              <Row containerStyle={{ gap: 4 }}>
+                                 <Text style={styles.centerLabel}>{item.value}</Text>
+                                 <Text style={[styles.centerLabel, { fontWeight: 'condensed' }]}>
+                                    {item.text}
+                                 </Text>
+                              </Row>
+                           </Animated.View>
+                        ))}
+                     </Animated.View>
+                  )}
+               </Row>
+            </View>
+            {/* <NeoView
             innerStyleContainer={{ borderRadius: SIZES.lg }}
             containerStyle={{ borderRadius: SIZES.lg }}>
             <Text type="header" center>
@@ -212,9 +264,52 @@ const GraphComponent: React.FC<GraphComponentProps> = ({ orders }) => {
                   yAxisTextStyle={{ color: textColor }}
                />
             </View>
-         </NeoView>
-      </ScrollView>
+         </NeoView> */}
+         </ScrollView>
+      </View>
    )
 }
 
 export default GraphComponent
+
+const renderDot = (color: ColorValue) => {
+   return (
+      <View
+         style={{ backgroundColor: color, height: 10, width: 10, borderRadius: 5, marginRight: 8 }}
+      />
+   )
+}
+
+const styles = StyleSheet.create({
+   legendContainer: {
+      alignItems: 'center',
+      paddingVertical: SIZES.sm
+   },
+   legendItem: {
+      flexDirection: 'row',
+      justifyContent: 'flex-start',
+      alignItems: 'center',
+      marginVertical: 4,
+      width: '100%'
+   },
+   dot: {
+      height: 10,
+      width: 10,
+      borderRadius: 5,
+      marginRight: 6
+   },
+   title: {
+      fontSize: 24,
+      fontWeight: 'bold',
+      marginBottom: 16
+   },
+   buttonsContainer: {
+      flexDirection: 'row',
+      justifyContent: 'space-around',
+      marginTop: 16
+   },
+   centerLabel: {
+      fontSize: 16,
+      fontWeight: 'bold'
+   }
+})

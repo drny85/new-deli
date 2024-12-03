@@ -102,6 +102,7 @@ const TopSellingItemDashboard = ({ orders }: Props) => {
                      <SegmentedControl
                         values={['LW', 'Today', 'This Week', 'MTD', 'YTD']}
                         selectedIndex={selectedIndex}
+                        style={{ height: 40 }}
                         activeFontStyle={{
                            fontSize: 18,
                            fontFamily: 'Montserrat-Bold',

@@ -7,7 +7,7 @@ import { useOrder } from '@/hooks/orders/useOrder'
 import { Courier, Order, ORDER_STATUS } from '@/typing'
 import { generateRandomNumbers } from '@/utils/generateRandomNumber'
 import { router, useLocalSearchParams } from 'expo-router'
-import { addDoc, collection } from 'firebase/firestore'
+import { collection, doc, setDoc } from 'firebase/firestore'
 
 const CourierAssigment = () => {
    const { orderId } = useLocalSearchParams<{ orderId: string }>()
@@ -27,7 +27,8 @@ const CourierAssigment = () => {
          const updated = await updateOrder(newOrder)
 
          if (updated) {
-            await addDoc(collection(db, 'deliveries'), {
+            const refDoc = doc(collection(db, 'deliveries'), orderId)
+            await setDoc(refDoc, {
                orderId,
                courierId: courier.id,
                orderDate: new Date().toISOString()

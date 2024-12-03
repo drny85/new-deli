@@ -17,7 +17,7 @@ import { useRestaurantsStore } from '@/stores/restaurantsStore'
 import SegmentedControl from '@react-native-segmented-control/segmented-control'
 import { useState } from 'react'
 
-const INDEXES = ['Activities', 'Reports']
+const INDEXES = ['Activities', 'Reports', 'Analities']
 
 const Home = () => {
    const { user } = useAuth()
@@ -42,6 +42,7 @@ const Home = () => {
                   fontFamily: 'Montserrat-Bold',
                   color: ascentColor
                }}
+               style={{ height: 42 }}
                fontStyle={{ fontSize: 18, fontFamily: 'Montserrat', color: textColor }}
                onChange={(event) => {
                   setSelectedIndex(event.nativeEvent.selectedSegmentIndex)
@@ -79,6 +80,7 @@ const Home = () => {
          )}
          {selectedIndex === 0 && <Dashboard orders={orders} />}
          {selectedIndex === 1 && <GraphComponent orders={orders} />}
+         {selectedIndex === 2 && <GraphComponent orders={orders} />}
       </Container>
    )
 }

@@ -14,7 +14,7 @@ const BusinessOrderStatusView = ({ orders }: Props) => {
 
    return (
       <FlashList
-         //key={orientation}
+         key={orientation}
          data={orders}
          numColumns={2}
          ListEmptyComponent={
