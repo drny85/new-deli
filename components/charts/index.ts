@@ -1,19 +1,15 @@
 import dayjs from 'dayjs'
 import { getRandomColor } from '@/utils/getRandomColor'
-import { Filter } from '@/typing'
+import { Filter, FilterDay, Order } from '@/typing'
 
-type Order = {
-   orderDate: string
-   total: number
-   items: { name: string; quantity: number }[]
-}
 type FilterDataResult = {
    ordersData: { value: number; label: string; frontColor: string }[]
    productsData: { value: number; label: string }[]
 }
 export const filterDataForGraph = (
    orders: Order[],
-   filter: Filter
+   filter: Filter,
+   all?: boolean
 ): FilterDataResult & { days: string[] } => {
    const now = dayjs()
    const daysFormat =
@@ -62,10 +58,12 @@ export const filterDataForGraph = (
       return { buckets, bucketLabels }
    }
 
-   const filteredOrders = orders.filter((order) => {
-      const orderDate = dayjs(order.orderDate)
-      return orderDate.isAfter(startDate) || orderDate.isSame(startDate)
-   })
+   const filteredOrders = all
+      ? orders
+      : orders.filter((order) => {
+           const orderDate = dayjs(order.orderDate)
+           return orderDate.isAfter(startDate) || orderDate.isSame(startDate)
+        })
 
    let ordersData: { value: number; label: string; frontColor: string }[]
    let days: string[]
@@ -183,4 +181,59 @@ export const filterDataForGraph = (
       .slice(0, 5)
 
    return { ordersData, productsData, days }
+}
+
+interface FilteredData {
+   value: number
+   label: string
+   frontColor: string
+}
+
+export const filterOrdersByTime = (orders: Order[], filter: FilterDay) => {
+   let groupedData: Record<string, number> = {}
+   let labelExtractor: (date: dayjs.Dayjs) => string
+
+   // Determine label extractor based on filter
+   switch (filter) {
+      case 'timeOfDay':
+         labelExtractor = (date) => {
+            const hour = date.hour()
+            if (hour < 12) return 'Morning'
+            if (hour < 17) return 'Afternoon'
+            return 'Evening'
+         }
+         break
+      case 'dayOfWeek':
+         labelExtractor = (date) => date.format('ddd') // Mon, Tue, ...
+         break
+      case 'month':
+         labelExtractor = (date) => date.format('MMM') // Jan, Feb, ...
+         break
+      case 'year':
+         labelExtractor = (date) => date.format('YYYY') // 2024, 2025, ...
+         break
+      default:
+         throw new Error('Invalid filter type')
+   }
+
+   // Group orders
+   groupedData = orders.reduce(
+      (acc, order) => {
+         const orderDate = dayjs(order.orderDate)
+         const label = labelExtractor(orderDate)
+
+         acc[label] = (acc[label] || 0) + order.total
+         return acc
+      },
+      {} as Record<string, number>
+   )
+
+   // Convert grouped data into the desired format
+   const filteredData: FilteredData[] = Object.entries(groupedData).map(([label, value]) => ({
+      value,
+      label,
+      frontColor: getRandomColor()
+   }))
+
+   return filteredData
 }

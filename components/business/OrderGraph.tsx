@@ -20,6 +20,7 @@ interface GraphComponentProps {
 const SIZE = SIZES.width / 6 / 2.5
 
 const GraphComponent: React.FC<GraphComponentProps> = ({ orders }) => {
+   const orientation = useOrientation()
    const textColor = useThemeColor('text')
    const [filter, setFilter] = useState<Filter>('thisWeek')
 
@@ -53,10 +54,8 @@ const GraphComponent: React.FC<GraphComponentProps> = ({ orders }) => {
    }
 
    const { productsData, ordersData } = filterDataForGraph(orders, filter)
-   const data = transformDataForPieChart(productsData)
-   const dataB = transformDataForPieChart(ordersData)
-   console.log(JSON.stringify(data, null, 2))
-   const orientation = useOrientation()
+   const ordersGraph = transformDataForPieChart(ordersData)
+   const productsGraph = transformDataForPieChart(productsData)
 
    return (
       <View style={{ flex: 1 }}>
@@ -120,41 +119,52 @@ const GraphComponent: React.FC<GraphComponentProps> = ({ orders }) => {
                      alignItems: 'center',
                      alignSelf: 'center'
                   }}>
-                  <PieChart
-                     data={dataB}
-                     donut
-                     innerRadius={SIZE}
-                     radius={SIZE * 2}
-                     focusOnPress
-                     sectionAutoFocus
-                     pieInnerComponentHeight={20}
-                     isAnimated
-                     showText
-                     textColor="#FFFFFF"
-                     centerLabelComponent={() => {
-                        return (
-                           <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-                              <Text type="header" center fontSize="medium">
-                                 {title}
-                              </Text>
-                           </View>
-                        )
-                     }}
-                  />
-                  {dataB.length > 0 && (
-                     <Animated.View style={[styles.legendContainer]}>
-                        {dataB.map((item, index) => (
-                           <Animated.View key={index} style={[styles.legendItem]}>
-                              {renderDot(item.color!)}
-                              <Row containerStyle={{ gap: 4 }}>
-                                 <Text style={[styles.centerLabel, { fontWeight: '500' }]}>
-                                    ${item.value.toFixed(2)}
-                                    <Text style={{ fontWeight: 'condensed' }}> - {item.text}</Text>
-                                 </Text>
-                              </Row>
-                           </Animated.View>
-                        ))}
-                     </Animated.View>
+                  {ordersGraph.length === 0 ? (
+                     <Text type="muted" center fontSize="large">
+                        No orders
+                     </Text>
+                  ) : (
+                     <>
+                        <PieChart
+                           data={ordersGraph}
+                           donut
+                           innerRadius={SIZE}
+                           radius={SIZE * 2}
+                           focusOnPress
+                           sectionAutoFocus
+                           pieInnerComponentHeight={20}
+                           isAnimated
+                           showText
+                           textColor="#FFFFFF"
+                           centerLabelComponent={() => {
+                              return (
+                                 <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                                    <Text type="header" center fontSize="medium">
+                                       {title}
+                                    </Text>
+                                 </View>
+                              )
+                           }}
+                        />
+
+                        <Animated.View style={[styles.legendContainer]}>
+                           {ordersGraph.map((item, index) => (
+                              <Animated.View key={index} style={[styles.legendItem]}>
+                                 {renderDot(item.color!)}
+                                 <Row containerStyle={{ gap: 4 }}>
+                                    <Text style={[styles.centerLabel, { fontWeight: 'condensed' }]}>
+                                       {item.text}
+
+                                       <Text style={{ fontWeight: '500' }}>
+                                          {' '}
+                                          - ${item.value.toFixed(2)}
+                                       </Text>
+                                    </Text>
+                                 </Row>
+                              </Animated.View>
+                           ))}
+                        </Animated.View>
+                     </>
                   )}
                </Row>
             </View>
@@ -180,39 +190,46 @@ const GraphComponent: React.FC<GraphComponentProps> = ({ orders }) => {
                      alignItems: 'center',
                      alignSelf: 'center'
                   }}>
-                  <PieChart
-                     data={data}
-                     donut
-                     innerRadius={SIZE}
-                     radius={SIZE * 2}
-                     focusOnPress
-                     sectionAutoFocus
-                     pieInnerComponentHeight={20}
-                     isAnimated
-                     centerLabelComponent={() => {
-                        return (
-                           <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-                              <Text type="header" center fontSize="medium">
-                                 {title}
-                              </Text>
-                           </View>
-                        )
-                     }}
-                  />
-                  {data.length > 0 && (
-                     <Animated.View style={[styles.legendContainer]}>
-                        {data.map((item, index) => (
-                           <Animated.View key={index} style={[styles.legendItem]}>
-                              {renderDot(item.color!)}
-                              <Row containerStyle={{ gap: 4 }}>
-                                 <Text style={styles.centerLabel}>{item.value}</Text>
-                                 <Text style={[styles.centerLabel, { fontWeight: 'condensed' }]}>
-                                    {item.text}
-                                 </Text>
-                              </Row>
-                           </Animated.View>
-                        ))}
-                     </Animated.View>
+                  {productsGraph.length === 0 ? (
+                     <Text type="muted" center fontSize="large">
+                        No products sold
+                     </Text>
+                  ) : (
+                     <>
+                        <PieChart
+                           data={productsGraph}
+                           donut
+                           innerRadius={SIZE}
+                           radius={SIZE * 2}
+                           focusOnPress
+                           sectionAutoFocus
+                           pieInnerComponentHeight={20}
+                           isAnimated
+                           centerLabelComponent={() => {
+                              return (
+                                 <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                                    <Text type="header" center fontSize="medium">
+                                       {title}
+                                    </Text>
+                                 </View>
+                              )
+                           }}
+                        />
+
+                        <Animated.View style={[styles.legendContainer]}>
+                           {productsGraph.map((item, index) => (
+                              <Animated.View key={index} style={[styles.legendItem]}>
+                                 {renderDot(item.color!)}
+                                 <Row containerStyle={{ gap: 4 }}>
+                                    <Text style={styles.centerLabel}>{item.value}</Text>
+                                    <Text style={[styles.centerLabel, { fontWeight: 'condensed' }]}>
+                                       {item.text}
+                                    </Text>
+                                 </Row>
+                              </Animated.View>
+                           ))}
+                        </Animated.View>
+                     </>
                   )}
                </Row>
             </View>
