@@ -19,9 +19,9 @@ const ProductCard = ({
 }) => {
    return (
       <NeoView
-         containerStyle={{ borderRadius: SIZES.md }}
+         containerStyle={{ borderRadius: SIZES.md * 2 }}
          innerStyleContainer={{ borderRadius: SIZES.md }}>
-         <TouchableOpacity onPress={onPress}>
+         <TouchableOpacity onPress={onPress} style={{ borderRadius: SIZES.md }}>
             <View
                style={[
                   {

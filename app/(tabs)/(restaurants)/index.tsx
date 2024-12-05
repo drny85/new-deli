@@ -186,7 +186,9 @@ const Restaurants = () => {
                renderItem={({ item }) => {
                   return (
                      <RestaurantCard
-                        contentContainerStyle={{ marginVertical: SIZES.sm * 0.5 }}
+                        contentContainerStyle={{
+                           marginVertical: SIZES.sm * 0.5
+                        }}
                         item={item}
                         onPress={() => onRestaurantPress(item.id!)}
                      />

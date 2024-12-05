@@ -1,4 +1,4 @@
-import { TouchableOpacity, View, ViewStyle } from 'react-native'
+import { TouchableOpacity, useColorScheme, View, ViewStyle } from 'react-native'
 import React from 'react'
 import NeoView from './NeoView'
 import { router } from 'expo-router'
@@ -13,6 +13,7 @@ type Props = {
 const BackButton = ({ onPress, containerStyle }: Props) => {
    const { top } = useSafeAreaInsets()
    const ascent = useThemeColor('ascent')
+   const isDark = useColorScheme() === 'dark'
    return (
       <View
          style={[
@@ -32,7 +33,7 @@ const BackButton = ({ onPress, containerStyle }: Props) => {
                size={50}
                containerStyle={{ shadowColor: 'transparent' }}
                innerStyleContainer={{ backgroundColor: 'transparent' }}>
-               <FontAwesome name="chevron-left" size={28} color={ascent} />
+               <FontAwesome name="chevron-left" size={28} color={isDark ? '#ffffff' : ascent} />
             </NeoView>
          </TouchableOpacity>
       </View>

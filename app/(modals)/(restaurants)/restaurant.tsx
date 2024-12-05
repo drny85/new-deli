@@ -16,7 +16,7 @@ import { useRestaurantsStore } from '@/stores/restaurantsStore'
 import { FontAwesome } from '@expo/vector-icons'
 import { router, useLocalSearchParams } from 'expo-router'
 import { useMemo } from 'react'
-import { TouchableOpacity } from 'react-native'
+import { TouchableOpacity, useColorScheme } from 'react-native'
 import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated'
 
 type Params = {
@@ -100,6 +100,7 @@ const Header = ({
    cartQuantity: number
 }) => {
    const textColor = useThemeColor('ascent')
+   const isDark = useColorScheme() === 'dark'
 
    return (
       <Row
@@ -123,7 +124,7 @@ const Header = ({
                   borderColor: '#ffffff',
                   shadowColor: 'transparent'
                }}>
-               <FontAwesome name="chevron-left" size={22} color={textColor} />
+               <FontAwesome name="chevron-left" size={22} color={isDark ? '#ffffff' : textColor} />
             </NeoView>
          </TouchableOpacity>
          {title && (
@@ -170,7 +171,11 @@ const Header = ({
                         borderColor: '#ffffff',
                         shadowColor: 'transparent'
                      }}>
-                     <FontAwesome name="shopping-cart" size={22} color={textColor} />
+                     <FontAwesome
+                        name="shopping-cart"
+                        size={22}
+                        color={isDark ? '#ffffff' : textColor}
+                     />
 
                      {cartQuantity > 0 && (
                         <View

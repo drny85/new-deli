@@ -58,7 +58,13 @@ export default Products
 const ProductsView = ({ item }: { item: CategorizedProduct }) => {
    const backgroundColor = useThemeColor('background')
    return (
-      <View style={{ flex: 1, gap: SIZES.sm, backgroundColor, marginBottom: 30 }}>
+      <View
+         style={{
+            flex: 1,
+            gap: SIZES.sm,
+            backgroundColor,
+            marginBottom: 30
+         }}>
          <Text type="defaultSemiBold" fontSize="large">
             {item.title}
          </Text>
@@ -70,7 +76,7 @@ const ProductsView = ({ item }: { item: CategorizedProduct }) => {
             estimatedItemSize={SIZES.height * 0.22}
             showsHorizontalScrollIndicator={false}
             renderItem={({ item }) => (
-               <View style={{ marginHorizontal: 2, borderRadius: SIZES.md }}>
+               <View style={{ marginHorizontal: 2, borderRadius: SIZES.lg * 2 }}>
                   <ProductCard
                      product={item}
                      onPress={() =>

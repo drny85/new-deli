@@ -159,15 +159,17 @@ const Analytics: React.FC<GraphComponentProps> = ({ orders }) => {
                   </>
                )}
             </Row>
-            <View style={{ marginVertical: 20 }}>
-               <Text type="title">
-                  {higherValueWIthLabel.label}{' '}
-                  <Text type="default" style={{ fontWeight: 'condensed', fontSize: 20 }}>
-                     has the most sales with
-                  </Text>{' '}
-                  ${higherValueWIthLabel.value.toFixed(2)}
-               </Text>
-            </View>
+            {higherValueWIthLabel && (
+               <View style={{ marginVertical: 20 }}>
+                  <Text type="title">
+                     {higherValueWIthLabel.label}{' '}
+                     <Text type="default" style={{ fontWeight: 'condensed', fontSize: 20 }}>
+                        has the most sales with
+                     </Text>{' '}
+                     ${higherValueWIthLabel.value.toFixed(2)}
+                  </Text>
+               </View>
+            )}
          </View>
       </View>
    )

@@ -1,7 +1,7 @@
 import { SIZES } from '@/constants/Colors'
 import { CardData } from '@/typing'
 import { Image } from 'expo-image'
-import { StyleSheet, TouchableOpacity, ViewStyle } from 'react-native'
+import { StyleSheet, TouchableOpacity, useColorScheme, ViewStyle } from 'react-native'
 import NeoView from '../NeoView'
 import Row from '../Row'
 import { Text } from '../ThemedText'
@@ -21,23 +21,30 @@ type Props = {
 
 const RestaurantCard = ({ item, onPress, contentContainerStyle }: Props) => {
    const bg = useThemeColor('background')
+   const isDark = useColorScheme() === 'dark'
    useUser()
    const { user } = useAuth()
    const isFavorite = user?.favoritesStores.includes(item.id!)
 
    return (
       <NeoView
+         innerStyleContainer={{ borderRadius: SIZES.md }}
          containerStyle={[
             {
                borderRadius: SIZES.md,
-               shadowColor: bg
+               shadowColor: isDark ? undefined : bg
             },
             contentContainerStyle
          ]}>
          {user && (
             <TouchableOpacity
                onPress={() => toggleFavorite(item.id!, user)}
-               style={{ position: 'absolute', right: 10, top: 10, zIndex: 30 }}>
+               style={{
+                  position: 'absolute',
+                  right: 10,
+                  top: 10,
+                  zIndex: 30
+               }}>
                <FontAwesome name={isFavorite ? 'heart' : 'heart-o'} size={28} color={'#c1121f'} />
             </TouchableOpacity>
          )}

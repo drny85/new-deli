@@ -4,13 +4,13 @@ import { useAuth } from '@/providers/authProvider'
 import { toastMessage } from '@/utils/toast'
 import { Feather } from '@expo/vector-icons'
 import * as Linking from 'expo-linking'
-import { Share, TouchableOpacity } from 'react-native'
+import { Share, TouchableOpacity, useColorScheme } from 'react-native'
 
 type Props = {
    id: string
    type: 'order' | 'cart' | 'restaurant' | 'product'
    ascentColor?: boolean
-   cartId: string
+   cartId?: string
    disabled?: boolean
    params?: {}
 }
@@ -26,6 +26,7 @@ const ShareButton: React.FC<Props> = ({
    params
 }) => {
    const ascent = useThemeColor(ascentColor ? 'ascent' : 'text')
+   const isDark = useColorScheme() === 'dark'
    const { user } = useAuth()
    const shareUrl = async () => {
       // Replace with your deep link URL
@@ -67,7 +68,7 @@ const ShareButton: React.FC<Props> = ({
             }
          )
          if (share.action === Share.sharedAction) {
-            if (type === 'cart') {
+            if (type === 'cart' && cartId) {
                const cartShared = await saveCartToDatabase(id, cartId)
                if (cartShared)
                   toastMessage({
@@ -107,7 +108,7 @@ const ShareButton: React.FC<Props> = ({
 
    return (
       <TouchableOpacity disabled={disabled} onPress={shareUrl}>
-         <Feather name="share" size={30} color={ascent} />
+         <Feather name="share" size={30} color={isDark ? '#ffffff' : ascent} />
       </TouchableOpacity>
    )
 }

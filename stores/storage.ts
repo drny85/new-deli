@@ -2,7 +2,7 @@ import { StateStorage } from 'zustand/middleware'
 import { MMKV } from 'react-native-mmkv'
 
 export const storage = new MMKV({
-   id: 'storage'
+   id: 'cart-storage'
 })
 
 export const zustandStorage: StateStorage = {

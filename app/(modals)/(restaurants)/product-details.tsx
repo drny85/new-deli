@@ -26,6 +26,7 @@ import { Image } from 'moti'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Keyboard, ScrollView, StyleSheet, TouchableOpacity } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import * as Haptics from 'expo-haptics'
 
 const PIC_DIMENSIONS = SIZES.height * 0.5
 
@@ -89,6 +90,7 @@ const ProductDetail = () => {
          carts.length >= CART_ALLOWED &&
          carts.findIndex((c) => c.items.find((i) => i.businessId === product?.businessId)) === -1
       ) {
+         Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error)
          return toastAlert({
             title: 'Error',
             message: 'You can only have 10 carts',
@@ -96,7 +98,8 @@ const ProductDetail = () => {
             duration: 1
          })
       }
-      if (!selected && product?.sizes && product.sizes.length > 0)
+      if (!selected && product?.sizes && product.sizes.length > 0) {
+         Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error)
          return toastAlert({
             title: 'Pick One',
             message: 'You must pick a size',
@@ -104,6 +107,8 @@ const ProductDetail = () => {
             iconName: 'hand.raised.fill',
             duration: 2
          })
+      }
+
       if (!cart) {
          createOrGetCart()
       }
