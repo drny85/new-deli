@@ -131,7 +131,8 @@ const Checkout = () => {
          })
          return
       }
-      cantContinueIfDeliveryWithoutAddress()
+      const isGood = cantContinueIfDeliveryWithoutAddress()
+      if (!isGood) return
       if (!user?.id || !cart || !restaurantId) return
       const withinRange = calculateDistanceBetweenDeliveryAddressResturant()
       if (!withinRange) return
@@ -221,12 +222,13 @@ const Checkout = () => {
       return false
    }
 
-   const cantContinueIfDeliveryWithoutAddress = () => {
+   const cantContinueIfDeliveryWithoutAddress = (): boolean => {
       if (!deliveryAddress && orderType === 'delivery') {
          setChangingAddressFromCheckoutScreen(true)
          router.push({ pathname: '/address', params: { restaurantId } })
-         return
+         return false
       }
+      return true
    }
 
    useEffect(() => {

@@ -4,6 +4,7 @@ import ItemQuantitySetter from '@/components/ItemQuantitySetter'
 import NeoView from '@/components/NeoView'
 import Row from '@/components/Row'
 import { Text } from '@/components/ThemedText'
+import ThemeToggle from '@/components/ThemeToggle'
 import { SIZES } from '@/constants/Colors'
 import { isFromToday } from '@/helpers/isFromToday'
 import { usePhoto } from '@/hooks/usePhoto'
@@ -62,6 +63,36 @@ export default function BusinessSettings() {
    const ascentColor = useThemeColor('ascent')
    const { width } = useWindowDimensions()
    const { orders } = useBusinessOrdersStore()
+
+   const onDeleteZip = (zip: number) => {
+      if (restaurant && zip) {
+         const newZipCodes = restaurant.zips.filter((z) => z !== zip)
+
+         updateBusiness({
+            ...restaurant!,
+            zips: newZipCodes
+         })
+      }
+   }
+
+   const zipDeletion = (zip: number) => {
+      Alert.alert(
+         'Delete Zip Code',
+         `Are you sure you want to delete the zip code ${zip}?`,
+         [
+            {
+               text: 'Cancel',
+               style: 'cancel'
+            },
+            {
+               text: 'Delete',
+               style: 'destructive',
+               onPress: () => onDeleteZip(zip)
+            }
+         ],
+         { cancelable: false }
+      )
+   }
 
    const canNotClosed = useMemo(() => {
       return orders
@@ -125,18 +156,19 @@ export default function BusinessSettings() {
    }, [])
 
    useEffect(() => {
+      if (!restaurant) return
       if (form.otpPIN) {
          updateBusiness({
-            ...restaurant!,
+            ...restaurant,
             requiredOTP: true
          })
       } else {
          updateBusiness({
-            ...restaurant!,
+            ...restaurant,
             requiredOTP: false
          })
       }
-   }, [form.otpPIN])
+   }, [form.otpPIN, restaurant])
 
    useEffect(() => {
       if (selectedImage && photo && restaurant) {
@@ -386,10 +418,7 @@ export default function BusinessSettings() {
 
                   <View style={styles.rowSpacer} />
 
-                  <Switch
-                     onValueChange={(darkMode) => setForm({ ...form, darkMode })}
-                     value={form.darkMode}
-                  />
+                  <ThemeToggle />
                </View>
                <View style={[styles.row, { backgroundColor: secondaryColor }]}>
                   <View style={[styles.rowIcon, { backgroundColor: '#006d77' }]}>
@@ -525,7 +554,20 @@ export default function BusinessSettings() {
                               {[
                                  restaurant?.zips
                                     .sort((a, b) => (a > b ? 1 : -1))
-                                    .map((zip) => <Text key={zip}>{zip}</Text>)
+                                    .map((zip) => (
+                                       <View key={zip} style={styles.zip}>
+                                          <Text>{zip}</Text>
+                                          <TouchableOpacity
+                                             style={styles.zipClose}
+                                             onPress={() => zipDeletion(zip)}>
+                                             <Feather
+                                                name="x-circle"
+                                                size={20}
+                                                color={ascentColor}
+                                             />
+                                          </TouchableOpacity>
+                                       </View>
+                                    ))
                               ]}
                            </Row>
                         </NeoView>
@@ -764,6 +806,17 @@ const styles = StyleSheet.create({
    rowLabel: {
       fontSize: 17,
       fontWeight: '400'
+   },
+   zip: {
+      borderRadius: SIZES.sm,
+      boxShadow: '0px 0px 4px rgba(0, 0, 0, 0.1)',
+      padding: SIZES.sm
+   },
+   zipClose: {
+      position: 'absolute',
+      top: -5,
+      right: -5,
+      zIndex: 999
    },
    rowSpacer: {
       flexGrow: 1,

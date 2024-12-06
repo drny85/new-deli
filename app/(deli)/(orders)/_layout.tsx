@@ -1,6 +1,6 @@
 import { Stack } from 'expo-router'
 
-const _layout = () => {
+const OrdersTabsLayout = () => {
    return (
       <Stack screenOptions={{ headerShown: false }}>
          <Stack.Screen name="(tabs)" />
@@ -9,4 +9,4 @@ const _layout = () => {
    )
 }
 
-export default _layout
+export default OrdersTabsLayout

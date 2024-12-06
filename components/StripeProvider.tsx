@@ -132,6 +132,7 @@ const StripeProviderComponent = ({ children, cartTotal, businessName, connectedI
                //     state: order.shippingAddress.state
                //  }
             },
+
             returnURL: getUrl('new-deli://'),
             applePay: {
                merchantCountryCode: 'US'
@@ -253,6 +254,8 @@ const StripeProviderComponent = ({ children, cartTotal, businessName, connectedI
             source={require('@/assets/animations/stripe_loading_light.json')}
          />
       )
+   if (!ENV) throw new Error('Missing Stripe Publishable Key')
+
    return (
       <StripeProvider
          threeDSecureParams={{

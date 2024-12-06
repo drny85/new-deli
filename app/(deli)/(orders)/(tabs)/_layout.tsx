@@ -22,7 +22,6 @@ const HomeLayout = () => {
    const text = useThemeColor('text')
    const border = useThemeColor('tabIconDefault')
    const { restaurant } = useRestaurantsStore()
-   console.log(restaurant?.couriers.length, restaurant?.ordersMethod)
 
    if (restaurant?.couriers.length === 0 && restaurant?.ordersMethod !== 'pickup-only')
       return <Redirect href={'/(deli)/(orders)/no-courriers'} />

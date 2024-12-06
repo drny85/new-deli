@@ -1,4 +1,4 @@
-import { StyleProp, StyleSheet, ViewStyle, View } from 'react-native'
+import { StyleProp, StyleSheet, ViewStyle, View, useColorScheme } from 'react-native'
 import React from 'react'
 import { useThemeColor } from '@/hooks/useThemeColor'
 
@@ -19,6 +19,7 @@ const NeoView = ({
    const backgroundColor = useThemeColor('background')
    const primaryColor = useThemeColor('primary')
    const secondaryColor = useThemeColor('secondary')
+   const isDark = useColorScheme() === 'dark'
 
    return (
       <View
@@ -26,7 +27,7 @@ const NeoView = ({
             styles.topShadow,
             {
                backgroundColor,
-               shadowColor: primaryColor,
+               shadowColor: isDark ? undefined : primaryColor,
                borderRadius: rounded && size ? size : undefined
             },
             containerStyle

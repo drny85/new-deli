@@ -2,7 +2,7 @@ import { SIZES } from '@/constants/Colors'
 import { useThemeColor } from '@/hooks/useThemeColor'
 import { FontAwesome, MaterialIcons } from '@expo/vector-icons'
 import { SymbolView } from 'expo-symbols'
-import { TouchableOpacity } from 'react-native'
+import { TouchableOpacity, useColorScheme } from 'react-native'
 import NeoView from '../NeoView'
 import Row from '../Row'
 import { Text } from '../ThemedText'
@@ -16,6 +16,7 @@ type Props = {
 }
 const MapHeader = ({ onPressBack, onCenter, onZoomIn, onZoomOut }: Props) => {
    const ascentColor = useThemeColor('ascent')
+   const isDark = useColorScheme() === 'dark'
 
    return (
       <View
@@ -34,7 +35,11 @@ const MapHeader = ({ onPressBack, onCenter, onZoomIn, onZoomOut }: Props) => {
             }}>
             <TouchableOpacity onPress={onPressBack}>
                <NeoView rounded size={48}>
-                  <FontAwesome name="chevron-left" size={22} color={ascentColor} />
+                  <FontAwesome
+                     name="chevron-left"
+                     size={24}
+                     color={isDark ? '#ffffff' : ascentColor}
+                  />
                </NeoView>
             </TouchableOpacity>
             <Text center type="title" style={{ opacity: 0.7 }}>
@@ -43,17 +48,25 @@ const MapHeader = ({ onPressBack, onCenter, onZoomIn, onZoomOut }: Props) => {
             <View style={{ gap: SIZES.md }}>
                <TouchableOpacity onPress={onCenter}>
                   <NeoView rounded size={48}>
-                     <MaterialIcons name="location-searching" size={28} color={ascentColor} />
+                     <MaterialIcons
+                        name="location-searching"
+                        size={28}
+                        color={isDark ? '#ffffff' : ascentColor}
+                     />
                   </NeoView>
                </TouchableOpacity>
                <TouchableOpacity onPress={onZoomIn}>
                   <NeoView rounded size={48}>
-                     <SymbolView name="plus" weight="bold" tintColor={ascentColor} />
+                     <SymbolView
+                        name="plus"
+                        weight="bold"
+                        tintColor={isDark ? '#ffffff' : ascentColor}
+                     />
                   </NeoView>
                </TouchableOpacity>
                <TouchableOpacity onPress={onZoomOut}>
                   <NeoView rounded size={48}>
-                     <SymbolView name="minus.circle" tintColor={ascentColor} />
+                     <SymbolView name="minus.circle" tintColor={isDark ? '#ffffff' : ascentColor} />
                   </NeoView>
                </TouchableOpacity>
             </View>

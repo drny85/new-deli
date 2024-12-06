@@ -10,7 +10,7 @@ import { customMapStyleLight } from '@/utils/customMap'
 import { router } from 'expo-router'
 import { SymbolView } from 'expo-symbols'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { FlatList } from 'react-native'
+import { FlatList, useColorScheme } from 'react-native'
 import MapView, { Marker, MarkerPressEvent, Region } from 'react-native-maps'
 
 const CARD_HEIGHT = 220
@@ -25,6 +25,7 @@ const PickUpView = () => {
    const mapRef = useRef<MapView>(null)
    const [region, setRegion] = useState<Region>()
    const ascentColor = useThemeColor('ascent')
+   const isDark = useColorScheme() === 'dark'
    const { restaurants } = useRestaurantsStore()
    const { setOrderType } = useOrderFlowStore()
    const flatListRef = useRef<FlatList>(null)
@@ -121,7 +122,11 @@ const PickUpView = () => {
                         title={restaurant.name}
                         description={restaurant.address?.slice(0, -15)}>
                         <NeoView rounded size={50}>
-                           <SymbolView name="fork.knife" size={30} tintColor={ascentColor} />
+                           <SymbolView
+                              name="fork.knife"
+                              size={30}
+                              tintColor={isDark ? '#ffffff' : ascentColor}
+                           />
                         </NeoView>
                      </Marker>
                   ))}

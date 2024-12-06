@@ -8,6 +8,7 @@ import { useThemeColor } from '@/hooks/useThemeColor'
 
 import { useAuth } from '@/providers/authProvider'
 import { useCartsStore } from '@/stores/cartsStore'
+import { FontAwesome5 } from '@expo/vector-icons'
 
 export default function TabLayout() {
    const colorScheme = useColorScheme()
@@ -46,21 +47,26 @@ export default function TabLayout() {
                )
             }}
          />
+
+         <Tabs.Screen
+            name="(orders)"
+            options={{
+               title: 'Orders',
+               tabBarIcon: ({ color, focused, size }) => (
+                  <FontAwesome5
+                     name="clipboard-list"
+                     size={focused ? size + 4 : size}
+                     color={color}
+                  />
+               )
+            }}
+         />
          <Tabs.Screen
             name="(favorites)"
             options={{
                title: 'Favorites',
                tabBarIcon: ({ color, focused }) => (
                   <TabBarIcon name={focused ? 'heart' : 'heart-outline'} color={color} />
-               )
-            }}
-         />
-         <Tabs.Screen
-            name="(orders)"
-            options={{
-               title: 'Orders',
-               tabBarIcon: ({ color, focused }) => (
-                  <TabBarIcon name={focused ? 'list' : 'list-outline'} color={color} />
                )
             }}
          />

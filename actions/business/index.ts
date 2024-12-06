@@ -38,8 +38,9 @@ export const updateETA = async (orders: Order[]) => {
          console.log('ETA is the same')
          return
       }
-      console.log('Updating ETA', eta)
-      await updateDoc(businessRef, { eta })
+      const noGreaterThan55 = eta > 55 ? 55 : eta
+      console.log('Updating ETA', eta, noGreaterThan55)
+      await updateDoc(businessRef, { eta: noGreaterThan55 })
    } catch (error) {
       console.log('Error updating eta', error)
    }

@@ -3,6 +3,7 @@ import Dashboard from '@/components/business/Dashboard'
 import GraphComponent from '@/components/business/OrderGraph'
 import Button from '@/components/Button'
 import Analytics from '@/components/charts/Analytics'
+import Customers from '@/components/charts/Customers'
 import { Container } from '@/components/Container'
 import Loading from '@/components/Loading'
 import Row from '@/components/Row'
@@ -18,7 +19,7 @@ import { useRestaurantsStore } from '@/stores/restaurantsStore'
 import SegmentedControl from '@react-native-segmented-control/segmented-control'
 import { useState } from 'react'
 
-const INDEXES = ['Activities', 'Reports', 'Analytics']
+const INDEXES = ['Activities', 'Reports', 'Analytics', 'Customers']
 
 const Home = () => {
    const { user } = useAuth()
@@ -34,7 +35,7 @@ const Home = () => {
    if (loading) return <Loading />
    return (
       <Container>
-         <View style={{ width: '50%', alignSelf: 'center', marginVertical: SIZES.md }}>
+         <View style={{ width: '80%', alignSelf: 'center', marginVertical: SIZES.md }}>
             <SegmentedControl
                values={INDEXES}
                selectedIndex={selectedIndex}
@@ -82,6 +83,7 @@ const Home = () => {
          {selectedIndex === 0 && <Dashboard orders={orders} />}
          {selectedIndex === 1 && <GraphComponent orders={orders} />}
          {selectedIndex === 2 && <Analytics orders={orders} />}
+         {selectedIndex === 3 && <Customers orders={orders} />}
       </Container>
    )
 }

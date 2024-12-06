@@ -1,16 +1,16 @@
+import React from 'react'
 import {
-   TouchableOpacity,
-   ViewStyle,
+   ActivityIndicator,
    StyleSheet,
    Text,
    TextStyle,
-   ActivityIndicator
+   TouchableOpacity,
+   ViewStyle
 } from 'react-native'
-import React from 'react'
 
 import { SIZES } from '@/constants/Colors'
-import NeoView from './NeoView'
 import { useThemeColor } from '@/hooks/useThemeColor'
+import NeoView from './NeoView'
 
 type Props = {
    title: string

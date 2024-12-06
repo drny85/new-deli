@@ -58,6 +58,17 @@ const _layout = () => {
             }}
          />
          <Stack.Screen
+            name="customer-view"
+            options={{
+               title: 'Customer',
+               headerLeft: () => (
+                  <TouchableOpacity style={{ padding: SIZES.sm }} onPress={router.back}>
+                     <FontAwesome name="chevron-left" size={24} color={iconColor} />
+                  </TouchableOpacity>
+               )
+            }}
+         />
+         <Stack.Screen
             name="modify-order"
             options={{
                animation: 'slide_from_bottom',
