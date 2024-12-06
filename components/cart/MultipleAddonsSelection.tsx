@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, TouchableOpacity } from 'react-native'
+import { StyleSheet, TouchableOpacity, ViewStyle } from 'react-native'
 import { View } from '../ThemedView'
 import { Text } from '../ThemedText'
 import { useThemeColor } from '@/hooks/useThemeColor'
@@ -13,6 +13,8 @@ type AddonsSelectorProps = {
    maxSelectable: number
    selectedAddons: string[]
    toggleAddonSelection: (addonName: string) => void
+   containerStyle?: ViewStyle
+   showTitle?: boolean
 }
 
 const AnimatedIcon = Animated.createAnimatedComponent(Feather)
@@ -21,7 +23,9 @@ const AddonsSelector: React.FC<AddonsSelectorProps> = ({
    addons,
    maxSelectable,
    selectedAddons,
-   toggleAddonSelection
+   toggleAddonSelection,
+   containerStyle,
+   showTitle = true
 }) => {
    const backgroundColor = useThemeColor('ascent')
    const textColor = useThemeColor('text')
@@ -39,35 +43,42 @@ const AddonsSelector: React.FC<AddonsSelectorProps> = ({
                   size={26}
                />
             )}
-            <Text center style={styles.title}>
-               Select up to {maxSelectable}
-            </Text>
+            {showTitle && (
+               <Text center style={styles.title}>
+                  Select up to {maxSelectable}
+               </Text>
+            )}
          </Row>
-         {addons.map((addon) => {
-            const isSelected = selectedAddons.includes(addon)
-            const isDisabled = !isSelected && selectedAddons.length >= maxSelectable
+         <View style={containerStyle}>
+            {addons.map((addon) => {
+               const isSelected = selectedAddons.includes(addon)
+               const isDisabled = !isSelected && selectedAddons.length >= maxSelectable
 
-            return (
-               <TouchableOpacity
-                  key={addon}
-                  style={[styles.addonItem, isDisabled && styles.disabled]}
-                  onPress={() => !isDisabled && toggleAddonSelection(addon)}>
-                  <View
-                     style={[
-                        styles.checkbox,
-                        { borderColor: textColor },
-                        isSelected && { borderColor: backgroundColor }
-                     ]}>
-                     {isSelected && (
-                        <View style={[styles.checkboxInner, isSelected && { backgroundColor }]} />
-                     )}
-                  </View>
-                  <Text capitalize style={[styles.addonText, isDisabled && styles.disabledText]}>
-                     {addon}
-                  </Text>
-               </TouchableOpacity>
-            )
-         })}
+               return (
+                  <TouchableOpacity
+                     key={addon}
+                     style={[styles.addonItem, isDisabled && styles.disabled]}
+                     onPress={() => !isDisabled && toggleAddonSelection(addon)}>
+                     <View
+                        style={[
+                           styles.checkbox,
+                           { borderColor: textColor },
+                           isSelected && { borderColor: backgroundColor }
+                        ]}>
+                        {isSelected && (
+                           <View
+                              style={[styles.checkboxInner, isSelected && { backgroundColor }]}
+                           />
+                        )}
+                     </View>
+
+                     <Text capitalize style={[styles.addonText, isDisabled && styles.disabledText]}>
+                        {addon}
+                     </Text>
+                  </TouchableOpacity>
+               )
+            })}
+         </View>
       </View>
    )
 }
@@ -107,6 +118,7 @@ const styles = StyleSheet.create({
    },
    addonText: {
       fontSize: 16,
+
       fontWeight: 'condensedBold'
    },
    disabledText: {

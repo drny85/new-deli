@@ -20,7 +20,6 @@ const CustomerView = () => {
    const orders = useBusinessOrdersStore((state) => state.orders)
    const customerOrders = orders.filter((o) => o.contactPerson.userId === customerId)
    const customer = customerOrders[0].contactPerson
-   console.log(customerOrders.length)
 
    const renderOrder = (order: Order) => (
       <View

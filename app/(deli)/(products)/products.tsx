@@ -159,6 +159,7 @@ const Products = () => {
                      </Text>
                   </View>
                )}
+               showsVerticalScrollIndicator={false}
                renderItem={() => null}
                //contentContainerStyle={{ margin: 10 }} // Since we use renderSection for items, we pass null here
                SectionSeparatorComponent={() => <View style={styles.sectionSeparator} />}

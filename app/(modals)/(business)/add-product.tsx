@@ -3,6 +3,7 @@ import { addNewProduct, updateProduct } from '@/actions/products'
 import BackButton from '@/components/BackButton'
 import BottomSheetModal, { BottomSheetModalRef } from '@/components/BottomSheetModal'
 import Button from '@/components/Button'
+import AddonsSelector from '@/components/cart/MultipleAddonsSelection'
 import Input from '@/components/Input'
 import ItemQuantitySetter from '@/components/ItemQuantitySetter'
 import Loading from '@/components/Loading'
@@ -10,6 +11,7 @@ import NeoView from '@/components/NeoView'
 import CategoryTitle from '@/components/restaurants/CategoryTitle'
 import ProductCard from '@/components/restaurants/ProductCart'
 import Row from '@/components/Row'
+import { Sheet, useSheetRef } from '@/components/Sheet'
 import { Text } from '@/components/ThemedText'
 import { View } from '@/components/ThemedView'
 import { ADDONS, SIZES_ADDONS } from '@/constants'
@@ -23,16 +25,27 @@ import { useAuth } from '@/providers/authProvider'
 import { useRestaurantsStore } from '@/stores/restaurantsStore'
 import { Category, P_Size, Product } from '@/typing'
 import { toastAlert, toastMessage } from '@/utils/toast'
-import { FontAwesome } from '@expo/vector-icons'
+import { Feather, FontAwesome } from '@expo/vector-icons'
 import SegmentedControl from '@react-native-segmented-control/segmented-control'
 import { router, useLocalSearchParams } from 'expo-router'
+import { AnimatePresence, MotiView } from 'moti'
 import { useCallback, useEffect, useRef, useState } from 'react'
 
-import { Keyboard, Modal, ScrollView, StyleSheet, TextInput, TouchableOpacity } from 'react-native'
+import {
+   Alert,
+   Keyboard,
+   Modal,
+   ScrollView,
+   StyleSheet,
+   TextInput,
+   TouchableOpacity
+} from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 const AddProduct = () => {
    const { user } = useAuth()
+   const bottomSheetModalRef = useRef<BottomSheetModalRef>(null)
+   const bottomSheetAddonsRef = useSheetRef()
    const priceInputRef = useRef<TextInput>(null)
    const restaurant = useRestaurantsStore((s) => s.restaurant)
    const { productId } = useLocalSearchParams<{ productId: string }>()
@@ -51,8 +64,20 @@ const AddProduct = () => {
    const [readyToUpload, setReadyToUpload] = useState(false)
    const { bottom } = useSafeAreaInsets()
    const products = useRestaurantsStore((s) => s.products)
+   const [selectedAddons, setSelectedAddons] = useState<string[]>([])
 
-   const bottomSheetModalRef = useRef<BottomSheetModalRef>(null)
+   const toggleAddonSelection = (addonName: string, maxSelectable: number) => {
+      const isSelected = selectedAddons.includes(addonName)
+      if (isSelected) {
+         setSelectedAddons((prevState) => prevState.filter((name) => name !== addonName))
+      } else {
+         if (selectedAddons.length < maxSelectable) {
+            setSelectedAddons((prevState) => [...prevState, addonName])
+         } else {
+            alert(`You can select up to ${maxSelectable} add-ons.`)
+         }
+      }
+   }
 
    const handleOpenBottomSheet = () => {
       bottomSheetModalRef.current?.open()
@@ -71,6 +96,7 @@ const AddProduct = () => {
       unitSold: 0,
       sizes: variations.length > 0 ? variations.map((v) => ({ ...v, price: +v.price })) : [],
       available: true,
+      addons: [],
       multipleAddons: null
    })
 
@@ -174,6 +200,7 @@ const AddProduct = () => {
          unitSold: 0,
          sizes: [],
          available: true,
+         addons: selectedAddons || [],
          multipleAddons: null
       })
       setVariations([])
@@ -447,10 +474,24 @@ const AddProduct = () => {
                                           if (index === 0) setSizeMode('none')
                                           else if (index === 1) setSizeMode('sizes')
                                           else if (index === 2) setSizeMode('addons')
-                                          else if (index === 3) setSizeMode('multiple')
+                                          else if (index === 3) {
+                                             setSizeMode('multiple')
+                                          }
                                           if (index !== 3) {
                                              setQty(0)
-                                             setProduct((p) => ({ ...p, multipleAddons: null }))
+                                             setProduct((p) => ({
+                                                ...p,
+                                                multipleAddons: null,
+                                                addons: []
+                                             }))
+                                          } else {
+                                             if (
+                                                selectedProduct &&
+                                                selectedProduct.multipleAddons &&
+                                                selectedProduct.multipleAddons > 0
+                                             ) {
+                                                setQty(selectedProduct.multipleAddons)
+                                             }
                                           }
                                           setVariations([])
                                        }}
@@ -545,37 +586,30 @@ const AddProduct = () => {
                                              flexWrap: 'wrap',
                                              marginTop: SIZES.md
                                           }}>
-                                          {ADDONS.sort((a, b) => a.localeCompare(b)).map(
-                                             (addon) => (
+                                          {selectedAddons
+                                             .sort((a, b) => a.localeCompare(b))
+                                             .map((addon) => (
                                                 <Text type="muted" capitalize key={addon}>
                                                    {addon}
                                                 </Text>
-                                             )
-                                          )}
+                                             ))}
                                        </View>
-                                       <Text>How Many Can Be Selected</Text>
-                                       <ItemQuantitySetter
-                                          onPressAdd={() =>
-                                             setQty((prev) => {
-                                                setProduct((p) => ({
-                                                   ...p,
-                                                   multipleAddons: prev + 1
-                                                }))
-                                                return prev + 1
-                                             })
-                                          }
-                                          onPressSub={() => {
-                                             if (qty >= 2)
-                                                setQty((prev) => {
-                                                   setProduct((p) => ({
-                                                      ...p,
-                                                      multipleAddons: prev - 1
-                                                   }))
-                                                   return prev - 1
-                                                })
-                                          }}
-                                          quantity={qty}
-                                       />
+
+                                       <TouchableOpacity
+                                          onPress={() => bottomSheetAddonsRef.current?.present()}
+                                          style={{
+                                             boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
+
+                                             paddingVertical: SIZES.sm,
+                                             paddingHorizontal: SIZES.lg,
+                                             borderRadius: SIZES.md,
+                                             marginTop: SIZES.sm * 0.5
+                                          }}>
+                                          <Row containerStyle={{ gap: 10 }}>
+                                             <Feather name="edit-2" size={22} color={'orange'} />
+                                             <Text>Edit</Text>
+                                          </Row>
+                                       </TouchableOpacity>
                                     </View>
                                  )}
                                  <View
@@ -769,6 +803,136 @@ const AddProduct = () => {
             setValue={(text) => setProduct((prev) => ({ ...prev, description: text }))}
             onClose={handleCloseBottomSheet}
          />
+
+         <Sheet snapPoints={['90%']} ref={bottomSheetAddonsRef}>
+            <Row containerStyle={{ justifyContent: 'space-between', paddingHorizontal: 20 }}>
+               <TouchableOpacity
+                  onPress={() => {
+                     if (!productId && !selectedProduct) {
+                        setSelectedIndex(0)
+                        setSizeMode('none')
+                     } else {
+                        console.log('HERE')
+                        if (
+                           productId &&
+                           selectedProduct &&
+                           selectedProduct.multipleAddons &&
+                           selectedProduct.multipleAddons > 0
+                        ) {
+                           setQty(selectedProduct.multipleAddons)
+                           setSelectedAddons([])
+                        }
+                     }
+                     bottomSheetAddonsRef.current?.close()
+                  }}>
+                  <Feather name="chevron-left" size={32} color={'#212121'} />
+               </TouchableOpacity>
+
+               <TouchableOpacity
+                  onPress={async () => {
+                     if (qty > selectedAddons.length) {
+                        Alert.alert(
+                           'Error',
+                           `Addons that can be selected must be equal or less than ${selectedAddons.length}`,
+                           [{ text: 'OK' }],
+                           { cancelable: false }
+                        )
+                        return
+                     }
+                     await updateProduct({
+                        ...product,
+                        multipleAddons: qty || null,
+                        addons: selectedAddons || []
+                     })
+                     bottomSheetAddonsRef.current?.close()
+                  }}
+                  style={{
+                     boxShadow: '1px 3px 2px 1px rbga(0,0,0,0.1)',
+                     paddingHorizontal: SIZES.lg,
+                     paddingVertical: SIZES.sm,
+                     backgroundColor: 'white',
+                     borderRadius: SIZES.md
+                  }}>
+                  <Text type="defaultSemiBold">Update Addons</Text>
+               </TouchableOpacity>
+            </Row>
+            <View
+               style={{
+                  flex: 1,
+                  width: '80%',
+                  alignSelf: 'center',
+                  justifyContent: 'space-evenly',
+                  gap: SIZES.sm
+               }}>
+               <View style={{ flex: 1 }}>
+                  <Text center type="title">
+                     Addons for this Product
+                  </Text>
+                  <AddonsSelector
+                     addons={selectedProduct?.addons || [...ADDONS]}
+                     maxSelectable={100}
+                     showTitle={false}
+                     selectedAddons={selectedAddons}
+                     containerStyle={{
+                        width: '100%',
+                        flexDirection: 'row',
+                        flexWrap: 'wrap',
+
+                        gap: 20
+                     }}
+                     toggleAddonSelection={(name) => {
+                        console.log('HERE', name)
+
+                        toggleAddonSelection(name, 100)
+                     }}
+                  />
+               </View>
+               <AnimatePresence>
+                  {selectedAddons.length > 0 && (
+                     <MotiView
+                        style={{ flex: 1 }}
+                        from={{ opacity: 0, translateY: -15 }}
+                        animate={{ opacity: 1, translateY: 0 }}>
+                        <View
+                           style={{
+                              alignSelf: 'center',
+                              gap: SIZES.sm,
+                              flex: 1,
+                              alignItems: 'center'
+                           }}>
+                           <Text type="title">How many addons can be selected?</Text>
+
+                           <ItemQuantitySetter
+                              onPressAdd={() => {
+                                 if (selectedAddons.length <= product.multipleAddons!) {
+                                    return
+                                 }
+                                 setQty((prev) => {
+                                    setProduct((p) => ({
+                                       ...p,
+                                       multipleAddons: prev + 1
+                                    }))
+                                    return prev + 1
+                                 })
+                              }}
+                              onPressSub={() => {
+                                 if (qty >= 2)
+                                    setQty((prev) => {
+                                       setProduct((p) => ({
+                                          ...p,
+                                          multipleAddons: prev - 1
+                                       }))
+                                       return prev - 1
+                                    })
+                              }}
+                              quantity={qty}
+                           />
+                        </View>
+                     </MotiView>
+                  )}
+               </AnimatePresence>
+            </View>
+         </Sheet>
       </View>
    )
 }

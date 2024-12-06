@@ -345,9 +345,9 @@ const ProductDetail = () => {
                   </Text>
                </View>
             </View>
-            {product.multipleAddons && product.multipleAddons > 0 && (
+            {product.multipleAddons && product.addons.length > 0 && product.multipleAddons > 0 && (
                <AddonsSelector
-                  addons={ADDONS}
+                  addons={product.addons}
                   maxSelectable={product.multipleAddons}
                   selectedAddons={selectedAddons}
                   toggleAddonSelection={(name) =>

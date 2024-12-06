@@ -116,7 +116,7 @@ export interface Tip {
    percentage: number
 }
 
-export interface Product {
+export type Product = {
    id?: string
    name: string
    category: Category | null
@@ -129,8 +129,8 @@ export interface Product {
    available: boolean
    multipleAddons?: number | null
    keywords?: string[]
+   addons: string[]
 }
-
 export type Category = {
    id?: string
    name: string
