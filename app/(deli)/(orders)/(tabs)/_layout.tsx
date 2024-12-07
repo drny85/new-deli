@@ -1,12 +1,11 @@
 import { useThemeColor } from '@/hooks/useThemeColor'
-import { useRestaurantsStore } from '@/stores/restaurantsStore'
 import {
    MaterialTopTabNavigationEventMap,
    MaterialTopTabNavigationOptions,
    createMaterialTopTabNavigator
 } from '@react-navigation/material-top-tabs'
 import { ParamListBase, TabNavigationState } from '@react-navigation/native'
-import { Redirect, withLayoutContext } from 'expo-router'
+import { withLayoutContext } from 'expo-router'
 import { SafeAreaView } from 'react-native-safe-area-context'
 const { Navigator } = createMaterialTopTabNavigator()
 export const MaterialTopTabs = withLayoutContext<
@@ -21,10 +20,6 @@ const HomeLayout = () => {
    const acent = useThemeColor('ascent')
    const text = useThemeColor('text')
    const border = useThemeColor('tabIconDefault')
-   const { restaurant } = useRestaurantsStore()
-
-   if (restaurant?.couriers.length === 0 && restaurant?.ordersMethod !== 'pickup-only')
-      return <Redirect href={'/(deli)/(orders)/no-courriers'} />
 
    return (
       <SafeAreaView style={{ flex: 1 }}>

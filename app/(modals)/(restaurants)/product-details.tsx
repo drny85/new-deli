@@ -11,7 +11,7 @@ import ShareButton from '@/components/ShareLink'
 import { Sheet, useSheetRef } from '@/components/Sheet'
 import { Text } from '@/components/ThemedText'
 import { View } from '@/components/ThemedView'
-import { ADDONS, CART_ALLOWED } from '@/constants'
+import { CART_ALLOWED } from '@/constants'
 import { SIZES } from '@/constants/Colors'
 import { useProduct } from '@/hooks/restaurants/useProduct'
 import { useThemeColor } from '@/hooks/useThemeColor'
@@ -120,6 +120,19 @@ const ProductDetail = () => {
          size: selected,
          quantity,
          instructions
+      }
+
+      if (product?.multipleAddons && product.addons.length > 0) {
+         if (item.addons.length === 0) {
+            toastAlert({
+               title: 'Error',
+               message: 'Please select at least one addon',
+               preset: 'error',
+               duration: 1
+            })
+            Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error)
+            return
+         }
       }
 
       const added = await addToCart(item)
@@ -251,7 +264,7 @@ const ProductDetail = () => {
                   alignSelf: 'center'
                }}
                resizeMode="cover"
-               blurRadius={2}
+               blurRadius={0.5}
                animate={{
                   height: SIZES.height * 0.8,
                   borderRadius: SIZES.height * 0.8 * 0.5,

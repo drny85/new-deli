@@ -41,6 +41,7 @@ const Button = ({
          containerStyle={[
             {
                borderRadius: SIZES.lg * 2,
+               shadowColor: 'transparent',
                backgroundColor:
                   type === 'primary' ? bgColor : type === 'soft' ? softColor : ascentColor
             }

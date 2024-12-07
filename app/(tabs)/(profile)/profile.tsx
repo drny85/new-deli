@@ -17,6 +17,7 @@ import { router } from 'expo-router'
 export default function ProfleScreen() {
    const { logOut, user } = useAuth()
    const textColor = useThemeColor('text')
+   console.log(SIZES.width)
 
    if (!user)
       return (
@@ -38,6 +39,21 @@ export default function ProfleScreen() {
                      }
                   />
                </View>
+               {SIZES.width > 480 && (
+                  <View style={{ width: '60%', marginTop: SIZES.lg * 3 }}>
+                     <Button
+                        title="Sign Up For Business"
+                        type="primary"
+                        contentTextStyle={{ color: '#ffffff' }}
+                        onPress={() =>
+                           router.push({
+                              pathname: '/businessSignup',
+                              params: { returnUrl: '/(tabs)/(profile)/profile' }
+                           })
+                        }
+                     />
+                  </View>
+               )}
             </View>
 
             <View style={{ padding: SIZES.md, gap: SIZES.lg, marginBottom: SIZES.md }}>

@@ -103,8 +103,8 @@ const AddProduct = () => {
       unitSold: 0,
       sizes: variations.length > 0 ? variations.map((v) => ({ ...v, price: +v.price })) : [],
       available: true,
-      addons: [],
-      multipleAddons: null
+      addons: [...selectedAddons],
+      multipleAddons: qty > 0 ? qty : null
    })
 
    const handleAddProduct = async () => {
@@ -281,6 +281,70 @@ const AddProduct = () => {
       return true
    }
 
+   const onAddonsUpdates = async () => {
+      try {
+         if (qty > selectedAddons.length) {
+            Alert.alert(
+               'Error',
+               `Addons that can be selected must be equal or less than ${selectedAddons.length}`,
+               [{ text: 'OK' }],
+               { cancelable: false }
+            )
+            return
+         }
+         if (productId && selectedProduct) {
+            await updateProduct({
+               ...product,
+               multipleAddons: qty || null,
+               addons: selectedAddons || []
+            })
+         } else {
+            console.log('Adding new')
+            setProduct((prev) => ({
+               ...prev,
+               multipleAddons: qty || null,
+               addons: selectedAddons || []
+            }))
+         }
+
+         bottomSheetAddonsRef.current?.close()
+         toastMessage({
+            title: 'Success',
+            message: 'Addons updated successfully',
+            preset: 'custom',
+            iconName: 'check',
+            duration: 2
+         })
+      } catch (error) {
+         console.log('Error updating addons', error)
+         toastMessage({
+            title: 'Error',
+            message: 'Something went wrong',
+            preset: 'error',
+            duration: 2
+         })
+      }
+   }
+
+   const onPressBackOnUpdateAddons = () => {
+      if (!productId && !selectedProduct) {
+         setSelectedIndex(0)
+         setSizeMode('none')
+      } else {
+         console.log('HERE')
+         if (
+            productId &&
+            selectedProduct &&
+            selectedProduct.multipleAddons &&
+            selectedProduct.multipleAddons > 0
+         ) {
+            setQty(selectedProduct.multipleAddons)
+            setSelectedAddons([])
+         }
+      }
+      bottomSheetAddonsRef.current?.close()
+   }
+
    useEffect(() => {
       if (selectedIndex === 0) {
          setSizeMode('none')
@@ -288,6 +352,8 @@ const AddProduct = () => {
          setSizeMode('sizes')
       } else if (selectedIndex === 2) {
          setSizeMode('addons')
+      } else if (selectedIndex === 3) {
+         setSizeMode('multiple')
       }
    }, [selectedIndex])
 
@@ -330,9 +396,6 @@ const AddProduct = () => {
                   setSizeMode('addons')
                   setSelectedIndex(2)
                }
-            } else {
-               setSizeMode('none')
-               setSelectedIndex(0)
             }
          }
       }
@@ -809,7 +872,6 @@ const AddProduct = () => {
             ref={bottomSheetModalRef}
             value={product.description!}
             onSubmit={() => {
-               console.log('submit')
                Keyboard.dismiss()
             }}
             setValue={(text) => setProduct((prev) => ({ ...prev, description: text }))}
@@ -818,25 +880,7 @@ const AddProduct = () => {
 
          <Sheet snapPoints={['90%', '100%']} ref={bottomSheetAddonsRef}>
             <Row containerStyle={{ justifyContent: 'space-between', paddingHorizontal: 20 }}>
-               <TouchableOpacity
-                  onPress={() => {
-                     if (!productId && !selectedProduct) {
-                        setSelectedIndex(0)
-                        setSizeMode('none')
-                     } else {
-                        console.log('HERE')
-                        if (
-                           productId &&
-                           selectedProduct &&
-                           selectedProduct.multipleAddons &&
-                           selectedProduct.multipleAddons > 0
-                        ) {
-                           setQty(selectedProduct.multipleAddons)
-                           setSelectedAddons([])
-                        }
-                     }
-                     bottomSheetAddonsRef.current?.close()
-                  }}>
+               <TouchableOpacity onPress={onPressBackOnUpdateAddons}>
                   <Feather name="chevron-left" size={32} color={'#212121'} />
                </TouchableOpacity>
                <Row>
@@ -854,30 +898,7 @@ const AddProduct = () => {
                   )}
 
                   <TouchableOpacity
-                     onPress={async () => {
-                        if (qty > selectedAddons.length) {
-                           Alert.alert(
-                              'Error',
-                              `Addons that can be selected must be equal or less than ${selectedAddons.length}`,
-                              [{ text: 'OK' }],
-                              { cancelable: false }
-                           )
-                           return
-                        }
-                        await updateProduct({
-                           ...product,
-                           multipleAddons: qty || null,
-                           addons: selectedAddons || []
-                        })
-                        bottomSheetAddonsRef.current?.close()
-                        toastMessage({
-                           title: 'Success',
-                           message: 'Addons updated successfully',
-                           preset: 'custom',
-                           iconName: 'check',
-                           duration: 2
-                        })
-                     }}
+                     onPress={onAddonsUpdates}
                      style={{
                         boxShadow: '1px 3px 2px 1px rbga(0,0,0,0.1)',
                         paddingHorizontal: SIZES.lg,
@@ -907,7 +928,7 @@ const AddProduct = () => {
                         marginTop: SIZES.md
                      }}>
                      <Text center type="title">
-                        Addons for this Product
+                        Addons Allowed for this Product
                      </Text>
                      <TouchableOpacity onPress={() => setAddingNewAddon(true)}>
                         <Feather name="plus-circle" size={28} color={ascentColor} />

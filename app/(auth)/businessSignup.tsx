@@ -34,8 +34,7 @@ const signupSchema = z
 type SignupSchema = z.infer<typeof signupSchema>
 
 const BusinessSignup = () => {
-   const params = useLocalSearchParams<{ returnUrl: string }>()
-   const { signUp, user, setUser } = useAuth()
+   const { signUp } = useAuth()
    const mmk = useMMKV()
 
    const [showReviewModal, setShowReviewModal] = useState(false)

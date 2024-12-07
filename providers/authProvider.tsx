@@ -15,7 +15,7 @@ import {
    User
 } from 'firebase/auth'
 import { doc, getDoc, setDoc } from 'firebase/firestore'
-import React, { createContext, PropsWithChildren, useContext, useEffect, useState } from 'react'
+import { createContext, PropsWithChildren, useContext, useEffect, useState } from 'react'
 
 // Define custom user type
 
@@ -35,6 +35,7 @@ interface AuthContextType {
    resetPasswordEmail: (email: string) => Promise<void>
    setUser: (user: AppUser) => void
    createUser: (user: AppUser) => void
+
    loading: boolean
 }
 
@@ -61,15 +62,8 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
             if (newUser) {
                //const m =await newUser.metadata
                setLoading(true)
-
-               const userDoc = doc(usersCollection, newUser.uid)
-               const data = await getDoc(userDoc)
-               if (!data.exists()) {
-                  setLoading(false)
-                  setUser(null)
-                  return
-               }
-               setUser({ ...data.data(), emailVerified: newUser.emailVerified })
+               const u = await getUserFromFirebase(newUser.uid)
+               if (u) setUser({ ...u, emailVerified: newUser.emailVerified })
             } else {
                setUser(null)
             }
@@ -86,7 +80,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
    const signIn = async (email: string, password: string): Promise<User | null> => {
       try {
          const { user } = await signInWithEmailAndPassword(auth, email, password)
-
+         await getUserFromFirebase(user.uid)
          return user
       } catch (error) {
          console.error('Sign in error:', error)
@@ -111,6 +105,18 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
       } catch (error) {
          console.error('Create user error:', error)
          return false
+      }
+   }
+
+   const getUserFromFirebase = async (uid: string): Promise<AppUser | null> => {
+      try {
+         const userRef = doc(usersCollection, uid)
+         const data = await getDoc(userRef)
+         if (!data.exists()) return null
+         return { id: data.id, ...data.data() } as AppUser
+      } catch (error) {
+         console.error('Get user error:', error)
+         return null
       }
    }
 

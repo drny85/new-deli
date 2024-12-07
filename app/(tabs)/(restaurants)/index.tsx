@@ -131,7 +131,7 @@ const Restaurants = () => {
          }
       }, [orderType])
    )
-   if (loading || products.length === 0) return <HomeSkelenton />
+   if (loading) return <HomeSkelenton />
 
    return (
       <Container>

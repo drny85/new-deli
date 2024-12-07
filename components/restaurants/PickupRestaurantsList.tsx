@@ -57,7 +57,8 @@ const PickupRestaurantsList = ({ listRef, mapRef, restaurants }: Props) => {
                      })
                   }}
                   containerStyle={{
-                     shadowRadius: 0,
+                     boxShadow: 'none',
+
                      borderRadius: SIZES.lg * 2,
                      backgroundColor: 'transparent'
                   }}

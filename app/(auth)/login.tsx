@@ -17,8 +17,9 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Controller, useForm } from 'react-hook-form'
 import { KeyboardAvoidingView, Platform } from 'react-native'
 import { z } from 'zod'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { FontAwesome } from '@expo/vector-icons'
+import { useMMKV } from 'react-native-mmkv'
 
 const loginSchema = z.object({
    email: z.string().email(),
@@ -27,6 +28,7 @@ const loginSchema = z.object({
 type LoginSchema = z.infer<typeof loginSchema>
 
 const Login = () => {
+   const mmk = useMMKV()
    const params = useLocalSearchParams<{ returnUrl: string }>()
    const { signIn, user } = useAuth()
    const bgColor = useThemeColor('icon')
@@ -36,6 +38,7 @@ const Login = () => {
    const {
       control,
       handleSubmit,
+      setValue,
       formState: { errors, isLoading, isSubmitting }
    } = useForm<LoginSchema>({
       defaultValues: {
@@ -56,6 +59,14 @@ const Login = () => {
          console.log('ZEZEE', error)
       }
    }
+
+   useEffect(() => {
+      const email = mmk.getString('email')
+      if (email) {
+         console.log('email', email)
+         setValue('email', email)
+      }
+   }, [])
 
    if (user && user.type === 'consumer') return <Redirect href={params.returnUrl as any} />
    if (user && user.type === 'business') return <Redirect href={'/(deli)/home'} />

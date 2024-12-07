@@ -48,7 +48,7 @@ const NoCourriers = () => {
                               ordersMethod: 'pickup-only'
                            })
                            if (updated) {
-                              router.back()
+                              router.replace('/(products)/products')
                            }
                         }
                      }}

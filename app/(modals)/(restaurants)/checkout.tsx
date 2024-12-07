@@ -187,6 +187,20 @@ const Checkout = () => {
 
    const preventDeliveryOrder = (): boolean => {
       if (restaurant && orderType) {
+         if (orderType === 'delivery' && restaurant.couriers.length === 0) {
+            Alert.alert('No Deliveries', 'This restaurant is not taking deliveries at the moment', [
+               {
+                  text: 'Cancel'
+               },
+               {
+                  text: 'Switch to Pick-Up',
+                  onPress: () => {
+                     setOrderType('pickup')
+                  }
+               }
+            ])
+            return true
+         }
          if (orderType === 'delivery' && restaurant.ordersMethod === 'pickup-only') {
             Alert.alert(
                'Not Delivery',

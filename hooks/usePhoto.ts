@@ -94,7 +94,7 @@ export const usePhoto = () => {
             mediaTypes: 'images',
             allowsMultipleSelection: false,
             aspect: [16, 9],
-            quality: 0.3
+            quality: 0.5
          })
 
          if (!result.canceled) {

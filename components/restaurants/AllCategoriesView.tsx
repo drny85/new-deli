@@ -42,6 +42,8 @@ const AllCategoriesView = ({ ids, products, onCategoryPress }: Props) => {
       return () => navigation.removeListener('blur', subs)
    }, [navigation])
 
+   if (!loading && categories.length === 0) return null
+
    return (
       <View style={{ height: SIZES.height * 0.07 }}>
          {loading ? (
