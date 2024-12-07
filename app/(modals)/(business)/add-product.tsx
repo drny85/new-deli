@@ -903,7 +903,8 @@ const AddProduct = () => {
                         alignSelf: 'center',
                         flexDirection: 'row',
                         alignItems: 'center',
-                        gap: 16
+                        gap: 16,
+                        marginTop: SIZES.md
                      }}>
                      <Text center type="title">
                         Addons for this Product
@@ -1007,6 +1008,7 @@ const AddProduct = () => {
                            <Text type="title">How many addons can be selected?</Text>
 
                            <ItemQuantitySetter
+                              iconSize={48}
                               onPressAdd={() => {
                                  if (selectedAddons.length <= product.multipleAddons!) {
                                     return

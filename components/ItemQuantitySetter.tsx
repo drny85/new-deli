@@ -22,13 +22,15 @@ type Props = {
    onPressSub: () => void
    containerStyle?: ViewStyle
    disabled?: boolean
+   iconSize?: number
 }
 const ItemQuantitySetter = ({
    quantity,
    onPressAdd,
    onPressSub,
    disabled,
-   containerStyle
+   containerStyle,
+   iconSize = 30
 }: Props) => {
    const ascent = useThemeColor('ascent')
    const isDark = useColorScheme() === 'dark'
@@ -39,7 +41,7 @@ const ItemQuantitySetter = ({
       <NeoView
          containerStyle={[{ borderRadius: SIZES.lg * 2, maxWidth: 180 }, containerStyle]}
          innerStyleContainer={{ borderRadius: 20 }}>
-         <Row containerStyle={{ gap: SIZES.md }} align="between">
+         <Row containerStyle={{ gap: SIZES.md, alignItems: 'center' }} align="between">
             <TouchableOpacity
                style={{ opacity: disabled ? 0.6 : 1 }}
                disabled={disabled}
@@ -52,16 +54,20 @@ const ItemQuantitySetter = ({
                      style={{ paddingLeft: SIZES.sm }}
                   />
                ) : (
-                  <Feather name="minus-circle" size={30} color={isDark ? '#ffffff' : ascent} />
+                  <Feather
+                     name="minus-circle"
+                     size={iconSize}
+                     color={isDark ? '#ffffff' : ascent}
+                  />
                )}
             </TouchableOpacity>
 
-            <Text type="title" fontSize="large">
+            <Text type="title" style={{ fontSize: iconSize / 1.5 }} center>
                {quantity}
             </Text>
 
             <TouchableOpacity onPress={onPressAdd}>
-               <Feather name="plus-circle" size={30} color={isDark ? '#ffffff' : ascent} />
+               <Feather name="plus-circle" size={iconSize} color={isDark ? '#ffffff' : ascent} />
                {/* <SymbolView name="plus.circle.fill" size={30} tintColor={ascent}  type="monochrome" /> */}
             </TouchableOpacity>
          </Row>
