@@ -1,5 +1,5 @@
 import { useBusinessOrdersStore } from '@/stores/businessOrders'
-import { ORDER_STATUS } from '@/typing'
+import { ORDER_STATUS } from '@/shared/types'
 
 export const useETA = () => {
    const etas: { orderId: string; eta: string; timeDiff: number }[] = []

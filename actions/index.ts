@@ -1,5 +1,5 @@
 import { usersCollection } from '@/collections'
-import { AppUser } from '@/typing'
+import { AppUser } from '@/shared/types'
 import { doc, updateDoc } from 'firebase/firestore'
 
 export const toggleFavorite = async (restaurantId: string, user: AppUser) => {

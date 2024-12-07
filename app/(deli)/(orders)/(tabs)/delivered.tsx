@@ -2,7 +2,7 @@ import BusinessOrderStatusView from '@/components/business/BusinessOrderStatusVi
 import { Container } from '@/components/Container'
 import { isFromToday } from '@/helpers/isFromToday'
 import { useBusinessOrdersStore } from '@/stores/businessOrders'
-import { ORDER_STATUS } from '@/typing'
+import { ORDER_STATUS } from '@/shared/types'
 import { MaterialTopTabs } from './_layout'
 
 const Delivered = () => {

@@ -1,5 +1,5 @@
 import { useOrderFlowStore } from '@/stores/orderFlowStore'
-import { OrderAddress } from '@/typing'
+import { OrderAddress } from '@/shared/types'
 import * as Location from 'expo-location'
 import { useEffect, useState } from 'react'
 export const useLocation = (address: OrderAddress | null) => {

@@ -1,7 +1,7 @@
 import { SIZES } from '@/constants/Colors'
 import NeoView from './NeoView'
 import { Text } from './ThemedText'
-import { Courier } from '@/typing'
+import { Courier } from '@/shared/types'
 import { View } from './ThemedView'
 import Row from './Row'
 import { Image } from 'expo-image'

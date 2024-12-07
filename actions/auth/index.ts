@@ -1,5 +1,5 @@
 import { usersCollection } from '@/collections'
-import { AppUser } from '@/typing'
+import { AppUser } from '@/shared/types'
 import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore'
 
 export const createUser = async (user: AppUser) => {

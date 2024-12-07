@@ -1,5 +1,5 @@
 import { ordersCollection, pendingOrdersCollection } from '@/collections'
-import { Order } from '@/typing'
+import { Order } from '@/shared/types'
 import { addDoc, doc, setDoc } from 'firebase/firestore'
 
 type OrderActionsReturnParams1 = {

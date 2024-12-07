@@ -1,5 +1,5 @@
 import { SIZES } from '@/constants/Colors'
-import { Order, ORDER_TYPE } from '@/typing'
+import { Order, ORDER_TYPE } from '@/shared/types'
 import { dayjsFormat } from '@/utils/dayjs'
 import { STATUS_NAME } from '@/utils/orderStatus'
 import { statusColor } from '@/utils/statusColor'

@@ -1,6 +1,6 @@
 import { couriersCollection } from '@/collections'
 import { useAuth } from '@/providers/authProvider'
-import { StoreCourierData } from '@/typing'
+import { StoreCourierData } from '@/shared/types'
 import { onSnapshot, query, where } from 'firebase/firestore'
 import { useEffect, useState } from 'react'
 

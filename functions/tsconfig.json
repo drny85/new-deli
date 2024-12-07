@@ -9,7 +9,10 @@
       "target": "ES2020",
       "typeRoots": ["node_modules/@types"],
       "esModuleInterop": true,
-      "allowSyntheticDefaultImports": true
+      "allowSyntheticDefaultImports": true,
+      "paths": {
+         "@shared/*": ["../shared/*"]
+      }
    },
    "compileOnSave": true,
    "exclude": ["node_modules"],

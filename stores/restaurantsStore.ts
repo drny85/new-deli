@@ -1,4 +1,4 @@
-import { Business, Product } from '@/typing'
+import { Business, Product } from '@/shared/types'
 import { create } from 'zustand'
 
 type RestaurantsStore = {

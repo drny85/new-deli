@@ -2,7 +2,7 @@ import { Modal, TouchableOpacity } from 'react-native'
 
 import { Container } from '../Container'
 import { View } from '../ThemedView'
-import { ORDER_STATUS, ORDER_TYPE } from '@/typing'
+import { ORDER_STATUS, ORDER_TYPE } from '@/shared/types'
 import { Text } from '../ThemedText'
 
 type Props = {

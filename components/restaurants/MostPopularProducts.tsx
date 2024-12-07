@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { SIZES } from '@/constants/Colors'
-import { Product } from '@/typing'
+import { Product } from '@/shared/types'
 import { FlashList } from '@shopify/flash-list'
 import MostPopularCard from './MostPopularCard'
 import { View } from '../ThemedView'

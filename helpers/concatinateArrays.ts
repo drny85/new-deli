@@ -1,4 +1,4 @@
-import { Category } from '@/typing'
+import { Category } from '@/shared/types'
 
 export function concatenateAndReturnNotInArray1(arr1: Category[], arr2: Category[]): Category[] {
    const notInArray1Arr: Category[] = []

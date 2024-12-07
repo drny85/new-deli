@@ -1,6 +1,6 @@
 import dayjs from 'dayjs'
 import { getRandomColor } from '@/utils/getRandomColor'
-import { Filter, FilterDay, Order } from '@/typing'
+import { Filter, FilterDay, Order } from '@/shared/types'
 
 type FilterDataResult = {
    ordersData: { value: number; label: string; frontColor: string }[]

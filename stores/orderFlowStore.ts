@@ -1,4 +1,4 @@
-import { Coords, Order, OrderAddress } from '@/typing'
+import { Coords, Order, OrderAddress } from '@/shared/types'
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 import { zustandStorage } from './storage'

@@ -22,7 +22,7 @@ import {
    NOTIFICATION_TYPE,
    Order,
    ORDER_STATUS
-} from '../typing'
+} from '@shared/types'
 import { v4 as UUID } from 'uuid'
 
 dotenv.config()
@@ -42,11 +42,11 @@ import Stripe from 'stripe'
 import {
    assignUserType,
    isAuthorizedToGrantAccess,
-   myTransaction_fee,
    notifySharedOrder,
    sendPushNotification
 } from './shared'
 import { defineSecret } from 'firebase-functions/params'
+import { myTransaction_fee } from '@shared/types'
 
 const STRIPE_KEY = defineSecret('STRIPE_KEY')
 const TEST_KEY = process.env.STRIPE_SK_KEY as string

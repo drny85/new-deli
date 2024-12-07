@@ -6,7 +6,7 @@ import {
 } from '@/collections'
 import { auth } from '@/firebase'
 import { calculateETA } from '@/helpers/calculateETA'
-import { Business, Order, StoreCourierData } from '@/typing'
+import { Business, Order, StoreCourierData } from '@/shared/types'
 import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore'
 
 export const updateOrder = async (order: Order): Promise<boolean> => {

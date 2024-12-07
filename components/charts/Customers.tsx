@@ -1,7 +1,7 @@
 import { View, StyleSheet } from 'react-native'
 import React, { useMemo, useState } from 'react'
 import { Container } from '../Container'
-import { Order } from '@/typing'
+import { Order } from '@/shared/types'
 import Input from '../Input'
 import { SIZES } from '@/constants/Colors'
 import { FlashList } from '@shopify/flash-list'

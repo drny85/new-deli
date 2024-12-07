@@ -4,7 +4,7 @@ import { Image } from 'expo-image'
 import { SIZES } from '@/constants/Colors'
 import { View } from '../ThemedView'
 import { Text } from '../ThemedText'
-import { Product } from '@/typing'
+import { Product } from '@/shared/types'
 import { LinearGradient } from 'expo-linear-gradient'
 import Row from '../Row'
 

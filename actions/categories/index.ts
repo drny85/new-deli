@@ -1,5 +1,5 @@
 import { categoriessCollection } from '@/collections'
-import { Category } from '@/typing'
+import { Category } from '@/shared/types'
 import { addDoc } from 'firebase/firestore'
 
 export const addCategory = async (category: Category, businessId: string): Promise<boolean> => {

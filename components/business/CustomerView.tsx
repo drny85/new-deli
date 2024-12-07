@@ -1,6 +1,6 @@
 import { View, StyleSheet, TouchableOpacity } from 'react-native'
 import React from 'react'
-import { Order } from '@/typing'
+import { Order } from '@/shared/types'
 import { SIZES } from '@/constants/Colors'
 import Row from '../Row'
 import PhoneCall from '../PhoneCall'

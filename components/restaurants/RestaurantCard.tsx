@@ -1,5 +1,5 @@
 import { SIZES } from '@/constants/Colors'
-import { CardData } from '@/typing'
+import { CardData } from '@/shared/types'
 import { Image } from 'expo-image'
 import { StyleSheet, TouchableOpacity, useColorScheme, ViewStyle } from 'react-native'
 import NeoView from '../NeoView'

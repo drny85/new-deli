@@ -1,7 +1,7 @@
 import { SIZES } from '@/constants/Colors'
 
 import { useAllCategories } from '@/hooks/category/useAllCategories'
-import { Category, Product } from '@/typing'
+import { Category, Product } from '@/shared/types'
 import { FlashList } from '@shopify/flash-list'
 import { useNavigation } from 'expo-router'
 import React, { useEffect, useMemo, useState } from 'react'

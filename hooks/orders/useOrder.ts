@@ -1,5 +1,5 @@
 import { ordersCollection } from '@/collections'
-import { Order } from '@/typing'
+import { Order } from '@/shared/types'
 import { doc, onSnapshot } from 'firebase/firestore'
 import { useEffect, useState } from 'react'
 

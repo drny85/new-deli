@@ -1,5 +1,5 @@
 import { SIZES } from '@/constants/Colors'
-import { Order } from '@/typing'
+import { Order } from '@/shared/types'
 import { FlashList } from '@shopify/flash-list'
 import OrderListItem from './OrderListItem'
 import { Text } from '../ThemedText'

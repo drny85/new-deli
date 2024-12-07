@@ -1,4 +1,4 @@
-import { Category } from '@/typing'
+import { Category } from '@/shared/types'
 import { useEffect, useState } from 'react'
 import { useAllCategories } from './useAllCategories'
 import { useAuth } from '@/providers/authProvider'

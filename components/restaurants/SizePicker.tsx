@@ -1,7 +1,7 @@
 import { TouchableOpacity } from 'react-native'
 import React from 'react'
 import { SIZES } from '@/constants/Colors'
-import { P_Size } from '@/typing'
+import { P_Size } from '@/shared/types'
 import NeoView from '../NeoView'
 import { useThemeColor } from '@/hooks/useThemeColor'
 import { View } from '../ThemedView'

@@ -1,6 +1,6 @@
 import { businessCollection } from '@/collections'
 import { useRestaurantsStore } from '@/stores/restaurantsStore'
-import { Business } from '@/typing'
+import { Business } from '@/shared/types'
 import { onSnapshot, query, where } from 'firebase/firestore'
 import { useEffect, useState } from 'react'
 

@@ -2,7 +2,7 @@ import { updateETA } from '@/actions/business'
 import { ordersCollection } from '@/collections'
 import { useAuth } from '@/providers/authProvider'
 import { useBusinessOrdersStore } from '@/stores/businessOrders'
-import { Order } from '@/typing'
+import { Order } from '@/shared/types'
 
 import { onSnapshot, query, where } from 'firebase/firestore'
 import { useEffect, useState } from 'react'

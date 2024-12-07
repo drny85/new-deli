@@ -1,4 +1,4 @@
-import { ORDER_TYPE } from '@/typing'
+import { ORDER_TYPE } from '@/shared/types'
 
 const myPercentage = 0.4
 

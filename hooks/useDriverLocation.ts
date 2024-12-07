@@ -1,5 +1,5 @@
 import { driversCollection } from '@/collections'
-import { Coords } from '@/typing'
+import { Coords } from '@/shared/types'
 import { doc, onSnapshot } from 'firebase/firestore'
 import { useEffect, useState } from 'react'
 

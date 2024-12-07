@@ -1,6 +1,6 @@
 // CustomCard.tsx
 
-import { Courier } from '@/typing'
+import { Courier } from '@/shared/types'
 import { StyleSheet, TouchableOpacity } from 'react-native'
 import Row from './Row'
 import { View } from './ThemedView'

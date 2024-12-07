@@ -1,4 +1,4 @@
-import { Order, ORDER_STATUS } from '@/typing'
+import { Order, ORDER_STATUS } from '@/shared/types'
 
 export async function calculateETA(orders: Order[]): Promise<number> {
    if (!orders || orders.length === 0) return 0

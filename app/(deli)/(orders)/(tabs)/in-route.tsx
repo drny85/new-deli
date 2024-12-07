@@ -1,7 +1,7 @@
 import { Container } from '@/components/Container'
 import { useBusinessOrdersStore } from '@/stores/businessOrders'
 import BusinessOrderStatusView from '@/components/business/BusinessOrderStatusView'
-import { ORDER_STATUS } from '@/typing'
+import { ORDER_STATUS } from '@/shared/types'
 import { MaterialTopTabs } from './_layout'
 import { isFromToday } from '@/helpers/isFromToday'
 

@@ -1,4 +1,4 @@
-import { NOTIFICATION_TYPE, NotificationData } from '@/typing'
+import { NOTIFICATION_TYPE, NotificationData } from '@/shared/types'
 import * as Notifications from 'expo-notifications'
 import { router } from 'expo-router'
 import { useEffect } from 'react'

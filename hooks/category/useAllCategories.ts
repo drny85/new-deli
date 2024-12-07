@@ -1,6 +1,6 @@
 import { categoriessCollection } from '@/collections'
 import { useCategoriesStore } from '@/stores/categoriesStore'
-import { Category } from '@/typing'
+import { Category } from '@/shared/types'
 import { getDocs } from 'firebase/firestore'
 import { useEffect, useState } from 'react'
 

@@ -1,4 +1,4 @@
-import { Order } from '@/typing'
+import { Order } from '@/shared/types'
 import { create } from 'zustand'
 
 type BusinessOrderPrams = {

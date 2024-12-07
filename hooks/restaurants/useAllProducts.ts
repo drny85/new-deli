@@ -1,6 +1,6 @@
 import { productsCollection } from '@/collections'
 import { useRestaurantsStore } from '@/stores/restaurantsStore'
-import { Product } from '@/typing'
+import { Product } from '@/shared/types'
 import { getDocs } from 'firebase/firestore'
 import { useCallback, useEffect, useState } from 'react'
 import { useRestaurants } from './useRestaurants'

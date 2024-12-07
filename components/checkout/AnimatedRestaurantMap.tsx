@@ -1,6 +1,6 @@
 import { SIZES } from '@/constants/Colors'
 import { customMapStyle } from '@/helpers/customMapStyle'
-import { RestaurantMapInfo } from '@/typing'
+import { RestaurantMapInfo } from '@/shared/types'
 import { useRef, useEffect } from 'react'
 import { View, StyleSheet, Animated, Dimensions } from 'react-native'
 import MapView, { Marker } from 'react-native-maps'

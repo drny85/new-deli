@@ -1,5 +1,5 @@
 import { businessCollection, productsCollection } from '@/collections'
-import { Business, Product } from '@/typing'
+import { Business, Product } from '@/shared/types'
 import { addDoc, deleteDoc, doc, getDoc, getDocs, updateDoc } from 'firebase/firestore'
 import { getStorage, ref, deleteObject } from 'firebase/storage'
 import { updateBusiness } from '../business'

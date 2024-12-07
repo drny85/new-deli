@@ -1,4 +1,4 @@
-import { ORDER_STATUS } from '@/typing'
+import { ORDER_STATUS } from '@/shared/types'
 
 export const statusColor = (status: ORDER_STATUS) => {
    switch (status) {

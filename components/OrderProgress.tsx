@@ -1,6 +1,11 @@
 import { Colors, SIZES } from '@/constants/Colors'
 import { useThemeColor } from '@/hooks/useThemeColor'
-import { ORDER_STATUS, ORDER_TYPE, statusListForDelivery, statusListForPickup } from '@/typing'
+import {
+   ORDER_STATUS,
+   ORDER_TYPE,
+   statusListForDelivery,
+   statusListForPickup
+} from '@/shared/types'
 import { orderNameSwitch } from '@/utils/orderNameSwitch'
 import { FontAwesome, Ionicons } from '@expo/vector-icons'
 import React, { useEffect, useMemo, useState } from 'react'

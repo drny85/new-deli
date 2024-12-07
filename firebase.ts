@@ -5,7 +5,7 @@ import { getReactNativePersistence, initializeAuth, User } from 'firebase/auth'
 import { collection, CollectionReference, DocumentData, getFirestore } from 'firebase/firestore'
 import { getStorage } from 'firebase/storage'
 
-import { ConnectedAccountParams, PaymentIntentParams, StripeResponse } from '@/typing'
+import { ConnectedAccountParams, PaymentIntentParams, StripeResponse } from '@/shared/types'
 import { getFunctions, httpsCallable } from 'firebase/functions'
 
 // Optionally import the services that you want to use

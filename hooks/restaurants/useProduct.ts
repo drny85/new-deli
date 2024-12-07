@@ -1,5 +1,5 @@
 import { productsCollection } from '@/collections'
-import { Product } from '@/typing'
+import { Product } from '@/shared/types'
 import { doc, onSnapshot } from 'firebase/firestore'
 import { useEffect, useState } from 'react'
 

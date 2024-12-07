@@ -1,6 +1,6 @@
 import { SIZES } from '@/constants/Colors'
 import { useThemeColor } from '@/hooks/useThemeColor'
-import { Filter, Order } from '@/typing'
+import { Filter, Order } from '@/shared/types'
 import { getRandomColor } from '@/utils/getRandomColor'
 import SegmentedControl from '@react-native-segmented-control/segmented-control'
 import { useState } from 'react'

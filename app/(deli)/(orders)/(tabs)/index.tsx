@@ -5,7 +5,7 @@ import { isFromToday } from '@/helpers/isFromToday'
 import { useOrders } from '@/hooks/orders/useOrders'
 import { useAuth } from '@/providers/authProvider'
 import { useBusinessOrdersStore } from '@/stores/businessOrders'
-import { ORDER_STATUS } from '@/typing'
+import { ORDER_STATUS } from '@/shared/types'
 import { MaterialTopTabs } from './_layout'
 
 const NewOrders = () => {

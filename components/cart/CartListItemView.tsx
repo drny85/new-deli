@@ -12,7 +12,7 @@ import { SymbolView } from 'expo-symbols'
 import { router } from 'expo-router'
 import { toastMessage } from '@/utils/toast'
 import { useThemeColor } from '@/hooks/useThemeColor'
-import { ORDER_TYPE } from '@/typing'
+import { ORDER_TYPE } from '@/shared/types'
 import { Feather, FontAwesome } from '@expo/vector-icons'
 
 const IMAGE_HEIGHT = 80

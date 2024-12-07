@@ -1,6 +1,6 @@
 import { userCouriersCollection } from '@/collections'
 import { useAuth } from '@/providers/authProvider'
-import { Courier } from '@/typing'
+import { Courier } from '@/shared/types'
 import { onSnapshot, query, where } from 'firebase/firestore'
 import { useEffect, useState } from 'react'
 import { useRestaurant } from '../restaurants/useRestaurant'

@@ -9,7 +9,7 @@ import {
    Order,
    Product,
    StoreCourierData
-} from '@/typing'
+} from '@/shared/types'
 
 export const businessCollection = createCollection<Business>('business')
 export const ordersCollection = createCollection<Order>('orders')

@@ -1,4 +1,4 @@
-import { Order } from '@/typing'
+import { Order } from '@/shared/types'
 import { isSameDay, isSameWeek, isSameMonth, format, endOfWeek } from 'date-fns'
 import { pieDataItem } from 'react-native-gifted-charts'
 

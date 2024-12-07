@@ -1,4 +1,4 @@
-import { ORDER_STATUS } from '@/typing'
+import { ORDER_STATUS } from '@/shared/types'
 
 export const orderNameSwitch = (status: ORDER_STATUS): string => {
    switch (status) {

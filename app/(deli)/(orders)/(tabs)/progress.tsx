@@ -2,7 +2,7 @@ import React from 'react'
 import { Container } from '@/components/Container'
 import { useBusinessOrdersStore } from '@/stores/businessOrders'
 import BusinessOrderStatusView from '@/components/business/BusinessOrderStatusView'
-import { ORDER_STATUS } from '@/typing'
+import { ORDER_STATUS } from '@/shared/types'
 import { isFromToday } from '@/helpers/isFromToday'
 import { MaterialTopTabs } from './_layout'
 

@@ -1,7 +1,7 @@
 import { TouchableOpacity, ImageBackground } from 'react-native'
 import React from 'react'
 import { SIZES } from '@/constants/Colors'
-import { Product } from '@/typing'
+import { Product } from '@/shared/types'
 import { View } from '../ThemedView'
 import { Text } from '../ThemedText'
 import { useThemeColor } from '@/hooks/useThemeColor'

@@ -1,6 +1,6 @@
 import { SIZES } from '@/constants/Colors'
 import { useRestaurantsStore } from '@/stores/restaurantsStore'
-import { Business } from '@/typing'
+import { Business } from '@/shared/types'
 import { router } from 'expo-router'
 import React, { useCallback, useEffect, useState } from 'react'
 import { Animated, ListRenderItem, Platform, View } from 'react-native'

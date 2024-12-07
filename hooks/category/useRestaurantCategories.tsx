@@ -1,6 +1,6 @@
 import { categoriessCollection } from '@/collections'
 import { useAuth } from '@/providers/authProvider'
-import { Category } from '@/typing'
+import { Category } from '@/shared/types'
 import { onSnapshot } from 'firebase/firestore'
 import { useEffect, useState } from 'react'
 

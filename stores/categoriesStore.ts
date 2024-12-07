@@ -1,4 +1,4 @@
-import { Category } from '@/typing'
+import { Category } from '@/shared/types'
 import { create } from 'zustand'
 
 type CategoriesStoreParams = {

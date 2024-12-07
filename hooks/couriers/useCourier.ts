@@ -1,6 +1,6 @@
 import { userCouriersCollection } from '@/collections'
 
-import { Courier } from '@/typing'
+import { Courier } from '@/shared/types'
 import { doc, onSnapshot } from 'firebase/firestore'
 import { useEffect, useState } from 'react'
 

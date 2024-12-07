@@ -1,4 +1,4 @@
-import { Coords } from '@/typing'
+import { Coords } from '@/shared/types'
 
 export function getDistanceFromLatLonInMeters(loc1: Coords, loc2: Coords): number {
    function deg2rad(deg: number): number {

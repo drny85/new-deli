@@ -3,7 +3,7 @@ import { usersCollection } from '@/collections'
 import { auth } from '@/firebase'
 import { useCartsStore } from '@/stores/cartsStore'
 import { useOrderFlowStore } from '@/stores/orderFlowStore'
-import { AppUser } from '@/typing'
+import { AppUser } from '@/shared/types'
 import { FIREBASE_ERRORS } from '@/utils/firebaseErrorMessages'
 import { toastAlert } from '@/utils/toast'
 import {

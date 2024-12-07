@@ -5,7 +5,7 @@ import { TouchableOpacity } from 'react-native'
 import CircularProgressBar from '../CircularProgressBar'
 import Row from '../Row'
 import { router } from 'expo-router'
-import { Order, ORDER_STATUS } from '@/typing'
+import { Order, ORDER_STATUS } from '@/shared/types'
 import { View } from '../ThemedView'
 import useOrientation from '@/hooks/useOrientation'
 

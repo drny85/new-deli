@@ -1,5 +1,5 @@
 import { SIZES } from '@/constants/Colors'
-import { Order } from '@/typing'
+import { Order } from '@/shared/types'
 import { dayjsFormat } from '@/utils/dayjs'
 import { ScrollView } from 'react-native'
 import { Container } from '../Container'

@@ -1,8 +1,43 @@
-import { CartItem } from './stores/cartsStore'
-
 export type Coords = {
    latitude: number
    longitude: number
+}
+
+export const CART_ALLOWED = 10
+export const MY_TRANSACTION_FEE = 1.2
+
+export const myTransaction_fee = 1.2 //must change this amount in the constants.index.js
+export const myPercentage = 0.4
+
+export interface CartItem extends Product {
+   itemId: string
+   quantity: number
+   size: P_Size | null
+   instructions: string
+   addons: string[]
+}
+
+export interface ConnectedParams {
+   businessName: string
+   phone: string
+   address: string
+   name: string
+   lastName: string
+   type: 'business' | 'courier'
+   mode?: 'test' | 'live' | undefined
+}
+
+export type Cart = {
+   id?: string
+   items: CartItem[]
+   quantity: number
+   total: number
+   restaurantId: string
+   orderType: ORDER_TYPE
+   createdAt: string
+   deliveryAddress: OrderAddress | null
+   isShared: boolean
+   sharedUserId?: string
 }
 
 export type OrderStatus =

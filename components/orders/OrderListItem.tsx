@@ -1,6 +1,6 @@
 import { SIZES } from '@/constants/Colors'
 import { useRestaurantsStore } from '@/stores/restaurantsStore'
-import { Order, ORDER_STATUS, ORDER_TYPE } from '@/typing'
+import { Order, ORDER_STATUS, ORDER_TYPE } from '@/shared/types'
 import React, { useCallback, useMemo } from 'react'
 import { TouchableOpacity } from 'react-native'
 import NeoView from '../NeoView'

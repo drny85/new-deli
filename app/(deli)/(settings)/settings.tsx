@@ -11,7 +11,7 @@ import { usePhoto } from '@/hooks/usePhoto'
 import { useThemeColor } from '@/hooks/useThemeColor'
 import { useBusinessOrdersStore } from '@/stores/businessOrders'
 import { useRestaurantsStore } from '@/stores/restaurantsStore'
-import { DELIVERY_TYPE, ORDER_STATUS } from '@/typing'
+import { DELIVERY_TYPE, ORDER_STATUS } from '@/shared/types'
 import { generateRandomNumbers } from '@/utils/generateRandomNumber'
 import { toastAlert, toastMessage } from '@/utils/toast'
 import {

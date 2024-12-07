@@ -1,29 +1,9 @@
-import { ORDER_TYPE, OrderAddress, P_Size, Product } from '@/typing'
+import { ORDER_TYPE } from '@/shared/types'
 import { create } from 'zustand'
 
+import { Cart, CartItem } from '@/shared/types'
 import { createJSONStorage, persist } from 'zustand/middleware'
 import { zustandStorage } from './storage'
-
-export interface CartItem extends Product {
-   itemId: string
-   quantity: number
-   size: P_Size | null
-   instructions: string
-   addons: string[]
-}
-
-export type Cart = {
-   id?: string
-   items: CartItem[]
-   quantity: number
-   total: number
-   restaurantId: string
-   orderType: ORDER_TYPE
-   createdAt: string
-   deliveryAddress: OrderAddress | null
-   isShared: boolean
-   sharedUserId?: string
-}
 
 type CartStoreParams = {
    carts: Cart[]

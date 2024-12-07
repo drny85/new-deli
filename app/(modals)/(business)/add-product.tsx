@@ -24,12 +24,11 @@ import { useProduct } from '@/hooks/restaurants/useProduct'
 import { usePhoto } from '@/hooks/usePhoto'
 import { useThemeColor } from '@/hooks/useThemeColor'
 import { useAuth } from '@/providers/authProvider'
+import { Category, P_Size, Product } from '@/shared/types'
 import { useRestaurantsStore } from '@/stores/restaurantsStore'
-import { Category, P_Size, Product } from '@/typing'
 import { toastAlert, toastMessage } from '@/utils/toast'
-import { EvilIcons, Feather, FontAwesome } from '@expo/vector-icons'
+import { Feather, FontAwesome } from '@expo/vector-icons'
 import SegmentedControl from '@react-native-segmented-control/segmented-control'
-import { set } from 'date-fns'
 import { router, useLocalSearchParams } from 'expo-router'
 import { AnimatePresence, MotiView } from 'moti'
 import { useCallback, useEffect, useRef, useState } from 'react'
@@ -43,7 +42,7 @@ import {
    TextInput,
    TouchableOpacity
 } from 'react-native'
-import Animated, { SlideInDown, SlideInUp, SlideOutDown, SlideOutUp } from 'react-native-reanimated'
+import Animated, { SlideInUp, SlideOutUp } from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 const AddProduct = () => {

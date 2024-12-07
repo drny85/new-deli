@@ -5,7 +5,7 @@ import { fetchPaymentParams } from '@/firebase'
 import { useThemeColor } from '@/hooks/useThemeColor'
 import { useAuth } from '@/providers/authProvider'
 import { useOrderFlowStore } from '@/stores/orderFlowStore'
-import { PaymentIntentParams } from '@/typing'
+import { PaymentIntentParams } from '@/shared/types'
 import { stripeFee } from '@/utils/stripeFee'
 import { toastAlert, toastMessage } from '@/utils/toast'
 import {

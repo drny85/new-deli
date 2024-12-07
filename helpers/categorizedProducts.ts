@@ -1,4 +1,4 @@
-import { Product } from '@/typing'
+import { Product } from '@/shared/types'
 
 export interface CategorizedProduct {
    title: string

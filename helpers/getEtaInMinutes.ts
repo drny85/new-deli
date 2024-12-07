@@ -1,4 +1,4 @@
-import { Coords } from '@/typing'
+import { Coords } from '@/shared/types'
 
 /**
  * Get travel duration in minutes between two coordinates using Google Maps API.

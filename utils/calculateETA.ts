@@ -1,4 +1,4 @@
-import { Coords } from '@/typing'
+import { Coords } from '@/shared/types'
 
 /**
  * Calculates ETA based on two coordinates and an average speed.
