@@ -45,6 +45,8 @@ const Sheet = React.forwardRef<BottomSheetModal, SheetProps>(
          <BottomSheetModal
             ref={ref}
             index={0}
+            name="product"
+            animateOnMount
             backgroundStyle={
                backgroundStyle ?? {
                   backgroundColor: bgColor

@@ -25,8 +25,9 @@ import { useAuth } from '@/providers/authProvider'
 import { useRestaurantsStore } from '@/stores/restaurantsStore'
 import { Category, P_Size, Product } from '@/typing'
 import { toastAlert, toastMessage } from '@/utils/toast'
-import { Feather, FontAwesome } from '@expo/vector-icons'
+import { EvilIcons, Feather, FontAwesome } from '@expo/vector-icons'
 import SegmentedControl from '@react-native-segmented-control/segmented-control'
+import { set } from 'date-fns'
 import { router, useLocalSearchParams } from 'expo-router'
 import { AnimatePresence, MotiView } from 'moti'
 import { useCallback, useEffect, useRef, useState } from 'react'
@@ -40,6 +41,7 @@ import {
    TextInput,
    TouchableOpacity
 } from 'react-native'
+import Animated, { SlideInDown, SlideInUp, SlideOutDown, SlideOutUp } from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 const AddProduct = () => {
@@ -65,6 +67,8 @@ const AddProduct = () => {
    const { bottom } = useSafeAreaInsets()
    const products = useRestaurantsStore((s) => s.products)
    const [selectedAddons, setSelectedAddons] = useState<string[]>([])
+   const [newAddon, setNewAddon] = useState('')
+   const [addingNewAddon, setAddingNewAddon] = useState(false)
 
    const toggleAddonSelection = (addonName: string, maxSelectable: number) => {
       const isSelected = selectedAddons.includes(addonName)
@@ -82,6 +86,9 @@ const AddProduct = () => {
    const handleOpenBottomSheet = () => {
       bottomSheetModalRef.current?.open()
    }
+   const handlePresentModalPress = useCallback(() => {
+      bottomSheetAddonsRef.current?.present()
+   }, [])
 
    const handleCloseBottomSheet = () => {
       bottomSheetModalRef.current?.close()
@@ -163,6 +170,7 @@ const AddProduct = () => {
             await updateBusiness({
                ...restaurant!,
                hasItems: true,
+               addons: [...ADDONS],
                profileCompleted: true
             })
          }
@@ -306,12 +314,12 @@ const AddProduct = () => {
          if (product) {
             setProduct({ ...product, price: product.price.toString() })
             setVariations(product.sizes)
-
             setCategory(product.category!)
             if (product.multipleAddons) {
                setQty(product.multipleAddons)
                setSizeMode('multiple')
                setSelectedIndex(3)
+               setSelectedAddons(product.addons)
             }
             if (product.sizes && product.sizes.length > 0) {
                const isSizes = letterSizes(product.sizes)
@@ -378,7 +386,11 @@ const AddProduct = () => {
                   showsVerticalScrollIndicator={false}>
                   <View style={styles.imageContainer}>
                      <ProductCard
-                        containerStyle={{ width: '100%', borderRadius: SIZES.lg, height: '100%' }}
+                        containerStyle={{
+                           width: '100%',
+                           borderRadius: SIZES.lg,
+                           height: '100%'
+                        }}
                         product={{
                            ...product,
                            image:
@@ -586,7 +598,7 @@ const AddProduct = () => {
                                              flexWrap: 'wrap',
                                              marginTop: SIZES.md
                                           }}>
-                                          {selectedAddons
+                                          {product.addons
                                              .sort((a, b) => a.localeCompare(b))
                                              .map((addon) => (
                                                 <Text type="muted" capitalize key={addon}>
@@ -596,7 +608,7 @@ const AddProduct = () => {
                                        </View>
 
                                        <TouchableOpacity
-                                          onPress={() => bottomSheetAddonsRef.current?.present()}
+                                          onPress={handlePresentModalPress}
                                           style={{
                                              boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
 
@@ -804,7 +816,7 @@ const AddProduct = () => {
             onClose={handleCloseBottomSheet}
          />
 
-         <Sheet snapPoints={['90%']} ref={bottomSheetAddonsRef}>
+         <Sheet snapPoints={['90%', '100%']} ref={bottomSheetAddonsRef}>
             <Row containerStyle={{ justifyContent: 'space-between', paddingHorizontal: 20 }}>
                <TouchableOpacity
                   onPress={() => {
@@ -827,34 +839,55 @@ const AddProduct = () => {
                   }}>
                   <Feather name="chevron-left" size={32} color={'#212121'} />
                </TouchableOpacity>
+               <Row>
+                  {selectedAddons > product.addons && (
+                     <View style={{ marginRight: SIZES.md }}>
+                        <TouchableOpacity
+                           onPress={() => setSelectedAddons(product.addons)}
+                           style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                           <EvilIcons name="undo" size={26} color="orange" />
+                           <Text type="defaultSemiBold" center>
+                              Undo
+                           </Text>
+                        </TouchableOpacity>
+                     </View>
+                  )}
 
-               <TouchableOpacity
-                  onPress={async () => {
-                     if (qty > selectedAddons.length) {
-                        Alert.alert(
-                           'Error',
-                           `Addons that can be selected must be equal or less than ${selectedAddons.length}`,
-                           [{ text: 'OK' }],
-                           { cancelable: false }
-                        )
-                        return
-                     }
-                     await updateProduct({
-                        ...product,
-                        multipleAddons: qty || null,
-                        addons: selectedAddons || []
-                     })
-                     bottomSheetAddonsRef.current?.close()
-                  }}
-                  style={{
-                     boxShadow: '1px 3px 2px 1px rbga(0,0,0,0.1)',
-                     paddingHorizontal: SIZES.lg,
-                     paddingVertical: SIZES.sm,
-                     backgroundColor: 'white',
-                     borderRadius: SIZES.md
-                  }}>
-                  <Text type="defaultSemiBold">Update Addons</Text>
-               </TouchableOpacity>
+                  <TouchableOpacity
+                     onPress={async () => {
+                        if (qty > selectedAddons.length) {
+                           Alert.alert(
+                              'Error',
+                              `Addons that can be selected must be equal or less than ${selectedAddons.length}`,
+                              [{ text: 'OK' }],
+                              { cancelable: false }
+                           )
+                           return
+                        }
+                        await updateProduct({
+                           ...product,
+                           multipleAddons: qty || null,
+                           addons: selectedAddons || []
+                        })
+                        bottomSheetAddonsRef.current?.close()
+                        toastMessage({
+                           title: 'Success',
+                           message: 'Addons updated successfully',
+                           preset: 'custom',
+                           iconName: 'check',
+                           duration: 2
+                        })
+                     }}
+                     style={{
+                        boxShadow: '1px 3px 2px 1px rbga(0,0,0,0.1)',
+                        paddingHorizontal: SIZES.lg,
+                        paddingVertical: SIZES.sm,
+                        backgroundColor: 'white',
+                        borderRadius: SIZES.md
+                     }}>
+                     <Text type="defaultSemiBold">Update Addons</Text>
+                  </TouchableOpacity>
+               </Row>
             </Row>
             <View
                style={{
@@ -865,28 +898,99 @@ const AddProduct = () => {
                   gap: SIZES.sm
                }}>
                <View style={{ flex: 1 }}>
-                  <Text center type="title">
-                     Addons for this Product
-                  </Text>
+                  <View
+                     style={{
+                        alignSelf: 'center',
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        gap: 16
+                     }}>
+                     <Text center type="title">
+                        Addons for this Product
+                     </Text>
+                     <TouchableOpacity onPress={() => setAddingNewAddon(true)}>
+                        <Feather name="plus-circle" size={28} color={ascentColor} />
+                     </TouchableOpacity>
+                  </View>
+                  {addingNewAddon && (
+                     <Animated.View
+                        entering={SlideInUp}
+                        exiting={SlideOutUp}
+                        style={{
+                           marginTop: SIZES.md,
+                           maxWidth: 400,
+                           alignSelf: 'center',
+                           width: '100%',
+                           flexDirection: 'row',
+                           alignItems: 'center',
+                           gap: SIZES.sm
+                        }}>
+                        <Input
+                           value={newAddon}
+                           contentContainerStyle={{ width: '90%' }}
+                           autoCapitalize="words"
+                           autoFocus
+                           onChangeText={setNewAddon}
+                           onEndEditing={() => {
+                              if (!newAddon) return
+                              const isAlreadyThere =
+                                 selectedAddons.find(
+                                    (a) => a.toLowerCase() === newAddon.toLowerCase()
+                                 ) ||
+                                 product.addons.find(
+                                    (a) => a.toLowerCase() === newAddon.toLowerCase()
+                                 )
+                              if (isAlreadyThere) {
+                                 toastMessage({
+                                    title: 'Error',
+                                    message: 'Addon already exists',
+                                    preset: 'custom',
+                                    iconName: 'x',
+                                    duration: 2
+                                 })
+                                 return
+                              }
+                              if (newAddon) {
+                                 const newAddons = [...selectedAddons, newAddon]
+                                 if (restaurant) {
+                                    updateBusiness({
+                                       ...restaurant,
+                                       addons: [...(restaurant.addons || []), newAddon]
+                                    })
+                                 }
+                                 setSelectedAddons(newAddons)
+                                 setNewAddon('')
+                                 setAddingNewAddon(false)
+                              }
+                           }}
+                           placeholder="Type new addon"
+                        />
+                        <TouchableOpacity
+                           onPress={() => {
+                              setAddingNewAddon(false)
+                              setNewAddon('')
+                           }}>
+                           <Feather name="x-circle" size={26} color={ascentColor} />
+                        </TouchableOpacity>
+                     </Animated.View>
+                  )}
+
                   <AddonsSelector
-                     addons={selectedProduct?.addons || [...ADDONS]}
-                     maxSelectable={100}
+                     addons={restaurant?.addons || []}
+                     maxSelectable={20}
                      showTitle={false}
                      selectedAddons={selectedAddons}
                      containerStyle={{
                         width: '100%',
                         flexDirection: 'row',
-                        flexWrap: 'wrap',
-
-                        gap: 20
+                        flexWrap: 'wrap'
                      }}
                      toggleAddonSelection={(name) => {
-                        console.log('HERE', name)
-
-                        toggleAddonSelection(name, 100)
+                        toggleAddonSelection(name, 20)
                      }}
                   />
                </View>
+
                <AnimatePresence>
                   {selectedAddons.length > 0 && (
                      <MotiView

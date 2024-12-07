@@ -40,7 +40,7 @@ const BottomSheetModal = forwardRef<BottomSheetModalRef, BottomSheetModalProps>(
       }
 
       useImperativeHandle(ref, () => ({
-         open: () => bottomSheetRef.current?.snapToIndex(1),
+         open: () => bottomSheetRef.current?.snapToIndex(0),
          close: () => bottomSheetRef.current?.close()
       }))
 

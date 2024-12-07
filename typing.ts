@@ -216,6 +216,7 @@ export interface Business {
    requiredOTP?: boolean
    deliveryType: DELIVERY_TYPE
    miles: number
+   addons?: string[]
    ordersMethod: ORDERS_METHOD
    otpOverride?: number | null
 }

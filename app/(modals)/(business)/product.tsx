@@ -22,7 +22,6 @@ const BusinessProduct = () => {
    const { productId } = useLocalSearchParams<{ productId: string }>()
    const [selected, setSelected] = useState<P_Size | null>(null)
    const { product, loading } = useProduct(user?.id!, productId!)
-   console.log(productId)
 
    if (loading) return <Loading />
 
