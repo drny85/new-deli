@@ -2,6 +2,7 @@ import { updateBusiness } from '@/actions/business'
 import { addNewProduct, updateProduct } from '@/actions/products'
 import BackButton from '@/components/BackButton'
 import BottomSheetModal, { BottomSheetModalRef } from '@/components/BottomSheetModal'
+import AddonsHeader from '@/components/business/AddonsHeader'
 import Button from '@/components/Button'
 import AddonsSelector from '@/components/cart/MultipleAddonsSelection'
 import Input from '@/components/Input'
@@ -17,6 +18,7 @@ import { View } from '@/components/ThemedView'
 import { ADDONS, SIZES_ADDONS } from '@/constants'
 import { SIZES } from '@/constants/Colors'
 import { letterSizes } from '@/helpers/lettersSizes'
+import { onlyLetters } from '@/helpers/onlyLetters'
 import { useAllCategories } from '@/hooks/category/useAllCategories'
 import { useProduct } from '@/hooks/restaurants/useProduct'
 import { usePhoto } from '@/hooks/usePhoto'
@@ -330,17 +332,6 @@ const AddProduct = () => {
       if (!productId && !selectedProduct) {
          setSelectedIndex(0)
          setSizeMode('none')
-      } else {
-         console.log('HERE')
-         if (
-            productId &&
-            selectedProduct &&
-            selectedProduct.multipleAddons &&
-            selectedProduct.multipleAddons > 0
-         ) {
-            setQty(selectedProduct.multipleAddons)
-            setSelectedAddons([])
-         }
       }
       bottomSheetAddonsRef.current?.close()
    }
@@ -879,37 +870,13 @@ const AddProduct = () => {
          />
 
          <Sheet snapPoints={['90%', '100%']} ref={bottomSheetAddonsRef}>
-            <Row containerStyle={{ justifyContent: 'space-between', paddingHorizontal: 20 }}>
-               <TouchableOpacity onPress={onPressBackOnUpdateAddons}>
-                  <Feather name="chevron-left" size={32} color={'#212121'} />
-               </TouchableOpacity>
-               <Row>
-                  {selectedAddons > product.addons && (
-                     <View style={{ marginRight: SIZES.md }}>
-                        <TouchableOpacity
-                           onPress={() => setSelectedAddons(product.addons)}
-                           style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-                           <EvilIcons name="undo" size={26} color="orange" />
-                           <Text type="defaultSemiBold" center>
-                              Undo
-                           </Text>
-                        </TouchableOpacity>
-                     </View>
-                  )}
+            <AddonsHeader
+               onPressUpdateAddons={onAddonsUpdates}
+               show={selectedAddons > product.addons}
+               onPressBack={onPressBackOnUpdateAddons}
+               onPressSetSeletecAddons={() => setSelectedAddons(product.addons)}
+            />
 
-                  <TouchableOpacity
-                     onPress={onAddonsUpdates}
-                     style={{
-                        boxShadow: '1px 3px 2px 1px rbga(0,0,0,0.1)',
-                        paddingHorizontal: SIZES.lg,
-                        paddingVertical: SIZES.sm,
-                        backgroundColor: 'white',
-                        borderRadius: SIZES.md
-                     }}>
-                     <Text type="defaultSemiBold">Update Addons</Text>
-                  </TouchableOpacity>
-               </Row>
-            </Row>
             <View
                style={{
                   flex: 1,
@@ -952,7 +919,7 @@ const AddProduct = () => {
                            contentContainerStyle={{ width: '90%' }}
                            autoCapitalize="words"
                            autoFocus
-                           onChangeText={setNewAddon}
+                           onChangeText={(text) => setNewAddon(onlyLetters(text))}
                            onEndEditing={() => {
                               if (!newAddon) return
                               const isAlreadyThere =
