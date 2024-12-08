@@ -15,9 +15,8 @@ import { FontAwesome } from '@expo/vector-icons'
 import { router } from 'expo-router'
 
 export default function ProfleScreen() {
-   const { logOut, user } = useAuth()
+   const { user } = useAuth()
    const textColor = useThemeColor('text')
-   console.log(SIZES.width)
 
    if (!user)
       return (

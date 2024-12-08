@@ -65,6 +65,7 @@ const Login = () => {
       if (email) {
          console.log('email', email)
          setValue('email', email)
+         mmk.delete('email')
       }
    }, [])
 

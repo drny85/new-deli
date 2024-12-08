@@ -144,8 +144,8 @@ const Couriers = () => {
                            </View>
                         </Row>
                         <Row>
-                           <Text>Is Busy: </Text>
-                           {item.isOnline ? (
+                           <Text>Avilable: </Text>
+                           {item.isOnline && !item.busy ? (
                               <View
                                  style={{
                                     width: 18,

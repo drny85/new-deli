@@ -6,7 +6,11 @@ const OrdersTabsLayout = () => {
    const { restaurant } = useRestaurantsStore()
 
    useEffect(() => {
-      if (restaurant?.couriers.length === 0 && restaurant?.ordersMethod !== 'pickup-only') {
+      if (
+         restaurant?.couriers.length === 0 &&
+         restaurant?.ordersMethod !== 'pickup-only' &&
+         restaurant.ordersMethod !== 'both'
+      ) {
          router.push('/(deli)/(orders)/no-courriers')
       }
    }, [restaurant?.ordersMethod])

@@ -1,4 +1,4 @@
-import { TouchableOpacity, View } from 'react-native'
+import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import { router, useLocalSearchParams } from 'expo-router'
 import { Container } from '@/components/Container'
@@ -22,16 +22,7 @@ const CustomerView = () => {
    const customer = customerOrders[0].contactPerson
 
    const renderOrder = (order: Order) => (
-      <View
-         style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            padding: SIZES.md,
-            boxShadow: '0px 2px 4px 1px rgba(0, 0, 0, 0.1)',
-            borderRadius: SIZES.sm,
-            marginBottom: SIZES.sm,
-            gap: SIZES.md
-         }}>
+      <View style={styles.hero}>
          <View style={{ gap: SIZES.sm }}>
             <Text>
                Order #: <Text type="defaultSemiBold">{order.orderNumber}</Text>
@@ -53,13 +44,7 @@ const CustomerView = () => {
                      params: { orderId: order.id }
                   })
                }
-               style={{
-                  padding: SIZES.sm,
-                  borderRadius: SIZES.sm,
-                  boxShadow: '0px 2px 4px 1px rgba(0, 0, 0, 0.1)',
-                  marginTop: SIZES.lg,
-                  paddingHorizontal: SIZES.lg
-               }}>
+               style={styles.btn}>
                <Text type="defaultSemiBold">View Order</Text>
             </TouchableOpacity>
          </View>
@@ -67,14 +52,8 @@ const CustomerView = () => {
    )
    return (
       <Container>
-         <View style={{ flex: 1, padding: 20 }}>
-            <View
-               style={{
-                  gap: SIZES.sm,
-                  boxShadow: '1px 2px 4px 3px rgba(0,0,0,0.1)',
-                  padding: SIZES.md,
-                  borderRadius: SIZES.sm
-               }}>
+         <View style={styles.container}>
+            <View style={styles.card}>
                <Text type="title">Customer Details</Text>
                <Text>
                   Name:{' '}
@@ -113,3 +92,32 @@ const CustomerView = () => {
 }
 
 export default CustomerView
+
+const styles = StyleSheet.create({
+   container: {
+      flex: 1,
+      padding: 20
+   },
+   card: {
+      gap: SIZES.sm,
+      boxShadow: '1px 2px 4px 3px rgba(0,0,0,0.1)',
+      padding: SIZES.md,
+      borderRadius: SIZES.sm
+   },
+   hero: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      padding: SIZES.md,
+      boxShadow: '0px 2px 4px 1px rgba(0, 0, 0, 0.1)',
+      borderRadius: SIZES.sm,
+      marginBottom: SIZES.sm,
+      gap: SIZES.md
+   },
+   btn: {
+      padding: SIZES.sm,
+      borderRadius: SIZES.sm,
+      boxShadow: '0px 2px 4px 1px rgba(0, 0, 0, 0.1)',
+      marginTop: SIZES.lg,
+      paddingHorizontal: SIZES.lg
+   }
+})

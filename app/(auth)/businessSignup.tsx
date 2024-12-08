@@ -5,7 +5,7 @@ import Input from '@/components/Input'
 import { View } from '@/components/ThemedView'
 import { SIZES } from '@/constants/Colors'
 import { useAuth } from '@/providers/authProvider'
-import { Redirect, router, useLocalSearchParams } from 'expo-router'
+import { router } from 'expo-router'
 
 import Loading from '@/components/Loading'
 import Row from '@/components/Row'
@@ -15,8 +15,8 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useCallback, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { KeyboardAvoidingView, Modal, Platform, ScrollView, TouchableOpacity } from 'react-native'
-import { z } from 'zod'
 import { useMMKV } from 'react-native-mmkv'
+import { z } from 'zod'
 
 const signupSchema = z
    .object({

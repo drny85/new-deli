@@ -50,7 +50,11 @@ const AllCategoriesView = ({ ids, products, onCategoryPress }: Props) => {
             <FlashList
                ref={viewRef}
                initialScrollIndex={index}
-               estimatedItemSize={97}
+               estimatedItemSize={SIZES.width}
+               estimatedListSize={{
+                  width: SIZES.width,
+                  height: SIZES.height * 0.07
+               }}
                showsHorizontalScrollIndicator={false}
                horizontal
                data={[{ id: 'all', name: 'All Categories' }, ...availableCategories].sort((a, b) =>

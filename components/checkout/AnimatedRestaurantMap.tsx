@@ -2,16 +2,17 @@ import { SIZES } from '@/constants/Colors'
 import { customMapStyle } from '@/helpers/customMapStyle'
 import { RestaurantMapInfo } from '@/shared/types'
 import { useRef, useEffect } from 'react'
-import { View, StyleSheet, Animated, Dimensions } from 'react-native'
+import { View, StyleSheet, Animated, Dimensions, ViewStyle } from 'react-native'
 import MapView, { Marker } from 'react-native-maps'
 
 const { height } = Dimensions.get('window')
 
 interface AnimatedMarkerProps {
    restaurant: RestaurantMapInfo
+   containerStyle?: ViewStyle
 }
 
-const AnimatedRestaurantMap: React.FC<AnimatedMarkerProps> = ({ restaurant }) => {
+const AnimatedRestaurantMap: React.FC<AnimatedMarkerProps> = ({ restaurant, containerStyle }) => {
    const slideAnim = useRef(new Animated.Value(-height * 0.2)).current // Initial position is off-screen
 
    useEffect(() => {
@@ -25,7 +26,7 @@ const AnimatedRestaurantMap: React.FC<AnimatedMarkerProps> = ({ restaurant }) =>
    return (
       <View style={styles.container}>
          <MapView
-            style={styles.map}
+            style={[styles.map, containerStyle]}
             showsBuildings={false}
             camera={{
                center: {

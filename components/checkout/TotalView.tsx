@@ -10,7 +10,8 @@ import Row from '../Row'
 import { Text } from '../ThemedText'
 import { View } from '../ThemedView'
 import { useAuth } from '@/providers/authProvider'
-import { MY_TRANSACTION_FEE } from '@/constants'
+import AnimatedNumber from '../AnimatedNumber'
+import { MY_TRANSACTION_FEE } from '@/shared/types'
 
 type Props = {
    title?: string
@@ -100,9 +101,7 @@ const TotalView = ({
                         : (cartTotal + tipAmount + stripeFee(cartTotal, orderType)).toFixed(2)}
                   </Text>
                ) : (
-                  <Text fontSize="large" type="defaultSemiBold">
-                     ${cartTotal.toFixed(2)}
-                  </Text>
+                  <AnimatedNumber value={+cartTotal.toFixed(2)} fontSize={22} />
                )}
             </Row>
             {title && (

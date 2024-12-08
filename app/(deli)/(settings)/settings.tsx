@@ -296,6 +296,7 @@ export default function BusinessSettings() {
                <Text style={styles.profileAddress}>{restaurant?.address}</Text>
                <Text style={styles.profileAddress}>{restaurant?.email}</Text>
                <Text style={styles.profileAddress}>{restaurant?.phone}</Text>
+               <Text style={styles.profileAddress}>ID: {restaurant?.id}</Text>
             </View>
          </View>
 

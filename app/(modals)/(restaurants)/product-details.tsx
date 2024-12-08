@@ -5,30 +5,29 @@ import ItemQuantitySetter from '@/components/ItemQuantitySetter'
 import Loading from '@/components/Loading'
 import NeoView from '@/components/NeoView'
 
+import AnimatedNumber from '@/components/AnimatedNumber'
+import { DescriptionText } from '@/components/checkout/DescriptionText'
 import SizePicker from '@/components/restaurants/SizePicker'
 import Row from '@/components/Row'
 import ShareButton from '@/components/ShareLink'
 import { Sheet, useSheetRef } from '@/components/Sheet'
 import { Text } from '@/components/ThemedText'
 import { View } from '@/components/ThemedView'
-import { CART_ALLOWED } from '@/constants'
 import { SIZES } from '@/constants/Colors'
 import { useProduct } from '@/hooks/restaurants/useProduct'
 import { useThemeColor } from '@/hooks/useThemeColor'
+import { Cart, CART_ALLOWED, CartItem, ORDER_TYPE, P_Size } from '@/shared/types'
 import { useCartsStore } from '@/stores/cartsStore'
 import { useOrderFlowStore } from '@/stores/orderFlowStore'
-import { ORDER_TYPE, P_Size } from '@/shared/types'
 import { toastAlert, toastMessage } from '@/utils/toast'
-import { FontAwesome } from '@expo/vector-icons'
+import { Feather } from '@expo/vector-icons'
 import { BottomSheetTextInput } from '@gorhom/bottom-sheet'
+import * as Haptics from 'expo-haptics'
 import { router, useLocalSearchParams } from 'expo-router'
 import { Image } from 'moti'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Keyboard, ScrollView, StyleSheet, TouchableOpacity } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import * as Haptics from 'expo-haptics'
-import { Cart, CartItem } from '@/shared/types'
-import { DescriptionText } from '@/components/checkout/DescriptionText'
 
 const PIC_DIMENSIONS = SIZES.height * 0.5
 
@@ -328,9 +327,10 @@ const ProductDetail = () => {
                   addons={product.addons}
                   maxSelectable={product.multipleAddons}
                   selectedAddons={selectedAddons}
-                  toggleAddonSelection={(name) =>
+                  toggleAddonSelection={(name) => {
+                     Haptics.selectionAsync()
                      toggleAddonSelection(name, product.multipleAddons!)
-                  }
+                  }}
                />
             )}
             {product.sizes.length > 0 && (
@@ -348,7 +348,7 @@ const ProductDetail = () => {
                <Row align="between">
                   <Text type="defaultSemiBold">Special Instructions</Text>
                   <TouchableOpacity onPress={() => bottomSheetRef.current?.present()}>
-                     <FontAwesome name="edit" size={24} color={ascent} />
+                     <Feather name="edit-3" size={24} color={ascent} />
                   </TouchableOpacity>
                </Row>
 
@@ -376,9 +376,13 @@ const ProductDetail = () => {
                   paddingVertical: SIZES.sm,
                   height: 50
                }}>
-               <Text type="defaultSemiBold" fontSize="large">
-                  $ {((selected ? +selected.price : +product.price) * quantity).toFixed(2)}
-               </Text>
+               <AnimatedNumber
+                  fontSize={22}
+                  value={+((selected ? +selected.price : +product.price) * quantity).toFixed(2)}
+               />
+               {/* <Text type="defaultSemiBold" fontSize="large">
+                  $ {}
+               </Text> */}
             </NeoView>
 
             <View style={{ flexGrow: 1, marginRight: SIZES.lg }}>

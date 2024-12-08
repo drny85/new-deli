@@ -38,7 +38,7 @@ export const useAllCategories = (business: string[]) => {
       startTransition(() => {
          fetchCategories()
       })
-   }, [])
+   }, [business.length])
 
    return { loading, categories, isPending }
 }
