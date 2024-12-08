@@ -15,7 +15,7 @@ type Props = {
    onCategoryPress: (category: Category) => void
 }
 const AllCategoriesView = ({ ids, products, onCategoryPress }: Props) => {
-   const { categories, loading } = useAllCategories(ids)
+   const { categories, isPending } = useAllCategories(ids)
    const navigation = useNavigation()
    const [index, setIndex] = useState<number>(0)
    const [selected, setSelected] = useState('All Categories')
@@ -42,22 +42,20 @@ const AllCategoriesView = ({ ids, products, onCategoryPress }: Props) => {
       return () => navigation.removeListener('blur', subs)
    }, [navigation])
 
-   if (!loading && categories.length === 0) return null
-
    return (
       <View style={{ height: SIZES.height * 0.07 }}>
-         {loading ? (
+         {isPending ? (
             <Loading />
          ) : (
             <FlashList
                ref={viewRef}
                initialScrollIndex={index}
+               estimatedItemSize={97}
                showsHorizontalScrollIndicator={false}
                horizontal
                data={[{ id: 'all', name: 'All Categories' }, ...availableCategories].sort((a, b) =>
                   a.name.localeCompare(b.name)
                )}
-               estimatedItemSize={availableCategories.length + 1}
                renderItem={({ item, index }) => {
                   return (
                      <CategoryTitle

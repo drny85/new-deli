@@ -2,12 +2,13 @@ import { categoriessCollection } from '@/collections'
 import { useCategoriesStore } from '@/stores/categoriesStore'
 import { Category } from '@/shared/types'
 import { getDocs } from 'firebase/firestore'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useTransition } from 'react'
 
 export const useAllCategories = (business: string[]) => {
    const [loading, setLoading] = useState<boolean>(true)
    const setCats = useCategoriesStore((s) => s.setCategories)
    const [categories, setCategories] = useState<Category[]>([])
+   const [isPending, startTransition] = useTransition()
    useEffect(() => {
       if (business.length === 0) {
          setLoading(false)
@@ -34,8 +35,10 @@ export const useAllCategories = (business: string[]) => {
          setCats([...new Set(temp)])
          setLoading(false)
       }
-      fetchCategories()
-   }, [])
+      startTransition(() => {
+         fetchCategories()
+      })
+   }, [business])
 
-   return { loading, categories }
+   return { loading, categories, isPending }
 }
