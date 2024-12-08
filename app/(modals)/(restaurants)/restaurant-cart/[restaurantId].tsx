@@ -11,9 +11,9 @@ import { SIZES } from '@/constants/Colors'
 import { useRestaurant } from '@/hooks/restaurants/useRestaurant'
 import { useThemeColor } from '@/hooks/useThemeColor'
 import { useAuth } from '@/providers/authProvider'
-import { Cart, useCartsStore } from '@/stores/cartsStore'
+import { useCartsStore } from '@/stores/cartsStore'
 import { useOrderFlowStore } from '@/stores/orderFlowStore'
-import { ORDER_TYPE } from '@/shared/types'
+import { Cart, ORDER_TYPE } from '@/shared/types'
 import { generateUniqueId } from '@/utils/generateUniqueId'
 import { toastAlert } from '@/utils/toast'
 import { router, useLocalSearchParams } from 'expo-router'
@@ -56,7 +56,7 @@ const RestaurantCart = () => {
       }
       if (restaurant?.ordersMethod === 'pickup-only') {
          if (!cart) return
-         setOrderType('pickup')
+         setOrderType(ORDER_TYPE.pickup)
          updateCart(restaurantId!, { ...cart!, orderType: ORDER_TYPE.pickup })
       }
       router.push({
@@ -101,7 +101,7 @@ const RestaurantCart = () => {
                {restaurant?.name}
             </Text>
 
-            <ShareButton id={restaurantId} cartId={generateUniqueId()} type="cart" />
+            <ShareButton id={restaurantId} cartId={generateUniqueId()} type="cart" ascentColor />
          </Row>
          <View style={{ flex: 1, justifyContent: 'space-between' }}>
             {cart && cart?.items.length > 0 && (

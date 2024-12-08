@@ -24,7 +24,6 @@ const NeoView = ({
    return (
       <View
          style={[
-            styles.topShadow,
             {
                backgroundColor,
                shadowColor: isDark ? undefined : primaryColor,
@@ -37,7 +36,7 @@ const NeoView = ({
                styles.bottomShadow,
                {
                   backgroundColor,
-                  shadowColor: secondaryColor,
+                  shadowColor: isDark ? undefined : secondaryColor,
                   borderRadius: rounded && size ? size : undefined
                },
                containerStyle
@@ -69,15 +68,6 @@ export default NeoView
 const styles = StyleSheet.create({
    inner: {
       borderWidth: 0.8
-   },
-   topShadow: {
-      shadowOffset: {
-         width: -4,
-         height: -4
-      },
-
-      shadowOpacity: 1,
-      shadowRadius: 4
    },
    bottomShadow: {
       shadowOffset: {

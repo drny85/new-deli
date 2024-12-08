@@ -61,7 +61,6 @@ const RestaurantCard = ({ item, onPress, contentContainerStyle }: Props) => {
                   width: 120,
                   borderRadius: SIZES.lg,
                   alignSelf: 'center',
-
                   zIndex: 30
                }}>
                <Text fontSize="large" style={{ color: 'red' }} type="defaultSemiBold" center>

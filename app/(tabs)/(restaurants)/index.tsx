@@ -11,7 +11,7 @@ import { View } from '@/components/ThemedView'
 import { SIZES } from '@/constants/Colors'
 import { useAllProducts } from '@/hooks/restaurants/useAllProducts'
 import { useOrderFlowStore } from '@/stores/orderFlowStore'
-import { Business, Category } from '@/shared/types'
+import { Business, Category, ORDER_TYPE } from '@/shared/types'
 import { getDistanceFromLatLonInMeters } from '@/utils/getDistanceInMeters'
 import { FlashList } from '@shopify/flash-list'
 import { router, useFocusEffect } from 'expo-router'
@@ -30,7 +30,7 @@ const Restaurants = () => {
    const [selectedCategory, setSelectedCategory] = useState<Category>(ALL)
    const [viewByDistance, setViewDyDistance] = useState(true)
 
-   const onOptionChange = (value: 'delivery' | 'pickup') => {
+   const onOptionChange = (value: ORDER_TYPE) => {
       setOrderType(value)
    }
    const resultsAll = useMemo(() => {

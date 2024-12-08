@@ -15,14 +15,16 @@ import { Text } from '@/components/ThemedText'
 import { View } from '@/components/ThemedView'
 import ToggleDeliveryPickup from '@/components/ToggleDeliveryPickup'
 import { SIZES } from '@/constants/Colors'
+import {
+   calculateDistanceBetweenDeliveryAddressResturant,
+   preventDeliveryOrder
+} from '@/helpers/checkout'
 import { useRestaurant } from '@/hooks/restaurants/useRestaurant'
 import { useThemeColor } from '@/hooks/useThemeColor'
 import { useAuth } from '@/providers/authProvider'
+import { Order, ORDER_STATUS, ORDER_TYPE } from '@/shared/types'
 import { useCartsStore } from '@/stores/cartsStore'
 import { useOrderFlowStore } from '@/stores/orderFlowStore'
-import { Order, ORDER_STATUS, ORDER_TYPE } from '@/shared/types'
-import { extractZipCode } from '@/utils/extractZipcode'
-import { getDistanceFromLatLonInMeters } from '@/utils/getDistanceInMeters'
 import { toastAlert, toastMessage } from '@/utils/toast'
 import { Feather } from '@expo/vector-icons'
 import BottomSheet, { BottomSheetTextInput } from '@gorhom/bottom-sheet'
@@ -31,7 +33,7 @@ import { Image } from 'expo-image'
 import { Redirect, router, useLocalSearchParams } from 'expo-router'
 import { AnimatePresence, MotiView } from 'moti'
 import { useEffect, useRef, useState } from 'react'
-import { Alert, Keyboard, ScrollView, StyleSheet, TouchableOpacity } from 'react-native'
+import { Keyboard, ScrollView, StyleSheet, TouchableOpacity } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 type Params = {
@@ -65,54 +67,8 @@ const Checkout = () => {
    const [deliveryInstruction, setDeliveryInstruction] = useState('')
    const { loading, restaurant } = useRestaurant(restaurantId!)
 
-   const calculateDistanceBetweenDeliveryAddressResturant = (): boolean => {
-      // Implement logic to calculate distance between delivery address and restaurant
-
-      if (orderType === 'delivery') {
-         if (restaurant?.deliveryType === 'zips') {
-            const zip = extractZipCode(deliveryAddress?.street!)
-            if (zip === 2) return false
-
-            if (!restaurant?.zips?.includes(zip)) {
-               toastAlert({
-                  message: `${restaurant.name} do not deliver to this zip code (${zip})`,
-                  title: 'Out of delivery range',
-                  preset: 'error',
-                  duration: 5
-               })
-               return false
-            }
-            return true
-         } else if (restaurant?.deliveryType === 'miles') {
-            if (!restaurant?.coords) return false
-            const loc1 = {
-               latitude: deliveryAddress?.coords.latitude!,
-               longitude: deliveryAddress?.coords.longitude!
-            }
-            const loc2 = {
-               latitude: restaurant?.coords?.latitude!,
-               longitude: restaurant?.coords?.longitude!
-            }
-
-            const distance = getDistanceFromLatLonInMeters(loc1, loc2)
-
-            if (distance > restaurant.miles) {
-               toastAlert({
-                  message: 'Consider changing the delivery address or place order for pick-up',
-                  title: 'Out of delivery range',
-                  preset: 'error',
-                  duration: 5
-               })
-               return false
-            }
-            return true
-         }
-      }
-      return true
-   }
-
    const handlePlaceOrder = async () => {
-      const prevented = preventDeliveryOrder()
+      const prevented = preventDeliveryOrder(restaurant!, orderType)
       if (prevented) return
       if (!isInternetReachable) {
          return toastMessage({
@@ -134,7 +90,11 @@ const Checkout = () => {
       const isGood = cantContinueIfDeliveryWithoutAddress()
       if (!isGood) return
       if (!user?.id || !cart || !restaurantId) return
-      const withinRange = calculateDistanceBetweenDeliveryAddressResturant()
+      const withinRange = calculateDistanceBetweenDeliveryAddressResturant(
+         restaurant,
+         orderType,
+         deliveryAddress!
+      )
       if (!withinRange) return
 
       const order: Order = {
@@ -158,7 +118,7 @@ const Checkout = () => {
          orderDate: new Date().toISOString(),
          items: cart.items,
          status: ORDER_STATUS.new,
-         orderType: orderType === 'delivery' ? ORDER_TYPE.delivery : ORDER_TYPE.pickup,
+         orderType: orderType === ORDER_TYPE.delivery ? ORDER_TYPE.delivery : ORDER_TYPE.pickup,
          userId: user?.id,
          total: cart.total,
          paymentIntent: '',
@@ -185,59 +145,8 @@ const Checkout = () => {
       }
    }
 
-   const preventDeliveryOrder = (): boolean => {
-      if (restaurant && orderType) {
-         if (orderType === 'delivery' && restaurant.couriers.length === 0) {
-            Alert.alert('No Deliveries', 'This restaurant is not taking deliveries at the moment', [
-               {
-                  text: 'Cancel'
-               },
-               {
-                  text: 'Switch to Pick-Up',
-                  onPress: () => {
-                     setOrderType('pickup')
-                  }
-               }
-            ])
-            return true
-         }
-         if (orderType === 'delivery' && restaurant.ordersMethod === 'pickup-only') {
-            Alert.alert(
-               'Not Delivery',
-               'Delivery is not available for this restaurant at the moment',
-               [
-                  {
-                     text: 'Cancel'
-                  },
-                  {
-                     text: 'Switch to Pick-Up',
-                     onPress: () => {
-                        setOrderType('pickup')
-                     }
-                  }
-               ]
-            )
-            return true
-         } else if (orderType === 'pickup' && restaurant.ordersMethod === 'delivery-only') {
-            Alert.alert('Not Pickup', 'Pickup is not available for this restaurant at the moment', [
-               {
-                  text: 'Cancel'
-               },
-               {
-                  text: 'Switch to Delivery',
-                  onPress: () => {
-                     setOrderType('delivery')
-                  }
-               }
-            ])
-            return true
-         }
-      }
-      return false
-   }
-
    const cantContinueIfDeliveryWithoutAddress = (): boolean => {
-      if (!deliveryAddress && orderType === 'delivery') {
+      if (!deliveryAddress && orderType === ORDER_TYPE.delivery) {
          setChangingAddressFromCheckoutScreen(true)
          router.push({ pathname: '/address', params: { restaurantId } })
          return false
@@ -247,7 +156,6 @@ const Checkout = () => {
 
    useEffect(() => {
       if (!user) return
-
       cantContinueIfDeliveryWithoutAddress()
 
       if (cart && cart.orderType && deliveryAddress) {
@@ -260,10 +168,9 @@ const Checkout = () => {
    }, [])
 
    useEffect(() => {
-      console.log(orderType, restaurant?.ordersMethod)
-      preventDeliveryOrder()
+      preventDeliveryOrder(restaurant!, orderType)
       if (orderType === 'delivery' && restaurant?.ordersMethod === 'pickup-only') {
-         setOrderType('pickup')
+         setOrderType(ORDER_TYPE.pickup)
       }
    }, [restaurant, orderType])
 

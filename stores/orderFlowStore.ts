@@ -1,4 +1,4 @@
-import { Coords, Order, OrderAddress } from '@/shared/types'
+import { Coords, Order, ORDER_TYPE, OrderAddress } from '@/shared/types'
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 import { zustandStorage } from './storage'
@@ -9,8 +9,8 @@ type OrderFlowStore = {
    recentAddresses: OrderAddress[]
    addToRecentAddresses: (address: OrderAddress) => void
    deleteFromRecentAddresses: (address: OrderAddress) => void
-   orderType: 'delivery' | 'pickup'
-   setOrderType: (type: 'delivery' | 'pickup') => void
+   orderType: ORDER_TYPE
+   setOrderType: (type: ORDER_TYPE) => void
    changingAddressFromCheckoutScreen: boolean
    setChangingAddressFromCheckoutScreen: (value: boolean) => void
    tipAmount: number
@@ -31,7 +31,7 @@ export const useOrderFlowStore = create<OrderFlowStore>()(
          tipAmount: 0,
          changingAddressFromCheckoutScreen: false,
          recentAddresses: [],
-         orderType: 'delivery',
+         orderType: ORDER_TYPE.delivery,
          order: null,
          initiatePayment: false,
          currentLocationCoords: null,

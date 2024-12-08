@@ -28,6 +28,7 @@ import { Keyboard, ScrollView, StyleSheet, TouchableOpacity } from 'react-native
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import * as Haptics from 'expo-haptics'
 import { Cart, CartItem } from '@/shared/types'
+import { DescriptionText } from '@/components/checkout/DescriptionText'
 
 const PIC_DIMENSIONS = SIZES.height * 0.5
 
@@ -266,17 +267,7 @@ const ProductDetail = () => {
                }}
                resizeMode="cover"
                blurRadius={0.5}
-               animate={{
-                  height: SIZES.height * 0.8,
-                  borderRadius: SIZES.height * 0.8 * 0.5,
-                  width: SIZES.height * 0.8,
-                  alignSelf: 'center',
-                  top: -SIZES.height * 0.4,
-                  zIndex: 5,
-
-                  opacity: 1,
-                  translateY: 0
-               }}
+               animate={styles.image1}
                //@ts-ignore
                transition={{ duration: 800, type: 'timing' }}
             />
@@ -292,31 +283,14 @@ const ProductDetail = () => {
                }}
                resizeMode="cover"
                source={{ uri: product.image! }}
-               style={{
-                  position: 'absolute',
-                  height: PIC_DIMENSIONS / 2,
-                  width: PIC_DIMENSIONS / 2,
-                  borderRadius: PIC_DIMENSIONS / 4,
-                  alignSelf: 'center',
-                  bottom: -PIC_DIMENSIONS / 4,
-                  top: SIZES.height * 0.2,
-                  zIndex: 10
-               }}
+               style={styles.image2}
             />
             {itemAlreadyInCart() && (
                <TouchableOpacity
                   onPress={() => {
                      router.push(`/restaurant-cart/${businessId}`)
                   }}
-                  style={{
-                     position: 'absolute',
-                     zIndex: 100,
-                     backgroundColor,
-                     bottom: 10,
-                     alignSelf: 'center',
-                     borderRadius: SIZES.sm,
-                     padding: SIZES.sm * 0.5
-                  }}>
+                  style={[styles.cartBtn, { backgroundColor }]}>
                   <Text type="defaultSemiBold">{itemAlreadyInCart()?.quantity} In Cart</Text>
                </TouchableOpacity>
             )}
@@ -341,22 +315,12 @@ const ProductDetail = () => {
 
                <View style={{ marginTop: SIZES.lg, gap: SIZES.sm }}>
                   <Text type="defaultSemiBold">Description</Text>
-                  <Text type="italic" fontSize="medium">
-                     {product.description &&
-                     product.description.length > 200 &&
-                     !showFullDescription
-                        ? product.description.slice(0, 200) + '...'
-                        : product.description}
-                     {product.description && product.description.length > 200 && (
-                        <Text
-                           style={{ fontWeight: '800' }}
-                           onPress={() => setShowFullDescription((prev) => !prev)}
-                           type="muted">
-                           {' '}
-                           {showFullDescription ? 'show less' : 'more'}
-                        </Text>
-                     )}
-                  </Text>
+                  <DescriptionText
+                     lenght={160}
+                     description={product.description!}
+                     showFullDescription={showFullDescription}
+                     setShowFullDescription={() => setShowFullDescription((p) => !p)}
+                  />
                </View>
             </View>
             {product.multipleAddons && product.addons.length > 0 && product.multipleAddons > 0 && (
@@ -403,18 +367,7 @@ const ProductDetail = () => {
             </View>
          </ScrollView>
 
-         <View
-            style={{
-               marginBottom: bottom,
-               marginTop: SIZES.sm,
-               flexDirection: 'row',
-               alignItems: 'center',
-               justifyContent: 'space-between',
-               marginLeft: SIZES.md,
-               height: 50,
-               gap: SIZES.md,
-               width: '100%'
-            }}>
+         <View style={[styles.totalView, { marginBottom: bottom }]}>
             <NeoView
                containerStyle={{ borderRadius: SIZES.lg * 2, width: SIZES.width * 0.45 }}
                innerStyleContainer={{
@@ -493,5 +446,43 @@ const styles = StyleSheet.create({
       lineHeight: 20,
       padding: SIZES.md,
       backgroundColor: 'rgba(151, 151, 151, 0.25)'
+   },
+   cartBtn: {
+      position: 'absolute',
+      zIndex: 100,
+      bottom: 10,
+      alignSelf: 'center',
+      borderRadius: SIZES.sm,
+      padding: SIZES.sm * 0.5
+   },
+   image1: {
+      height: SIZES.height * 0.8,
+      borderRadius: SIZES.height * 0.8 * 0.5,
+      width: SIZES.height * 0.8,
+      alignSelf: 'center',
+      top: -SIZES.height * 0.4,
+      zIndex: 5,
+      opacity: 1,
+      translateY: 0
+   },
+   image2: {
+      position: 'absolute',
+      height: PIC_DIMENSIONS / 2,
+      width: PIC_DIMENSIONS / 2,
+      borderRadius: PIC_DIMENSIONS / 4,
+      alignSelf: 'center',
+      bottom: -PIC_DIMENSIONS / 4,
+      top: SIZES.height * 0.2,
+      zIndex: 10
+   },
+   totalView: {
+      marginTop: SIZES.sm,
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      marginLeft: SIZES.md,
+      height: 50,
+      gap: SIZES.md,
+      width: '100%'
    }
 })

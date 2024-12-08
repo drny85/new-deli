@@ -11,9 +11,10 @@ import Row from '../Row'
 import { Text } from '../ThemedText'
 import { View } from '../ThemedView'
 import ToggleDeliveryPickup from '../ToggleDeliveryPickup'
+import { ORDER_TYPE } from '@/shared/types'
 
 type Props = {
-   onOptionChange: (option: 'delivery' | 'pickup') => void
+   onOptionChange: (option: ORDER_TYPE) => void
 }
 const RestaurantsHeader = ({ onOptionChange }: Props) => {
    const deliveryAddress = useOrderFlowStore((s) => s.deliveryAddress)

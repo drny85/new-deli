@@ -1,10 +1,8 @@
-import React from 'react'
-
 import { SIZES } from '@/constants/Colors'
 import { Product } from '@/shared/types'
 import { FlashList } from '@shopify/flash-list'
-import MostPopularCard from './MostPopularCard'
 import { View } from '../ThemedView'
+import MostPopularCard from './MostPopularCard'
 
 type Props = {
    products: Product[]
@@ -15,14 +13,14 @@ const MostPopularProducts = ({ products, onPress }: Props) => {
    return (
       <FlashList
          horizontal
-         contentContainerStyle={{ padding: SIZES.sm }}
+         contentContainerStyle={{ paddingVertical: SIZES.sm }}
          showsHorizontalScrollIndicator={false}
-         estimatedItemSize={products.length + 2}
+         estimatedItemSize={158}
          data={products}
          keyExtractor={(item) => item.id!}
          renderItem={({ index, item }) => {
             return (
-               <View style={{ marginHorizontal: SIZES.sm }}>
+               <View style={{ marginRight: SIZES.sm }}>
                   <MostPopularCard index={index} item={item} onPress={onPress} />
                </View>
             )

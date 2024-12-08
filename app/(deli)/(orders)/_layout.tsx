@@ -4,7 +4,6 @@ import { useEffect } from 'react'
 
 const OrdersTabsLayout = () => {
    const { restaurant } = useRestaurantsStore()
-   console.log('ME', restaurant?.ordersMethod)
 
    useEffect(() => {
       if (restaurant?.couriers.length === 0 && restaurant?.ordersMethod !== 'pickup-only') {

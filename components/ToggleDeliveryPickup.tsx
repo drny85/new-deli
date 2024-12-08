@@ -6,9 +6,10 @@ import { Alert, Animated, Platform, StyleSheet, TouchableOpacity } from 'react-n
 import { View } from './ThemedView'
 import { useRestaurantsStore } from '@/stores/restaurantsStore'
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5'
+import { ORDER_TYPE } from '@/shared/types'
 
 interface ToggleDeliveryPickupProps {
-   onOptionChange: (option: 'delivery' | 'pickup') => void
+   onOptionChange: (option: ORDER_TYPE) => void
 }
 
 const ToggleDeliveryPickup: React.FC<ToggleDeliveryPickupProps> = ({ onOptionChange }) => {
@@ -47,7 +48,7 @@ const ToggleDeliveryPickup: React.FC<ToggleDeliveryPickupProps> = ({ onOptionCha
                   Alert.alert('Pickup Only', 'This restaurant only accepts pickup orders.')
                   return
                } else {
-                  toggleOption('delivery')
+                  toggleOption(ORDER_TYPE.delivery)
                }
             }}>
             <Animated.View style={{ opacity: deliveryIconOpacity }}>
@@ -55,13 +56,13 @@ const ToggleDeliveryPickup: React.FC<ToggleDeliveryPickupProps> = ({ onOptionCha
                   <SymbolView
                      name="car.fill"
                      weight="bold"
-                     tintColor={orderType === 'delivery' ? activeColor : 'gray'}
+                     tintColor={orderType === ORDER_TYPE.delivery ? activeColor : 'gray'}
                   />
                ) : (
                   <FontAwesome5
                      name="car-alt"
                      size={24}
-                     color={orderType === 'delivery' ? activeColor : 'gray'}
+                     color={orderType === ORDER_TYPE.delivery ? activeColor : 'gray'}
                   />
                )}
             </Animated.View>
@@ -72,7 +73,7 @@ const ToggleDeliveryPickup: React.FC<ToggleDeliveryPickupProps> = ({ onOptionCha
                   Alert.alert('Delivery Only', 'This restaurant only accepts delivery orders.')
                   return
                } else {
-                  toggleOption('pickup')
+                  toggleOption(ORDER_TYPE.pickup)
                }
             }}>
             <Animated.View style={{ opacity: pickupIconOpacity }}>
@@ -87,7 +88,7 @@ const ToggleDeliveryPickup: React.FC<ToggleDeliveryPickupProps> = ({ onOptionCha
                   <FontAwesome5
                      name="walking"
                      size={24}
-                     color={orderType === 'pickup' ? activeColor : 'gray'}
+                     color={orderType === ORDER_TYPE.pickup ? activeColor : 'gray'}
                   />
                )}
             </Animated.View>
