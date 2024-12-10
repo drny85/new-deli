@@ -4,6 +4,7 @@ import { useDevRoutes } from '@/hooks/useDevRoutes'
 import { useLinking } from '@/hooks/useLinking'
 import { useNotificationObserver } from '@/hooks/useNotificationObserver'
 import { useThemeColor } from '@/hooks/useThemeColor'
+import { useUpdateChecker } from '@/hooks/useUpdateChecker'
 import { AuthProvider } from '@/providers/authProvider'
 import { Feather, FontAwesome } from '@expo/vector-icons'
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
@@ -37,7 +38,7 @@ export default function RootLayout() {
    const iconColor = useThemeColor('text')
    const bgColor = useThemeColor('background')
    const [loaded] = useFonts(fonts)
-
+   useUpdateChecker()
    useLinking()
    useNotificationObserver()
    useDevRoutes()

@@ -46,6 +46,39 @@ export const updateETA = async (orders: Order[]) => {
    }
 }
 
+export const updateBusinessCourier = (courierId: string, businessId: string): Promise<boolean> => {
+   return new Promise(async (resolve) => {
+      try {
+         const user = auth.currentUser
+         if (!user || !businessId || !courierId) return resolve(false)
+         const businessRef = doc(businessCollection, businessId)
+         const businessData = await getDoc(businessRef)
+         if (!businessData.exists()) return resolve(false)
+
+         const updated = {
+            ...businessData.data(),
+            id: businessData.id
+         }
+
+         const businessCouriers = updated.couriers.map((courier) => {
+            if (courier.id === courierId) {
+               return { ...courier, active: !courier.active }
+            }
+            return courier
+         })
+         const u: Business = {
+            ...updated,
+            couriers: businessCouriers
+         }
+         await updateDoc(businessRef, { ...u })
+         return resolve(true)
+      } catch (error) {
+         console.log(error)
+         return resolve(false)
+      }
+   })
+}
+
 export const updateBusiness = async (business: Business): Promise<boolean> => {
    try {
       if (!business) return false

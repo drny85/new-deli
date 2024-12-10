@@ -2,7 +2,7 @@ import { userCouriersCollection } from '@/collections'
 import { useAuth } from '@/providers/authProvider'
 import { Courier } from '@/shared/types'
 import { onSnapshot, query, where } from 'firebase/firestore'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useRestaurant } from '../restaurants/useRestaurant'
 
 export const useCouriers = () => {
@@ -10,6 +10,9 @@ export const useCouriers = () => {
    const [loading, setLoading] = useState(false)
    const { user } = useAuth()
    const { restaurant } = useRestaurant(user?.id!)
+   const activeCouriers = useMemo(() => {
+      return restaurant?.couriers.map((c) => c.id)
+   }, [restaurant?.couriers])
 
    useEffect(() => {
       if (!user || !restaurant) return
@@ -21,7 +24,7 @@ export const useCouriers = () => {
 
       const q = query(
          userCouriersCollection,
-         where('id', 'in', restaurant?.couriers || []),
+         where('id', 'in', activeCouriers || []),
          where('isOnline', '==', true),
          where('isActive', '==', true),
          where('coords', '!=', null)

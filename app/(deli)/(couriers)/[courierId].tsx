@@ -1,3 +1,4 @@
+import { updateBusinessCourier } from '@/actions/business'
 import AnimatedRestaurantMap from '@/components/checkout/AnimatedRestaurantMap'
 import { Container } from '@/components/Container'
 import Loading from '@/components/Loading'
@@ -7,21 +8,76 @@ import { Text } from '@/components/ThemedText'
 import { View } from '@/components/ThemedView'
 import { SIZES } from '@/constants/Colors'
 import { useCourier } from '@/hooks/couriers/useCourier'
+import { useRestaurant } from '@/hooks/restaurants/useRestaurant'
 import { Order, ORDER_STATUS } from '@/shared/types'
 import { useBusinessOrdersStore } from '@/stores/businessOrders'
 import { orderNameSwitch } from '@/utils/orderNameSwitch'
+import { toastMessage } from '@/utils/toast'
+import { Feather, Foundation } from '@expo/vector-icons'
 import { FlashList } from '@shopify/flash-list'
 import { format } from 'date-fns'
 import { Image } from 'expo-image'
-import { router, useLocalSearchParams } from 'expo-router'
-import { StyleSheet, TouchableOpacity } from 'react-native'
+import { router, useLocalSearchParams, useNavigation } from 'expo-router'
+import { useLayoutEffect } from 'react'
+import { Alert, StyleSheet, TouchableOpacity } from 'react-native'
 
+type ParamsProps = {
+   courierId: string
+   back?: string
+}
 const CourierDetails = () => {
-   const { courierId } = useLocalSearchParams<{ courierId: string }>()
+   const navigation = useNavigation()
+   const { courierId, back } = useLocalSearchParams<ParamsProps>()
    const { courier, loading } = useCourier(courierId!)
    const orders = useBusinessOrdersStore((state) =>
       state.orders.filter((o) => o.status === ORDER_STATUS.delivered && o.courier?.id === courierId)
    )
+   const { restaurant } = useRestaurant(orders[0].businessId)
+
+   const isActive = restaurant?.couriers.map((c) => c.active && c.id).includes(courierId)
+
+   const handleDeactiveCourier = async () => {
+      try {
+         if (!restaurant) return
+         Alert.alert('Are you sure?', 'This action cannot be undone', [
+            {
+               text: 'Cancel',
+               onPress: () => console.log('Cancel Pressed'),
+               style: 'cancel'
+            },
+            {
+               text: 'OK',
+               style: 'destructive',
+               onPress: async () => {
+                  const updated = await updateBusinessCourier(courierId, restaurant.id!)
+                  console.log(updated)
+                  if (updated) {
+                     toastMessage({
+                        title: 'Success',
+                        message: 'Courier Deactivated',
+                        preset: 'done'
+                     })
+                  }
+               }
+            }
+         ])
+      } catch (error) {
+         console.log(error)
+      }
+   }
+
+   useLayoutEffect(() => {
+      if (!back) return
+      navigation.setOptions({
+         headerLeft: () => {
+            return (
+               <TouchableOpacity onPress={() => router.dismiss()} style={{ padding: 10 }}>
+                  <Feather name="chevron-left" size={28} />
+               </TouchableOpacity>
+            )
+         }
+      })
+   }, [back])
 
    const renderItem = (order: Order) => {
       return (
@@ -51,7 +107,7 @@ const CourierDetails = () => {
                         params: { orderId: order.id }
                      })
                   }
-                  style={styles.btn}>
+                  style={[styles.btn, { marginTop: 20 }]}>
                   <Text type="defaultSemiBold">View Order</Text>
                </TouchableOpacity>
             </View>
@@ -63,7 +119,18 @@ const CourierDetails = () => {
    return (
       <Container>
          <View style={{ flex: 1, padding: SIZES.md }}>
-            <Text>ID:{courierId}</Text>
+            <Row containerStyle={{ justifyContent: 'space-between', alignItems: 'center' }}>
+               <Text>ID:{courierId}</Text>
+               <Text style={{ fontSize: 20, fontWeight: '600', color: isActive ? 'green' : 'red' }}>
+                  {isActive ? 'Active' : 'Inactive'}
+               </Text>
+               <TouchableOpacity style={styles.btn} onPress={handleDeactiveCourier}>
+                  <Row containerStyle={{ gap: 10 }}>
+                     <Foundation name="prohibited" size={24} color="orange" />
+                     <Text>{isActive ? 'De-Activate' : 'Re-Activate'}</Text>
+                  </Row>
+               </TouchableOpacity>
+            </Row>
             <View style={styles.card}>
                <Row containerStyle={{ gap: SIZES.lg }}>
                   <View style={styles.imageContainer}>
@@ -164,7 +231,7 @@ const styles = StyleSheet.create({
       padding: SIZES.sm,
       borderRadius: SIZES.sm,
       boxShadow: '0px 2px 4px 1px rgba(0, 0, 0, 0.1)',
-      marginTop: SIZES.lg,
+
       paddingHorizontal: SIZES.lg
    }
 })

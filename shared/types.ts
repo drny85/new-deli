@@ -245,7 +245,7 @@ export interface Business {
    lastOpened?: string
    createdAt: string
    status: 'onboarding' | 'completed'
-   couriers: string[]
+   couriers: BusinessCourier[]
    agreedToTerms: boolean
    agreedToTermsOn?: string
    requiredOTP?: boolean
@@ -254,6 +254,10 @@ export interface Business {
    addons?: string[]
    ordersMethod: ORDERS_METHOD
    otpOverride?: number | null
+}
+export type BusinessCourier = {
+   id: string
+   active: boolean
 }
 
 export type StoreCourierData = {

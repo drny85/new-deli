@@ -1,8 +1,8 @@
 import { createCollection } from '@/firebase'
-import { Cart } from '@/stores/cartsStore'
 import {
    AppUser,
    Business,
+   Cart,
    Category,
    Coords,
    Courier,

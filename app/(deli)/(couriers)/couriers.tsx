@@ -31,6 +31,9 @@ const Couriers = () => {
    const { loading: loadingCouriers, couriers: data } = useCouriers()
    const [submitting, setSubmitting] = useState(false)
    const [option, setOption] = useState(0)
+
+   const isCourierActive = (courierId: string) =>
+      restaurant?.couriers.map((c) => c.active && c.id).includes(courierId)
    const search = useNavigationSearch({
       searchBarOptions: {
          placeholder: 'Search couriers',
@@ -70,8 +73,11 @@ const Couriers = () => {
       if (courier?.status === 'completed') return
       try {
          if (!restaurant) return
-         if (restaurant?.couriers.includes(courierId)) return
-         const newCouriers = restaurant?.couriers ? [...restaurant.couriers, courierId] : []
+         if (restaurant?.couriers.map((c) => c.active && c.id).includes(courierId)) return
+         const newCouriers =
+            restaurant?.couriers.length > 0
+               ? [...restaurant.couriers, { id: courierId, active: true }]
+               : []
          const updatedBusiness: Business = {
             ...restaurant,
             couriers: newCouriers,
@@ -117,7 +123,8 @@ const Couriers = () => {
                      <Row
                         containerStyle={{
                            gap: SIZES.lg,
-                           alignItems: 'center'
+                           alignItems: 'center',
+                           marginTop: 10
                         }}>
                         <Row>
                            <Text>Online: </Text>
@@ -165,6 +172,29 @@ const Couriers = () => {
                               />
                            )}
                         </Row>
+
+                        <Row>
+                           <Text>Active: </Text>
+                           {isCourierActive(item.id!) ? (
+                              <View
+                                 style={{
+                                    width: 18,
+                                    height: 18,
+                                    borderRadius: 9,
+                                    backgroundColor: 'green'
+                                 }}
+                              />
+                           ) : (
+                              <View
+                                 style={{
+                                    width: 18,
+                                    height: 18,
+                                    borderRadius: 9,
+                                    backgroundColor: 'red'
+                                 }}
+                              />
+                           )}
+                        </Row>
                      </Row>
                   </View>
                   <Button
@@ -173,7 +203,13 @@ const Couriers = () => {
                      contentTextStyle={{ paddingHorizontal: SIZES.lg }}
                      type="soft"
                      onPress={() => {}}
-                     title={item.status === 'completed' ? 'Active' : 'Activate'}
+                     title={
+                        !isCourierActive(item.id!)
+                           ? 'De-Activated'
+                           : item.status === 'completed'
+                             ? 'Active'
+                             : 'Activate'
+                     }
                   />
                </Row>
             </NeoView>

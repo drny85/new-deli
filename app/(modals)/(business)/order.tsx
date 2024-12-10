@@ -25,7 +25,7 @@ import { generateRandomNumbers } from '@/utils/generateRandomNumber'
 import { STATUS_NAME } from '@/utils/orderStatus'
 import { Redirect, router, Stack, useLocalSearchParams } from 'expo-router'
 import { useEffect, useState } from 'react'
-import { Alert, ScrollView } from 'react-native'
+import { Alert, ScrollView, TouchableOpacity } from 'react-native'
 
 const BussinessOrder = () => {
    const { user } = useAuth()
@@ -246,7 +246,15 @@ const BussinessOrder = () => {
                </Text>
                {order.deliveredBy && (
                   <View style={{ alignItems: 'center' }}>
-                     <Text>Delivered By: {order.deliveredBy.name}</Text>
+                     <TouchableOpacity
+                        onPress={() =>
+                           router.push({
+                              pathname: '/[courierId]',
+                              params: { courierId: order.courier?.id!, back: 'order' }
+                           })
+                        }>
+                        <Text>Delivered By: {order.deliveredBy.name}</Text>
+                     </TouchableOpacity>
                      <Text>Delivered On: {dayjsFormat(order.deliveredOn).format('lll')}</Text>
                   </View>
                )}

@@ -113,7 +113,7 @@ const OrderStatusPicker: React.FC<OrderStatusModalProps> = ({
                      contentTextStyle={{ paddingHorizontal: SIZES.md }}
                   />
                   <Button
-                     contentTextStyle={{ paddingHorizontal: SIZES.md, color: '#ffffff' }}
+                     contentTextStyle={{ paddingHorizontal: SIZES.lg, color: '#ffffff' }}
                      type="primary"
                      title="Change Status"
                      onPress={() => {
