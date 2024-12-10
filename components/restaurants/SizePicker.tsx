@@ -14,16 +14,25 @@ type Props = {
    onPress: (size: P_Size) => void
    selected: P_Size | null
    disabled?: boolean
+   showTitle?: boolean
+   radius?: number
 }
 
-const SizePicker = ({ sizes, onPress, selected, disabled }: Props) => {
+const SizePicker = ({
+   sizes,
+   onPress,
+   selected,
+   disabled,
+   showTitle = true,
+   radius = 60
+}: Props) => {
    const ascent = useThemeColor('ascent')
 
    const letterSize = letterSizes(sizes)
 
    return (
       <View style={{ alignItems: 'center' }}>
-         {sizes.length > 0 && (
+         {showTitle && sizes.length > 0 && (
             <Text type="defaultSemiBold">
                Pick One{' '}
                <Text style={{ opacity: 0.6, fontSize: 13 }} type="error">
@@ -52,7 +61,7 @@ const SizePicker = ({ sizes, onPress, selected, disabled }: Props) => {
                      {letterSize ? (
                         <NeoView
                            rounded
-                           size={60}
+                           size={radius}
                            innerStyleContainer={{
                               borderColor:
                                  selected && selected.id === p.id ? ascent : 'transparent',

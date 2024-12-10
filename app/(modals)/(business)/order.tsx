@@ -26,6 +26,7 @@ import { STATUS_NAME } from '@/utils/orderStatus'
 import { Redirect, router, Stack, useLocalSearchParams } from 'expo-router'
 import { useEffect, useState } from 'react'
 import { Alert, ScrollView, TouchableOpacity } from 'react-native'
+import NeumorphismView from '@/components/NeumorphismView'
 
 const BussinessOrder = () => {
    const { user } = useAuth()
@@ -177,12 +178,7 @@ const BussinessOrder = () => {
                <Row
                   align="between"
                   containerStyle={{ alignItems: 'flex-start', paddingHorizontal: SIZES.md }}>
-                  <NeoView
-                     containerStyle={{ borderRadius: SIZES.lg }}
-                     innerStyleContainer={{
-                        borderRadius: SIZES.lg,
-                        padding: SIZES.md
-                     }}>
+                  <NeumorphismView padding={SIZES.lg}>
                      <Text fontSize="large" type="defaultSemiBold">
                         Customer Information
                      </Text>
@@ -207,14 +203,8 @@ const BussinessOrder = () => {
                            </Text>
                         )}
                      </View>
-                  </NeoView>
-                  <NeoView
-                     containerStyle={{ borderRadius: SIZES.lg }}
-                     innerStyleContainer={{
-                        borderRadius: SIZES.lg,
-                        padding: SIZES.md,
-                        minHeight: SIZES.height * 0.15
-                     }}>
+                  </NeumorphismView>
+                  <NeumorphismView padding={SIZES.lg}>
                      <Text fontSize="large" type="defaultSemiBold">
                         Order Information
                      </Text>
@@ -227,7 +217,7 @@ const BussinessOrder = () => {
                            {order.orderType === ORDER_TYPE.delivery ? 'Delivery' : 'Pick Up'}
                         </Text>
                      </View>
-                  </NeoView>
+                  </NeumorphismView>
                </Row>
             </View>
             <View

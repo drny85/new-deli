@@ -2,7 +2,10 @@ import Button from '@/components/Button'
 import { Container } from '@/components/Container'
 import Loading from '@/components/Loading'
 import NeoView from '@/components/NeoView'
+import NeumorphismView from '@/components/NeumorphismView'
 import AllCategoriesView from '@/components/restaurants/AllCategoriesView'
+import SizePicker from '@/components/restaurants/SizePicker'
+import Row from '@/components/Row'
 import { Text } from '@/components/ThemedText'
 import { View } from '@/components/ThemedView'
 import { Colors, SIZES } from '@/constants/Colors'
@@ -60,9 +63,7 @@ const Products = () => {
          contentInsetAdjustmentBehavior="automatic"
          renderItem={({ item }) => (
             <View style={{ width: '50%', padding: SIZES.sm }}>
-               <NeoView
-                  containerStyle={{ borderRadius: SIZES.lg }}
-                  innerStyleContainer={{ borderRadius: SIZES.lg, flex: 1 }}>
+               <NeumorphismView borderRadius={SIZES.lg}>
                   <TouchableOpacity
                      onPress={() =>
                         router.push({
@@ -85,10 +86,34 @@ const Products = () => {
                         }}
                      />
                      <View style={{ padding: SIZES.sm }}>
-                        <Text>{item.name}</Text>
+                        <Row align="between" containerStyle={{ flexGrow: 1, gap: 20 }}>
+                           <Text type="defaultSemiBold">{item.name}</Text>
+                           {item.sizes.length > 0 && <Text>From ${item.price}</Text>}
+                        </Row>
+                        {item.sizes.length > 0 && (
+                           <View style={{ marginBottom: 10 }}>
+                              <SizePicker
+                                 selected={item.sizes[0]}
+                                 radius={36}
+                                 showTitle={false}
+                                 disabled
+                                 sizes={item.sizes}
+                                 onPress={(size) => {
+                                    //setSelected(size)
+                                 }}
+                              />
+                           </View>
+                        )}
+                        {item.addons.length > 0 && item.multipleAddons && (
+                           <View style={{ padding: SIZES.sm }}>
+                              <Text type="subtitle">Multiple Choices</Text>
+                              <Text type="italic">Select up to {item.multipleAddons}</Text>
+                              <Text type="title">${item.price}</Text>
+                           </View>
+                        )}
                      </View>
                   </TouchableOpacity>
-               </NeoView>
+               </NeumorphismView>
             </View>
          )}
       />

@@ -997,7 +997,7 @@ const AddProduct = () => {
                            <ItemQuantitySetter
                               iconSize={48}
                               onPressAdd={() => {
-                                 if (selectedAddons.length <= product.multipleAddons!) {
+                                 if (selectedAddons.length - 1 <= product.multipleAddons!) {
                                     return
                                  }
                                  setQty((prev) => {

@@ -11,6 +11,7 @@ import Row from '../Row'
 import { Text } from '../ThemedText'
 import { View } from '../ThemedView'
 import { useThemeColor } from '@/hooks/useThemeColor'
+import NeumorphismView from '../NeumorphismView'
 
 type Props = {
    item: Order
@@ -27,13 +28,7 @@ const OrderListItem = ({ item }: Props) => {
             justifyContent: 'space-evenly',
             borderRadius: SIZES.md
          }}>
-         <NeoView
-            containerStyle={{ borderRadius: SIZES.md, flex: 1 }}
-            innerStyleContainer={{
-               borderTopLeftRadius: SIZES.md,
-               borderBottomLeftRadius: SIZES.md,
-               flex: 1
-            }}>
+         <NeumorphismView>
             <TouchableOpacity
                style={{ padding: SIZES.sm, gap: 4 }}
                onPress={() =>
@@ -65,7 +60,7 @@ const OrderListItem = ({ item }: Props) => {
                   )}
                </Row>
             </TouchableOpacity>
-         </NeoView>
+         </NeumorphismView>
          <View
             style={{
                width: SIZES.md,

@@ -4,6 +4,7 @@ import PickupRestaurantsList from '@/components/restaurants/PickupRestaurantsLis
 import { View } from '@/components/ThemedView'
 import { SIZES } from '@/constants/Colors'
 import { useThemeColor } from '@/hooks/useThemeColor'
+import { ORDER_TYPE } from '@/shared/types'
 import { useOrderFlowStore } from '@/stores/orderFlowStore'
 import { useRestaurantsStore } from '@/stores/restaurantsStore'
 import { customMapStyleLight } from '@/utils/customMap'
@@ -99,7 +100,7 @@ const PickUpView = () => {
             onZoomOut={zoomOut}
             onCenter={centerMap}
             onPressBack={() => {
-               setOrderType('delivery')
+               setOrderType(ORDER_TYPE.delivery)
                router.back()
             }}
          />

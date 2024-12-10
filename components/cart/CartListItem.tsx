@@ -1,8 +1,8 @@
 import { SIZES } from '@/constants/Colors'
-import { CartItem, useCartsStore } from '@/stores/cartsStore'
+import { useCartsStore } from '@/stores/cartsStore'
 import { Image } from 'expo-image'
 import { router } from 'expo-router'
-import { Alert, StyleSheet, TextStyle, TouchableOpacity } from 'react-native'
+import { StyleSheet, TextStyle, TouchableOpacity } from 'react-native'
 import ItemQuantitySetter from '../ItemQuantitySetter'
 import NeoView from '../NeoView'
 import Row from '../Row'
@@ -13,6 +13,7 @@ import { FontAwesome } from '@expo/vector-icons'
 import { letterSizes } from '@/helpers/lettersSizes'
 import { useAuth } from '@/providers/authProvider'
 import { toastAlert } from '@/utils/toast'
+import { CartItem } from '@/shared/types'
 
 type Props = {
    item: CartItem
@@ -89,9 +90,17 @@ const CartListItem = ({ item, showSetter = true, removable = false, onRemove }: 
                </TouchableOpacity>
             )}
             <Row align="between">
-               <Text type="muted" style={[{ fontWeight: '600' }, isBusiness && styles.title]}>
-                  {item.quantity} - {item.name}
-               </Text>
+               <TouchableOpacity
+                  onPress={() =>
+                     router.push({
+                        pathname: '/(modals)/(business)/product',
+                        params: { productId: item.id }
+                     })
+                  }>
+                  <Text type="muted" style={[{ fontWeight: '600' }, isBusiness && styles.title]}>
+                     {item.quantity} - {item.name}
+                  </Text>
+               </TouchableOpacity>
                <Text type="muted">
                   $
                   {(item.size !== null

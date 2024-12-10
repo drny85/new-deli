@@ -19,6 +19,7 @@ const ModalRestaurantLayout = () => {
                animation: 'slide_from_bottom'
             }}
          />
+
          <Stack.Screen
             name="checkout"
             options={{

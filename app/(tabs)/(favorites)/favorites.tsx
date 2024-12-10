@@ -89,7 +89,7 @@ const Favorites = () => {
                   <Button
                      type="soft"
                      title="Start Searching"
-                     onPress={() => router.push('/(restaurants)')}
+                     onPress={() => router.push({ pathname: '/favorite-search' })}
                   />
                </View>
             }

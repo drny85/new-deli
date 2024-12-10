@@ -38,6 +38,7 @@ import Row from './Row'
 import { Text } from './ThemedText'
 import { View } from './ThemedView'
 import ThemeToogle from './ThemeToggle'
+import NeumorphismView from './NeumorphismView'
 
 export default function ModernSettingsPage() {
    const { user, logOut } = useAuth()
@@ -250,7 +251,7 @@ export default function ModernSettingsPage() {
                showsVerticalScrollIndicator={false}>
                <View style={styles.section}>
                   <Text style={styles.sectionTitle}>Preferences</Text>
-                  <View style={[styles.row, { backgroundColor: secondaryColor }]}>
+                  <NeumorphismView style={[styles.row]}>
                      <View style={[styles.rowIcon, { backgroundColor: '#007afe' }]}>
                         <Feather color="#fff" name="moon" size={20} />
                      </View>
@@ -260,26 +261,27 @@ export default function ModernSettingsPage() {
                      <View style={styles.rowSpacer} />
 
                      <ThemeToogle />
-                  </View>
+                  </NeumorphismView>
 
                   <TouchableOpacity
                      onPress={() => {
                         // handle onPress
                         router.push('/address')
-                     }}
-                     style={[styles.row, { backgroundColor: secondaryColor }]}>
-                     <View style={[styles.rowIcon, { backgroundColor: 'green' }]}>
-                        <SimpleLineIcons name="map" size={20} color="#ffffff" />
-                     </View>
+                     }}>
+                     <NeumorphismView style={[styles.row]}>
+                        <View style={[styles.rowIcon, { backgroundColor: 'green' }]}>
+                           <SimpleLineIcons name="map" size={20} color="#ffffff" />
+                        </View>
 
-                     <Text style={styles.rowLabel}>Saved Addresses</Text>
+                        <Text style={styles.rowLabel}>Saved Addresses</Text>
 
-                     <View style={styles.rowSpacer} />
+                        <View style={styles.rowSpacer} />
 
-                     <Feather color="#C6C6C6" name="chevron-right" size={20} />
+                        <Feather color="#C6C6C6" name="chevron-right" size={20} />
+                     </NeumorphismView>
                   </TouchableOpacity>
                   {user?.image && (
-                     <View style={[styles.row, { backgroundColor: secondaryColor }]}>
+                     <NeumorphismView style={[styles.row]}>
                         <View style={[styles.rowIcon, { backgroundColor: 'orange' }]}>
                            <Feather color="#fff" name="camera-off" size={20} />
                         </View>
@@ -295,10 +297,10 @@ export default function ModernSettingsPage() {
                            }}
                            value={user?.sharePicture}
                         />
-                     </View>
+                     </NeumorphismView>
                   )}
 
-                  <View style={[styles.row, { backgroundColor: secondaryColor }]}>
+                  <NeumorphismView style={[styles.row]}>
                      <View style={[styles.rowIcon, { backgroundColor: '#38C959' }]}>
                         <Feather color="#fff" name="bell" size={20} />
                      </View>
@@ -313,7 +315,7 @@ export default function ModernSettingsPage() {
                         }
                         value={user?.pushToken !== null}
                      />
-                  </View>
+                  </NeumorphismView>
                </View>
 
                <View style={styles.section}>
@@ -323,34 +325,36 @@ export default function ModernSettingsPage() {
                      onPress={() => {
                         // handle onPress
                         Alert.alert('Upcoming feature')
-                     }}
-                     style={[styles.row, { backgroundColor: secondaryColor }]}>
-                     <View style={[styles.rowIcon, { backgroundColor: '#8e8d91' }]}>
-                        <Feather color="#fff" name="flag" size={20} />
-                     </View>
+                     }}>
+                     <NeumorphismView style={[styles.row]}>
+                        <View style={[styles.rowIcon, { backgroundColor: '#8e8d91' }]}>
+                           <Feather color="#fff" name="flag" size={20} />
+                        </View>
 
-                     <Text style={styles.rowLabel}>Report Bug</Text>
+                        <Text style={styles.rowLabel}>Report Bug</Text>
 
-                     <View style={styles.rowSpacer} />
+                        <View style={styles.rowSpacer} />
 
-                     <Feather color="#C6C6C6" name="chevron-right" size={20} />
+                        <Feather color="#C6C6C6" name="chevron-right" size={20} />
+                     </NeumorphismView>
                   </TouchableOpacity>
 
                   <TouchableOpacity
                      onPress={() => {
                         // handle onPress
                         Alert.alert('Upcoming feature')
-                     }}
-                     style={[styles.row, { backgroundColor: secondaryColor }]}>
-                     <View style={[styles.rowIcon, { backgroundColor: '#007afe' }]}>
-                        <Feather color="#fff" name="mail" size={20} />
-                     </View>
+                     }}>
+                     <NeumorphismView style={[styles.row]}>
+                        <View style={[styles.rowIcon, { backgroundColor: '#007afe' }]}>
+                           <Feather color="#fff" name="mail" size={20} />
+                        </View>
 
-                     <Text style={styles.rowLabel}>Contact Us</Text>
+                        <Text style={styles.rowLabel}>Contact Us</Text>
 
-                     <View style={styles.rowSpacer} />
+                        <View style={styles.rowSpacer} />
 
-                     <Feather color="#C6C6C6" name="chevron-right" size={20} />
+                        <Feather color="#C6C6C6" name="chevron-right" size={20} />
+                     </NeumorphismView>
                   </TouchableOpacity>
                </View>
                <View style={styles.section}>
@@ -359,39 +363,40 @@ export default function ModernSettingsPage() {
                      onPress={() => {
                         // handle onPress
                         router.push('/terms')
-                     }}
-                     style={[styles.row, { backgroundColor: secondaryColor }]}>
-                     <View style={[styles.rowIcon, { backgroundColor: 'royalblue' }]}>
-                        <FontAwesome6 name="file-contract" size={24} color="#ffffff" />
-                     </View>
+                     }}>
+                     <NeumorphismView style={[styles.row]}>
+                        <View style={[styles.rowIcon, { backgroundColor: 'royalblue' }]}>
+                           <FontAwesome6 name="file-contract" size={24} color="#ffffff" />
+                        </View>
 
-                     <Text style={styles.rowLabel}>Terms of Use</Text>
+                        <Text style={styles.rowLabel}>Terms of Use</Text>
 
-                     <View style={styles.rowSpacer} />
+                        <View style={styles.rowSpacer} />
 
-                     <Feather color="#C6C6C6" name="chevron-right" size={20} />
+                        <Feather color="#C6C6C6" name="chevron-right" size={20} />
+                     </NeumorphismView>
                   </TouchableOpacity>
                   <TouchableOpacity
                      onPress={() => {
                         // handle onPress
                         router.push('/privacy')
-                     }}
-                     style={[styles.row, { backgroundColor: secondaryColor }]}>
-                     <View style={[styles.rowIcon, { backgroundColor: 'red' }]}>
-                        <Feather color="#fff" name="user-x" size={20} />
-                     </View>
+                     }}>
+                     <NeumorphismView style={[styles.row]}>
+                        <View style={[styles.rowIcon, { backgroundColor: 'red' }]}>
+                           <Feather color="#fff" name="user-x" size={20} />
+                        </View>
 
-                     <Text style={styles.rowLabel}>Privacy Policy</Text>
+                        <Text style={styles.rowLabel}>Privacy Policy</Text>
 
-                     <View style={styles.rowSpacer} />
+                        <View style={styles.rowSpacer} />
 
-                     <Feather color="#C6C6C6" name="chevron-right" size={20} />
+                        <Feather color="#C6C6C6" name="chevron-right" size={20} />
+                     </NeumorphismView>
                   </TouchableOpacity>
-                  <View
+                  <NeumorphismView
                      style={[
                         styles.row,
                         {
-                           backgroundColor: secondaryColor,
                            marginBottom: 80
                         }
                      ]}>
@@ -406,7 +411,7 @@ export default function ModernSettingsPage() {
                      <TouchableOpacity onPress={handleDeleteAccount} style={{ padding: SIZES.sm }}>
                         <FontAwesome name="trash-o" size={20} color={deleteColor} />
                      </TouchableOpacity>
-                  </View>
+                  </NeumorphismView>
                </View>
                <Text style={{ marginLeft: SIZES.lg }} type="muted">
                   version: {Constants.expoConfig?.version}
@@ -603,7 +608,6 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       justifyContent: 'flex-start',
       height: 50,
-
       borderRadius: 8,
       marginBottom: 12,
       paddingHorizontal: 12

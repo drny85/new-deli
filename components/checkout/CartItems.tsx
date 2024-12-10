@@ -1,9 +1,9 @@
 import { SIZES } from '@/constants/Colors'
-import { CartItem } from '@/stores/cartsStore'
 import { router } from 'expo-router'
 import { ScrollView } from 'react-native'
 import AddMoreItemsButton from '../cart/AddMoreItemsButton'
 import CartListItem from '../cart/CartListItem'
+import { CartItem } from '@/shared/types'
 
 type Props = {
    items: CartItem[]

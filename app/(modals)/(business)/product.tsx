@@ -105,10 +105,10 @@ const BusinessProduct = () => {
                   {product.sizes && product.sizes.length > 0 && !selected && (
                      <Text type="defaultSemiBold">As low as</Text>
                   )}
-                  <Text type="defaultSemiBold">${selected ? selected.price : product.price}</Text>
+                  <Text type="title">${selected ? selected.price : product.price}</Text>
                </View>
             </Row>
-            <Text center type="defaultSemiBold">
+            <Text center type="title">
                Units Sold: {product.unitSold}
             </Text>
 
@@ -116,8 +116,8 @@ const BusinessProduct = () => {
                style={{
                   flexDirection: 'row',
                   gap: SIZES.md,
-                  alignItems: 'center',
-                  alignSelf: 'center',
+                  //alignItems: 'center',
+                  //alignSelf: 'center',
                   marginTop: SIZES.md
                }}>
                {product && product.sizes.length > 0 && (
@@ -128,6 +128,31 @@ const BusinessProduct = () => {
                         setSelected(option)
                      }}
                   />
+               )}
+               {product.addons.length > 0 && product.multipleAddons && (
+                  <View
+                     style={{
+                        padding: SIZES.sm,
+                        width: '100%',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        alignSelf: 'center',
+                        gap: 4
+                     }}>
+                     <Text type="title">Multiple Choices</Text>
+                     <Text type="subtitle">Select up to {product.multipleAddons} of these</Text>
+
+                     <View style={{ alignSelf: 'center' }}>
+                        <Row containerStyle={{ gap: 4 }}>
+                           {product.addons.map((addon, index) => (
+                              <Text key={addon} type="italic">
+                                 {addon}
+                                 {index !== product.addons.length - 1 ? ', ' : ''}
+                              </Text>
+                           ))}
+                        </Row>
+                     </View>
+                  </View>
                )}
             </View>
 
