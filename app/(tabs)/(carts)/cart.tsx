@@ -7,7 +7,6 @@ import { View } from '@/components/ThemedView'
 import { SIZES } from '@/constants/Colors'
 import { useColorScheme } from '@/hooks/useColorScheme.web'
 import { useCartsStore } from '@/stores/cartsStore'
-import { toastMessage } from '@/utils/toast'
 import { router } from 'expo-router'
 import { SymbolView } from 'expo-symbols'
 import LottieView from 'lottie-react-native'
@@ -16,6 +15,7 @@ import { Alert, TouchableOpacity } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import Animated, { SlideInLeft } from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { toast } from 'sonner-native'
 
 const Cart = () => {
    const { clearCarts, carts } = useCartsStore()
@@ -30,10 +30,10 @@ const Cart = () => {
             style: 'destructive',
             onPress: () => {
                clearCarts()
-               toastMessage({
-                  title: 'Carts deleted',
-                  message: 'All carts deleted',
-                  preset: 'done'
+               toast.success('Carts deleted', {
+                  description: 'All carts deleted',
+                  duration: 2000,
+                  position: 'top-center'
                })
             }
          }

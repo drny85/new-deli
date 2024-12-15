@@ -11,14 +11,14 @@ import { SIZES } from '@/constants/Colors'
 import { useRestaurant } from '@/hooks/restaurants/useRestaurant'
 import { useThemeColor } from '@/hooks/useThemeColor'
 import { useAuth } from '@/providers/authProvider'
+import { Cart, ORDER_TYPE } from '@/shared/types'
 import { useCartsStore } from '@/stores/cartsStore'
 import { useOrderFlowStore } from '@/stores/orderFlowStore'
-import { Cart, ORDER_TYPE } from '@/shared/types'
 import { generateUniqueId } from '@/utils/generateUniqueId'
-import { toastAlert } from '@/utils/toast'
 import { router, useLocalSearchParams } from 'expo-router'
 import { useEffect, useState } from 'react'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { toast } from 'sonner-native'
 
 type Params = {
    restaurantId: string
@@ -45,12 +45,12 @@ const RestaurantCart = () => {
          })
       if (restaurant && restaurant.minimumDelivery && cart) {
          if (restaurant.minimumDelivery > cart?.total) {
-            toastAlert({
-               title: 'Minimum delivery',
-               message: `Minimum delivery is ${restaurant.minimumDelivery}`,
-               preset: 'error',
-               iconName: 'cart.circle.fill'
+            toast.warning('Minimum delivery not met', {
+               description: `Minimum delivery is ${restaurant.minimumDelivery}\nSpend at least $${Math.round(restaurant.minimumDelivery - cart.total).toFixed(1)} more`,
+
+               position: 'top-center'
             })
+
             return
          }
       }

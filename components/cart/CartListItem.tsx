@@ -12,8 +12,8 @@ import Divider from '../Divider'
 import { FontAwesome } from '@expo/vector-icons'
 import { letterSizes } from '@/helpers/lettersSizes'
 import { useAuth } from '@/providers/authProvider'
-import { toastAlert } from '@/utils/toast'
 import { CartItem } from '@/shared/types'
+import { toast } from 'sonner-native'
 
 type Props = {
    item: CartItem
@@ -199,23 +199,20 @@ const CartListItem = ({ item, showSetter = true, removable = false, onRemove }: 
                      quantity={item.quantity}
                      onPressAdd={() => {
                         if (cart?.isShared) {
-                           return toastAlert({
-                              title: 'Cart is shared',
-                              message: 'You cannot add items to a shared cart',
-                              preset: 'error',
-                              duration: 4
+                           toast.warning('Cart is shared', {
+                              description: 'You cannot add items to a shared cart',
+                              duration: 3000
                            })
+                           return
                         }
                         handleInAdd(item)
                      }}
                      onPressSub={() => {
                         if (cart?.isShared) {
-                           return toastAlert({
-                              title: 'Cart is shared',
-                              message: 'You cannot modify a shared cart',
-                              preset: 'error',
-                              duration: 4
+                           toast.warning('Cart is shared', {
+                              description: 'You cannot remove items from a shared cart'
                            })
+                           return
                         }
                         handleRemove(item)
                      }}

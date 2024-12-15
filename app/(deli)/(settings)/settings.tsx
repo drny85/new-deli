@@ -13,7 +13,6 @@ import { useBusinessOrdersStore } from '@/stores/businessOrders'
 import { useRestaurantsStore } from '@/stores/restaurantsStore'
 import { DELIVERY_TYPE, ORDER_STATUS } from '@/shared/types'
 import { generateRandomNumbers } from '@/utils/generateRandomNumber'
-import { toastAlert, toastMessage } from '@/utils/toast'
 import {
    Feather,
    FontAwesome5,
@@ -37,6 +36,7 @@ import {
    useWindowDimensions,
    View
 } from 'react-native'
+import { toast } from 'sonner-native'
 
 type Props = {
    darkMode: boolean
@@ -109,12 +109,11 @@ export default function BusinessSettings() {
    const handleOpenAndCloseStore = async (value: boolean) => {
       try {
          if (canNotClosed && !value) {
-            return toastAlert({
-               message:
+            return toast.warning('Warning', {
+               description:
                   'You cannot close the store until all orders are delivered or picked up by the client.',
-               title: 'Error',
-               preset: 'error',
-               duration: 5
+               duration: 5000,
+               position: 'top-center'
             })
          }
          if (restaurant) {
@@ -174,10 +173,9 @@ export default function BusinessSettings() {
       if (selectedImage && photo && restaurant) {
          updateBusiness({ ...restaurant!, image: selectedImage })
          resetAll()
-         toastMessage({
-            message: 'Profile picture updated successfully',
-            title: 'Success',
-            preset: 'done'
+         toast.success('Success', {
+            duration: 2000,
+            description: 'Image uploaded successfully'
          })
       }
    }, [selectedImage, photo])
@@ -531,9 +529,8 @@ export default function BusinessSettings() {
                                  })
                                  if (updated) {
                                     setZip('')
-                                    toastMessage({
-                                       title: 'Success',
-                                       message: 'Zip was added'
+                                    toast.success('Success', {
+                                       description: 'Zip was added'
                                     })
                                  }
                               }}

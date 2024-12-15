@@ -3,16 +3,16 @@ import { auth } from '@/firebase'
 import { useAuth } from '@/providers/authProvider'
 import { AppUser } from '@/shared/types'
 
+import { useThemeColor } from '@/hooks/useThemeColor'
+import { AntDesign } from '@expo/vector-icons'
 import * as Google from 'expo-auth-session/providers/google'
 import * as WebBrowser from 'expo-web-browser'
 import { GoogleAuthProvider, User, signInWithCredential } from 'firebase/auth'
 import { doc, getDoc } from 'firebase/firestore'
 import { useCallback, useEffect } from 'react'
 import { TouchableOpacity } from 'react-native'
+import { toast } from 'sonner-native'
 import NeoView from '../NeoView'
-import { toastMessage } from '@/utils/toast'
-import { AntDesign } from '@expo/vector-icons'
-import { useThemeColor } from '@/hooks/useThemeColor'
 
 WebBrowser.maybeCompleteAuthSession()
 
@@ -79,13 +79,19 @@ const SigninWithGoogle = () => {
             })
       } else {
          if (response?.type === 'cancel') {
-            toastMessage({
-               message: 'You canceled this request',
-               title: 'Canceled',
-               preset: 'error',
-               haptic: 'error',
-               position: 'bottom'
+            toast.warning('Sign In Canceled', {
+               description: 'You canceled this request',
+               duration: 2000,
+               icon: <AntDesign name="google" size={28} color={ascentColor} />,
+               position: 'top-center'
             })
+            // toastMessage({
+            //    message: 'You canceled this request',
+            //    title: 'Canceled',
+            //    preset: 'error',
+            //    haptic: 'error',
+            //    position: 'bottom'
+            // })
          }
       }
    }, [response])

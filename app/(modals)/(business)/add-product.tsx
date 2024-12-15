@@ -26,7 +26,6 @@ import { useThemeColor } from '@/hooks/useThemeColor'
 import { useAuth } from '@/providers/authProvider'
 import { Category, P_Size, Product } from '@/shared/types'
 import { useRestaurantsStore } from '@/stores/restaurantsStore'
-import { toastAlert, toastMessage } from '@/utils/toast'
 import { Feather, FontAwesome } from '@expo/vector-icons'
 import SegmentedControl from '@react-native-segmented-control/segmented-control'
 import { router, useLocalSearchParams } from 'expo-router'
@@ -44,6 +43,7 @@ import {
 } from 'react-native'
 import Animated, { SlideInUp, SlideOutUp } from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { toast } from 'sonner-native'
 
 const AddProduct = () => {
    const { user } = useAuth()
@@ -119,11 +119,13 @@ const AddProduct = () => {
       }
 
       if (!photo) {
-         toastAlert({
-            message: 'Please upload a product image',
-            preset: 'error',
-            title: 'Error'
+         toast.warning('Please upload a product image', {
+            description: 'You must upload a product image',
+            duration: 2000,
+            icon: <FontAwesome name="photo" size={24} color={textColor} />,
+            position: 'top-center'
          })
+
          handleImageUpload()
          return
       }
@@ -131,11 +133,12 @@ const AddProduct = () => {
          const found =
             products.findIndex((p) => p.name.toLowerCase() === product.name.toLowerCase()) !== -1
          if (found) {
-            toastAlert({
-               message: `Product ${product.name} already exists`,
-               preset: 'error',
-               title: 'Error'
+            toast.warning('Product already exists', {
+               description: 'This product already exists',
+               duration: 2000,
+               position: 'top-center'
             })
+
             return
          }
       }
@@ -214,20 +217,21 @@ const AddProduct = () => {
       })
       setVariations([])
       setReadyToUpload(false)
-      toastMessage({
-         message: 'Product added successfully',
-         preset: 'done',
-         title: 'Success'
+      toast.success('Product Added', {
+         description: 'Your product has been added',
+         duration: 2000,
+         position: 'top-center'
       })
    }
 
    const validateInputs = (): boolean => {
       if (!product.name || !product.price) {
-         toastAlert({
-            message: 'Name and price are required',
-            preset: 'error',
-            title: 'Error'
+         toast.warning('Please fill in all fields', {
+            description: 'You must fill in all fields',
+            duration: 2000,
+            position: 'top-center'
          })
+
          return false
       }
       if (!product.category) {
@@ -236,46 +240,42 @@ const AddProduct = () => {
       }
       if (sizeMode === 'sizes' || sizeMode === 'addons') {
          if (variations.length === 0) {
-            toastAlert({
-               message: 'Please add at least one size',
-               preset: 'error',
-               title: 'Error'
+            toast.warning('Error', {
+               description: 'You must add at least one size',
+               duration: 2000,
+               position: 'top-center'
             })
+
             return false
          }
          if (variations.some((v) => v.price === '')) {
-            toastAlert({
-               message: 'Please fill in all size prices',
-               preset: 'error',
-               title: 'Error'
+            toast.warning('Error', {
+               description: 'Please fill in all size prices',
+               duration: 2000
             })
             return false
          }
       }
       if (sizeMode === 'multiple') {
          if (qty === 0) {
-            toastAlert({
-               message: 'Please select a quantity',
-               preset: 'error',
-               title: 'Error'
+            toast.warning('Error', {
+               description: 'Please select a quantity'
             })
             return false
          }
       }
 
       if (product.description === '') {
-         toastAlert({
-            message: 'Please add a description',
-            preset: 'error',
-            title: 'Error'
+         toast.warning('Error', {
+            description: 'Please add a description'
          })
+
          return false
       } else if (product.description && product.description.length < 10) {
-         toastAlert({
-            message: 'Description must be at least 10 characters long',
-            preset: 'error',
-            title: 'Error'
+         toast.warning('Error', {
+            description: 'Description must be at least 10 characters long'
          })
+
          return false
       }
 
@@ -309,20 +309,13 @@ const AddProduct = () => {
          }
 
          bottomSheetAddonsRef.current?.close()
-         toastMessage({
-            title: 'Success',
-            message: 'Addons updated successfully',
-            preset: 'custom',
-            iconName: 'check',
-            duration: 2
+         toast.success('Success', {
+            description: 'Addons updated successfully'
          })
       } catch (error) {
          console.log('Error updating addons', error)
-         toastMessage({
-            title: 'Error',
-            message: 'Something went wrong',
-            preset: 'error',
-            duration: 2
+         toast.error('Error', {
+            description: 'Something went wrong'
          })
       }
    }
@@ -929,13 +922,10 @@ const AddProduct = () => {
                                     (a) => a.toLowerCase() === newAddon.toLowerCase()
                                  )
                               if (isAlreadyThere) {
-                                 toastMessage({
-                                    title: 'Error',
-                                    message: 'Addon already exists',
-                                    preset: 'custom',
-                                    iconName: 'x',
-                                    duration: 2
+                                 toast.error('Error', {
+                                    description: 'Addon already exists'
                                  })
+
                                  return
                               }
                               if (newAddon) {

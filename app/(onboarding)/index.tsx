@@ -1,5 +1,4 @@
 import { updateBusiness } from '@/actions/business'
-import { userCouriersCollection } from '@/collections'
 import Button from '@/components/Button'
 import { Container } from '@/components/Container'
 import Input from '@/components/Input'
@@ -20,7 +19,7 @@ import { useThemeColor } from '@/hooks/useThemeColor'
 import { useAuth } from '@/providers/authProvider'
 import { Business, ConnectedAccountParams } from '@/shared/types'
 import { formatPhone } from '@/utils/formatPhone'
-import { toastAlert } from '@/utils/toast'
+import { FontAwesome6 } from '@expo/vector-icons'
 import { Redirect, router } from 'expo-router'
 import { sendEmailVerification, User } from 'firebase/auth'
 import LottieView from 'lottie-react-native'
@@ -31,6 +30,7 @@ import {
    GooglePlacesAutocompleteRef
 } from 'react-native-google-places-autocomplete'
 import Animated, { SlideInUp } from 'react-native-reanimated'
+import { toast } from 'sonner-native'
 
 const Onboarding = () => {
    useUser()
@@ -91,10 +91,8 @@ const Onboarding = () => {
             if (success) {
                router.push({ pathname: '/stripe', params: { url: result } })
             } else {
-               toastAlert({
-                  message: 'Error conencting Store',
-                  title: 'Error',
-                  preset: 'error'
+               toast.warning('Error connecting Store', {
+                  description: 'Please try again later'
                })
             }
          } catch (error) {
@@ -336,35 +334,35 @@ const Onboarding = () => {
                            onPress={() => {
                               if (!restaurant) return
                               if (!photo?.assets) {
-                                 toastAlert({
-                                    title: 'Error',
-                                    message: 'Please select an image'
+                                 toast.warning('Error', {
+                                    description: 'Please select an image'
                                  })
+
                                  handleImageUpload()
                                  return
                               }
                               if (!restaurantData?.name) {
                                  nameRef.current?.focus()
-                                 toastAlert({
-                                    title: 'Error',
-                                    message: 'Please enter a valid name'
+                                 toast.warning('Error', {
+                                    description: 'Please enter a valid name'
                                  })
+
                                  return
                               }
                               if (!restaurantData?.phone) {
                                  phoneRef.current?.focus()
-                                 toastAlert({
-                                    title: 'Error',
-                                    message: 'Please enter a valid phone number'
+                                 toast.warning('Error', {
+                                    description: 'Please enter a valid phone number'
                                  })
+
                                  return
                               }
                               if (!restaurantData?.address) {
                                  googleRef.current?.focus()
-                                 toastAlert({
-                                    title: 'Error',
-                                    message: 'Please enter a valid address'
+                                 toast.warning('Error', {
+                                    description: 'Please enter a valid address'
                                  })
+
                                  return
                               }
 
@@ -414,9 +412,15 @@ const Onboarding = () => {
                         }
                         sendEmailVerification(userRecord).then(() => {
                            console.log('Email verification sent')
-                           toastAlert({
-                              title: 'Success',
-                              message: 'Email verification sent'
+                           toast.success('Success', {
+                              description: 'Email verification sent',
+                              icon: (
+                                 <FontAwesome6
+                                    name="envelope-circle-check"
+                                    size={24}
+                                    color={textColor}
+                                 />
+                              )
                            })
                         })
                      }}>

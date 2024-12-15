@@ -5,7 +5,6 @@ import { useCartsStore } from '@/stores/cartsStore'
 import { useOrderFlowStore } from '@/stores/orderFlowStore'
 import { AppUser } from '@/shared/types'
 import { FIREBASE_ERRORS } from '@/utils/firebaseErrorMessages'
-import { toastAlert } from '@/utils/toast'
 import {
    createUserWithEmailAndPassword,
    onAuthStateChanged,
@@ -16,6 +15,7 @@ import {
 } from 'firebase/auth'
 import { doc, getDoc, setDoc } from 'firebase/firestore'
 import { createContext, PropsWithChildren, useContext, useEffect, useState } from 'react'
+import { toast } from 'sonner-native'
 
 // Define custom user type
 
@@ -83,14 +83,12 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
          await getUserFromFirebase(user.uid)
          return user
       } catch (error) {
-         console.error('Sign in error:', error)
+         console.log('Sign in error:', error)
          const err = error as Error
-         toastAlert({
-            title: 'Error',
-            message: FIREBASE_ERRORS[err.message],
-            preset: 'error',
-            duration: 2
+         toast.error('Error', {
+            description: FIREBASE_ERRORS[err.message]
          })
+
          return null
       }
    }
@@ -159,12 +157,11 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
       } catch (error) {
          console.log('Sign up error:', error)
          const err = error as Error
-         toastAlert({
-            title: 'Error',
-            message: FIREBASE_ERRORS[err.message],
-            preset: 'error',
-            duration: 2
+         toast.warning('Error', {
+            description: FIREBASE_ERRORS[err.message],
+            duration: 2000
          })
+
          return false
          // throw error
       }

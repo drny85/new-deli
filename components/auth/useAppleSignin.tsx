@@ -3,11 +3,12 @@ import { SIZES } from '@/constants/Colors'
 import { auth } from '@/firebase'
 import { useAuth } from '@/providers/authProvider'
 import { AppUser } from '@/shared/types'
-import { toastMessage } from '@/utils/toast'
+import { AntDesign } from '@expo/vector-icons'
 import * as AppleAuthentication from 'expo-apple-authentication'
 import { OAuthProvider, User, signInWithCredential } from 'firebase/auth'
 import { doc, getDoc } from 'firebase/firestore'
 import { StyleSheet, useColorScheme } from 'react-native'
+import { toast } from 'sonner-native'
 
 const provider = new OAuthProvider('apple.com')
 const SigninWithApple = () => {
@@ -87,13 +88,11 @@ const SigninWithApple = () => {
             } catch (e: any) {
                if (e.code === 'ERR_REQUEST_CANCELED') {
                   // handle that the user canceled the sign-in flow
-
-                  toastMessage({
-                     message: 'You canceled this request',
-                     title: 'Canceled',
-                     preset: 'error',
-                     haptic: 'error',
-                     position: 'bottom'
+                  toast.warning('Sign In Canceled', {
+                     description: 'You canceled this request',
+                     duration: 2000,
+                     icon: <AntDesign name="apple-o" size={28} color={dark ? 'white' : 'black'} />,
+                     position: 'top-center'
                   })
                } else {
                   // handle other errors

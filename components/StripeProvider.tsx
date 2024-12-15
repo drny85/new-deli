@@ -4,10 +4,9 @@ import { SIZES } from '@/constants/Colors'
 import { fetchPaymentParams } from '@/firebase'
 import { useThemeColor } from '@/hooks/useThemeColor'
 import { useAuth } from '@/providers/authProvider'
-import { useOrderFlowStore } from '@/stores/orderFlowStore'
 import { PaymentIntentParams } from '@/shared/types'
+import { useOrderFlowStore } from '@/stores/orderFlowStore'
 import { stripeFee } from '@/utils/stripeFee'
-import { toastAlert, toastMessage } from '@/utils/toast'
 import {
    initPaymentSheet,
    presentPaymentSheet,
@@ -20,7 +19,7 @@ import { getDocs, query, where } from 'firebase/firestore'
 import LottieView from 'lottie-react-native'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Alert } from 'react-native'
-import Constants from 'expo-constants'
+import { toast } from 'sonner-native'
 type Props = {
    children: React.ReactElement
    cartTotal: number
@@ -92,12 +91,10 @@ const StripeProviderComponent = ({ children, cartTotal, businessName, connectedI
          console.log(data)
 
          if (!data.success)
-            return toastAlert({
-               message: `Something went wrong, ${data.result}`,
-               title: 'Error',
-               preset: 'error',
-               duration: 2
+            return toast.warning('Error', {
+               description: 'Something went wrong, please try again'
             })
+
          initializePaymentSheet(data.result)
       } catch (error) {
          console.log(error)
@@ -186,12 +183,10 @@ const StripeProviderComponent = ({ children, cartTotal, businessName, connectedI
 
          if (error) {
             setInitiatePayment(false)
-            return toastAlert({
-               message: `${(error.code, error.message)}`,
-               title: 'Warning',
-               preset: 'error',
-               duration: 2
+            return toast.warning('Error', {
+               description: `${(error.code, error.message)}`
             })
+
             // return Alert.alert(`Error code: ${error.code}`, error.message)
          } else {
             const orderNumber = await getOrderNumber()
@@ -207,12 +202,10 @@ const StripeProviderComponent = ({ children, cartTotal, businessName, connectedI
                setReOrder(false)
                router.dismissAll()
                router.replace({ pathname: `/order-success`, params: { orderId } })
-               toastMessage({
-                  message: 'Order placed successfully',
-                  title: 'Success',
-                  preset: 'done',
-                  duration: 2
+               toast.success('Success', {
+                  description: 'Order placed successfully'
                })
+
                //setOrder(null)
             } else {
                console.log('Something happened processing the order')

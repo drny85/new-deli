@@ -18,7 +18,7 @@ import { useThemeColor } from '@/hooks/useThemeColor'
 import { Cart, CART_ALLOWED, CartItem, ORDER_TYPE, P_Size } from '@/shared/types'
 import { useCartsStore } from '@/stores/cartsStore'
 import { useOrderFlowStore } from '@/stores/orderFlowStore'
-import { Feather, Ionicons } from '@expo/vector-icons'
+import { AntDesign, Feather, Ionicons } from '@expo/vector-icons'
 import { BottomSheetTextInput } from '@gorhom/bottom-sheet'
 import * as Haptics from 'expo-haptics'
 import { router, useLocalSearchParams } from 'expo-router'
@@ -95,31 +95,16 @@ const ProductDetail = () => {
          return toast.warning('You can only have 10 carts', {
             description: 'You can only have 10 carts',
             duration: 2000,
-            icon: '🛒',
             position: 'top-center'
          })
-         // return toastAlert({
-         //    title: 'Error',
-         //    message: 'You can only have 10 carts',
-         //    preset: 'error',
-         //    duration: 1
-         // })
       }
       if (!selected && product?.sizes && product.sizes.length > 0) {
          Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error)
          return toast.warning('Please select a size', {
             description: 'You must select a size to add to cart',
             duration: 2000,
-
             position: 'top-center'
          })
-         // return toastAlert({
-         //    title: 'Pick One',
-         //    message: 'You must pick a size',
-         //    preset: 'custom',
-         //    iconName: 'hand.raised.fill',
-         //    duration: 2
-         // })
       }
 
       if (!cart) {
@@ -140,15 +125,9 @@ const ProductDetail = () => {
             toast.warning('Please select at least one addon', {
                description: 'You must select at least one addon',
                duration: 2000,
-               icon: '🛒',
                position: 'top-center'
             })
-            // toastAlert({
-            //    title: 'Error',
-            //    message: 'Please select at least one addon',
-            //    preset: 'error',
-            //    duration: 1
-            // })
+
             Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error)
             return
          }
@@ -220,7 +199,7 @@ const ProductDetail = () => {
       toast.success('Updated cart', {
          description: 'Your cart has been updated',
          duration: 2000,
-         icon: '🛒',
+         icon: <AntDesign name="shoppingcart" size={24} color={textColor} />,
          position: 'top-center'
       })
       router.back()

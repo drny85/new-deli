@@ -1,6 +1,4 @@
-import { ORDER_TYPE } from '@/shared/types'
-
-const myPercentage = 0.4
+import { myPercentage, ORDER_TYPE } from '@/shared/types'
 
 export const stripeFee = (amount: number, orderType: keyof typeof ORDER_TYPE): number => {
    if (!amount) return 0

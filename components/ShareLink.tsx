@@ -1,10 +1,10 @@
 import { saveCartToDatabase } from '@/actions/cart'
 import { useThemeColor } from '@/hooks/useThemeColor'
 import { useAuth } from '@/providers/authProvider'
-import { toastMessage } from '@/utils/toast'
 import { Feather } from '@expo/vector-icons'
 import * as Linking from 'expo-linking'
 import { Share, TouchableOpacity, useColorScheme } from 'react-native'
+import { toast } from 'sonner-native'
 
 type Props = {
    id: string
@@ -71,30 +71,24 @@ const ShareButton: React.FC<Props> = ({
             if (type === 'cart' && cartId) {
                const cartShared = await saveCartToDatabase(id, cartId)
                if (cartShared)
-                  toastMessage({
-                     title: 'Success',
-                     message: 'Cart shared successfully',
-                     duration: 3,
-                     preset: 'custom',
-                     iconName: 'shared.with.you'
+                  toast.success('Success', {
+                     description: 'Cart shared successfully',
+                     duration: 3000,
+                     icon: <Feather name="share" size={24} color={ascent} />
                   })
             }
             if (type === 'order') {
-               toastMessage({
-                  title: 'Success',
-                  message: 'Order shared successfully',
-                  duration: 3,
-                  preset: 'custom',
-                  iconName: 'shared.with.you'
+               toast.success('Success', {
+                  description: 'Order shared successfully',
+                  duration: 3000,
+                  icon: <Feather name="share" size={24} color={ascent} />
                })
             }
             if (type === 'restaurant') {
-               toastMessage({
-                  title: 'Success',
-                  message: 'Restaurant shared successfully',
-                  duration: 3,
-                  preset: 'custom',
-                  iconName: 'shared.with.you'
+               toast.success('Success', {
+                  description: 'Restaurant shared successfully',
+                  duration: 3000,
+                  icon: <Feather name="share" size={24} color={ascent} />
                })
             }
          }

@@ -2,8 +2,8 @@ import { Business, ORDER_TYPE, OrderAddress } from '@/shared/types'
 import { useOrderFlowStore } from '@/stores/orderFlowStore'
 import { extractZipCode } from '@/utils/extractZipcode'
 import { getDistanceFromLatLonInMeters } from '@/utils/getDistanceInMeters'
-import { toastAlert } from '@/utils/toast'
 import { Alert } from 'react-native'
+import { toast } from 'sonner-native'
 
 export const calculateDistanceBetweenDeliveryAddressResturant = (
    restaurant: Business,
@@ -19,12 +19,11 @@ export const calculateDistanceBetweenDeliveryAddressResturant = (
          if (zip === 2) return false
 
          if (!restaurant?.zips?.includes(zip)) {
-            toastAlert({
-               message: `${restaurant.name} do not deliver to this zip code (${zip})`,
-               title: 'Out of delivery range',
-               preset: 'error',
+            toast.warning('Out of delivery range', {
+               description: `${restaurant.name} do not deliver to this zip code (${zip})`,
                duration: 5
             })
+
             return false
          }
          return true
@@ -42,12 +41,11 @@ export const calculateDistanceBetweenDeliveryAddressResturant = (
          const distance = getDistanceFromLatLonInMeters(loc1, loc2)
 
          if (distance > restaurant.miles) {
-            toastAlert({
-               message: 'Consider changing the delivery address or place order for pick-up',
-               title: 'Out of delivery range',
-               preset: 'error',
+            toast.warning('Out of delivery range', {
+               description: `${restaurant.name} do not deliver to this address`,
                duration: 5
             })
+
             return false
          }
          return true

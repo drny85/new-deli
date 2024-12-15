@@ -12,7 +12,6 @@ import { useRestaurant } from '@/hooks/restaurants/useRestaurant'
 import { Order, ORDER_STATUS } from '@/shared/types'
 import { useBusinessOrdersStore } from '@/stores/businessOrders'
 import { orderNameSwitch } from '@/utils/orderNameSwitch'
-import { toastMessage } from '@/utils/toast'
 import { Feather, Foundation } from '@expo/vector-icons'
 import { FlashList } from '@shopify/flash-list'
 import { format } from 'date-fns'
@@ -20,6 +19,7 @@ import { Image } from 'expo-image'
 import { router, useLocalSearchParams, useNavigation } from 'expo-router'
 import { useLayoutEffect } from 'react'
 import { Alert, StyleSheet, TouchableOpacity } from 'react-native'
+import { toast } from 'sonner-native'
 
 type ParamsProps = {
    courierId: string
@@ -52,11 +52,16 @@ const CourierDetails = () => {
                   const updated = await updateBusinessCourier(courierId, restaurant.id!)
                   console.log(updated)
                   if (updated) {
-                     toastMessage({
-                        title: 'Success',
-                        message: 'Courier Deactivated',
-                        preset: 'done'
+                     toast.success('Deactivated', {
+                        description: 'Courier Deactivated',
+                        duration: 2000,
+                        position: 'top-center'
                      })
+                     // toastMessage({
+                     //    title: 'Success',
+                     //    message: 'Courier Deactivated',
+                     //    preset: 'done'
+                     // })
                   }
                }
             }

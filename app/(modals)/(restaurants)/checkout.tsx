@@ -25,7 +25,6 @@ import { useAuth } from '@/providers/authProvider'
 import { Order, ORDER_STATUS, ORDER_TYPE } from '@/shared/types'
 import { useCartsStore } from '@/stores/cartsStore'
 import { useOrderFlowStore } from '@/stores/orderFlowStore'
-import { toastAlert, toastMessage } from '@/utils/toast'
 import { Feather } from '@expo/vector-icons'
 import BottomSheet, { BottomSheetTextInput } from '@gorhom/bottom-sheet'
 import { useNetInfo } from '@react-native-community/netinfo'
@@ -35,6 +34,7 @@ import { AnimatePresence, MotiView } from 'moti'
 import { useEffect, useRef, useState } from 'react'
 import { Keyboard, ScrollView, StyleSheet, TouchableOpacity } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { toast } from 'sonner-native'
 
 type Params = {
    restaurantId: string
@@ -71,20 +71,18 @@ const Checkout = () => {
       const prevented = preventDeliveryOrder(restaurant!, orderType)
       if (prevented) return
       if (!isInternetReachable) {
-         return toastMessage({
-            message: 'No internet connection',
-            title: 'Error',
-            preset: 'error',
-            duration: 2
+         toast.warning('No Internet', {
+            description: 'No internet connection',
+            position: 'top-center'
          })
+         return
       }
       if (!restaurant?.isOpen) {
-         toastAlert({
-            message: 'Restaurant is closed',
-            title: 'Error',
-            preset: 'error',
-            duration: 2
+         toast.warning('Restaurant is closed', {
+            description: 'Restaurant is closed',
+            position: 'top-center'
          })
+
          return
       }
       const isGood = cantContinueIfDeliveryWithoutAddress()
@@ -96,6 +94,15 @@ const Checkout = () => {
          deliveryAddress!
       )
       if (!withinRange) return
+      if (restaurant && restaurant?.minimumDelivery && restaurant.minimumDelivery > cart?.total) {
+         toast.warning('Minimum delivery not met', {
+            description: `Minimum delivery is ${restaurant.minimumDelivery}`,
+
+            position: 'top-center'
+         })
+
+         return
+      }
 
       const order: Order = {
          address: deliveryAddress,
@@ -109,7 +116,7 @@ const Checkout = () => {
             amount: tipAmount,
             percentage: 0
          },
-         businessId: restaurantId!,
+         businessId: restaurantId,
          deliveredBy: null,
          declined: [],
          deliveryPaid: false,
@@ -133,11 +140,9 @@ const Checkout = () => {
             setInitiatePayment(true)
          } else {
             console.log('Error placing order', success, pendingOrder)
-            toastAlert({
-               message: 'Something went wrong',
-               title: 'Error',
-               preset: 'error',
-               duration: 2
+            toast.error('Error placing order', {
+               description: 'Something went wrong',
+               position: 'top-center'
             })
          }
       } catch (error) {

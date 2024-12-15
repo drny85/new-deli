@@ -8,7 +8,7 @@ import { useThemeColor } from '@/hooks/useThemeColor'
 import { useOrderFlowStore } from '@/stores/orderFlowStore'
 import { router } from 'expo-router'
 import { useEffect, useRef, useState } from 'react'
-import { KeyboardAvoidingView, Platform, TextInput } from 'react-native'
+import { KeyboardAvoidingView, Platform, TextInput, useColorScheme } from 'react-native'
 import {
    GooglePlacesAutocomplete,
    GooglePlacesAutocompleteRef
@@ -19,6 +19,7 @@ import Animated, { FadeIn, FadeOut } from 'react-native-reanimated'
 const AddressScreen = () => {
    const bgColor = useThemeColor('primary')
    const textColor = useThemeColor('text')
+   const isDark = useColorScheme() === 'dark'
    const {
       setDeliveryAddress,
       deliveryAddress,
@@ -176,7 +177,7 @@ const AddressScreen = () => {
                                     router.dismissAll()
                                  }
                               }}
-                              type="soft"
+                              type={isDark ? 'secondary' : 'soft'}
                            />
                         </View>
                      </View>
