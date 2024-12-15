@@ -1,3 +1,4 @@
+/* eslint-disable no-unsafe-optional-chaining */
 import { SIZES } from '@/constants/Colors'
 import { FilterData, sortByMonths, sortByWeekdays } from '@/helpers/charts'
 import { useThemeColor } from '@/hooks/useThemeColor'
@@ -6,7 +7,7 @@ import { getRandomColor } from '@/utils/getRandomColor'
 import SegmentedControl from '@react-native-segmented-control/segmented-control'
 import { useState } from 'react'
 import { ColorValue, StyleSheet } from 'react-native'
-import { PieChart } from 'react-native-gifted-charts'
+import { PieChart, pieDataItem } from 'react-native-gifted-charts'
 import Animated from 'react-native-reanimated'
 import { filterOrdersByTime } from '../charts'
 import Row from '../Row'
@@ -36,14 +37,15 @@ const Analytics: React.FC<GraphComponentProps> = ({ orders }) => {
                ? 'By Year'
                : ''
 
-   const transformDataForPieChart = (values: any[]): FilterData[] => {
+   const transformDataForPieChart = (values: pieDataItem[]): FilterData[] => {
       // Determine the maximum value in categorized data for the "focused" property
+      if (!values) return []
       const maxValue = Math.max(...values?.map(({ value }) => value), 0)
 
-      return values.map(({ label, value }) => ({
+      return values.map(({ text, value }) => ({
          value,
          color: getRandomColor(), // Generate random colors for the chart
-         text: label, // Use category (e.g., Morning, Afternoon, etc.) as text
+         text, // Use category (e.g., Morning, Afternoon, etc.) as text
          focused: value === maxValue
 
          // Mark the highest value as focused

@@ -1,10 +1,14 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { TouchableOpacity, StyleSheet, TextInput, Keyboard } from 'react-native'
+import { TouchableOpacity, StyleSheet, Keyboard } from 'react-native'
 import { View } from '../ThemedView'
 import { Text } from '../ThemedText'
 import { useThemeColor } from '@/hooks/useThemeColor'
 import { useOrderFlowStore } from '@/stores/orderFlowStore'
-import BottomSheet, { BottomSheetBackdrop, BottomSheetTextInput } from '@gorhom/bottom-sheet'
+import BottomSheet, {
+   BottomSheetBackdrop,
+   BottomSheetBackdropProps,
+   BottomSheetTextInput
+} from '@gorhom/bottom-sheet'
 import Button from '../Button'
 import { SIZES } from '@/constants/Colors'
 import NeoView from '../NeoView'
@@ -53,7 +57,7 @@ const TipsCalculator: React.FC<TipsCalculatorProps> = ({ orderTotal, bottomSheet
 
    const snapPoints = useMemo(() => ['1%', '80%'], [])
    const renderBackdrop = useCallback(
-      (props: any) => (
+      (props: BottomSheetBackdropProps) => (
          <BottomSheetBackdrop
             {...props}
             disappearsOnIndex={0}

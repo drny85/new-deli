@@ -13,8 +13,8 @@ import { Alert } from 'react-native'
 
 const CourierAssigment = () => {
    const { orderId } = useLocalSearchParams<{ orderId: string }>()
-   const { loading, order } = useOrder(orderId!)
-   const { restaurant } = useRestaurant(order?.businessId!)
+   const { loading, order } = useOrder(orderId)
+   const { restaurant } = useRestaurant(order?.businessId || '')
 
    const handleOnPress = async (courier: Courier) => {
       const isActive = checkIfCourierIsActive(courier.id!)
@@ -53,7 +53,7 @@ const CourierAssigment = () => {
                text: 'Activate Courier',
                onPress: async () => {
                   // router.push({ pathname: '/[courierId]', params: { courierId: courier.id! } })
-                  const updated = await updateBusinessCourier(courierId, restaurant?.id!)
+                  const updated = await updateBusinessCourier(courierId, restaurant?.id || '')
                   if (updated) {
                      return true
                   }
@@ -75,7 +75,7 @@ const CourierAssigment = () => {
 
    return (
       <View style={{ flex: 1 }}>
-         <CourierMap onPress={(c) => handleOnPress(c)} assigedCourier={order?.courier!} />
+         <CourierMap onPress={(c) => handleOnPress(c)} assigedCourier={order?.courier || null} />
       </View>
    )
 }

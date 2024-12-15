@@ -32,7 +32,7 @@ const RestaurantCart = () => {
    const setOrderType = useOrderFlowStore((s) => s.setOrderType)
    const cartT = getCart(restaurantId!)
    const cart = sharedCart || cartT
-   const { restaurant, loading } = useRestaurant(cart?.restaurantId!)
+   const { restaurant, loading } = useRestaurant(cart?.restaurantId || '')
 
    const backgroundColor = useThemeColor('background')
    const { top } = useSafeAreaInsets()
@@ -68,7 +68,9 @@ const RestaurantCart = () => {
    useEffect(() => {
       if (cart?.items.length === 0) {
          removeCart(restaurantId!)
-         router.canGoBack() && router.back()
+         if (router.canGoBack()) {
+            router.back()
+         }
       }
    }, [cart?.items.length])
 

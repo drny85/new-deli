@@ -21,7 +21,7 @@ const BusinessProduct = () => {
    const { user } = useAuth()
    const { productId } = useLocalSearchParams<{ productId: string }>()
    const [selected, setSelected] = useState<P_Size | null>(null)
-   const { product, loading } = useProduct(user?.id!, productId!)
+   const { product, loading } = useProduct(user?.id || '', productId)
 
    if (loading) return <Loading />
 
@@ -71,7 +71,7 @@ const BusinessProduct = () => {
                               text: 'Delete',
                               style: 'destructive',
                               onPress: async () => {
-                                 await deleteProduct(product.id!, user?.id!)
+                                 await deleteProduct(product.id || '', user?.id || '')
                                  router.dismissAll()
                               }
                            }

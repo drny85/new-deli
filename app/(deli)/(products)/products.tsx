@@ -1,7 +1,6 @@
 import Button from '@/components/Button'
 import { Container } from '@/components/Container'
 import Loading from '@/components/Loading'
-import NeoView from '@/components/NeoView'
 import NeumorphismView from '@/components/NeumorphismView'
 import AllCategoriesView from '@/components/restaurants/AllCategoriesView'
 import SizePicker from '@/components/restaurants/SizePicker'
@@ -14,6 +13,7 @@ import { useProducts } from '@/hooks/restaurants/useProducts'
 import { useNavigationSearch } from '@/hooks/useNavigationSearch'
 import { useThemeColor } from '@/hooks/useThemeColor'
 import { useAuth } from '@/providers/authProvider'
+import { Product } from '@/shared/types'
 import { useCategoriesStore } from '@/stores/categoriesStore'
 import { Image } from 'expo-image'
 import { router } from 'expo-router'
@@ -24,8 +24,8 @@ const Products = () => {
    const { user } = useAuth()
    const backgroundColor = useThemeColor('background')
    const categories = useCategoriesStore((s) => s.categories)
-   const sectionListRef = useRef<SectionList<any, any>>(null)
-   const { products, loading } = useProducts(user?.id!)
+   const sectionListRef = useRef<SectionList<Product, CategorizedProduct>>(null)
+   const { products, loading } = useProducts(user?.id || '')
    const search = useNavigationSearch({
       searchBarOptions: {
          placeholder: 'Search products',
@@ -98,7 +98,7 @@ const Products = () => {
                                  showTitle={false}
                                  disabled
                                  sizes={item.sizes}
-                                 onPress={(size) => {
+                                 onPress={() => {
                                     //setSelected(size)
                                  }}
                               />
@@ -161,7 +161,7 @@ const Products = () => {
                {data.length > 0 && (
                   <AllCategoriesView
                      products={data}
-                     ids={[user?.id!]}
+                     ids={[user?.id || '']}
                      onCategoryPress={(category) => {
                         const index = items.findIndex((item) => item.title === category.name)
                         if (index !== -1) {

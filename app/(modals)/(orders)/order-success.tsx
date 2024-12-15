@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 import Button from '@/components/Button'
 import ConfettiComponent, { ConfettiComponentRef } from '@/components/ConfettiComponent'
 import { View } from '@/components/ThemedView'

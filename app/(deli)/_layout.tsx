@@ -12,7 +12,7 @@ import { useNotifications } from '@/hooks/useNotification'
 export default function TabLayout() {
    const colorScheme = useColorScheme()
    const { user } = useAuth()
-   const { loading, restaurant } = useRestaurant(user?.id!)
+   const { loading, restaurant } = useRestaurant(user?.id || '')
    useNotifications()
    if (loading) return null
    if (!user || user.type !== 'business') return <Redirect href={'/(tabs)/(restaurants)'} />

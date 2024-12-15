@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable no-undef */
 'use strict'
 Object.defineProperty(exports, '__esModule', { value: true })
 exports.NOTIFICATION_TYPE =

@@ -1,6 +1,10 @@
 import { useMemo, useRef, useImperativeHandle, forwardRef, useCallback } from 'react'
 import { Button, Keyboard, StyleSheet } from 'react-native'
-import BottomSheet, { BottomSheetBackdrop, BottomSheetTextInput } from '@gorhom/bottom-sheet'
+import BottomSheet, {
+   BottomSheetBackdrop,
+   BottomSheetBackdropProps,
+   BottomSheetTextInput
+} from '@gorhom/bottom-sheet'
 import { View } from './ThemedView'
 import { SIZES } from '@/constants/Colors'
 import { useThemeColor } from '@/hooks/useThemeColor'
@@ -24,7 +28,7 @@ const BottomSheetModal = forwardRef<BottomSheetModalRef, BottomSheetModalProps>(
       const textColor = useThemeColor('text')
       const snapPoints = useMemo(() => ['25%', '50%', '75%'], [])
       const renderBackdrop = useCallback(
-         (props: any) => (
+         (props: BottomSheetBackdropProps) => (
             <BottomSheetBackdrop
                {...props}
                disappearsOnIndex={0}

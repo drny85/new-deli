@@ -20,12 +20,12 @@ const DELTA = {
 }
 
 type Props = {
-   listRef: React.RefObject<Animated.FlatList<any>>
+   listRef: React.RefObject<Animated.FlatList>
    restaurants: Business[]
    mapRef: React.RefObject<MapView>
 }
 const PickupRestaurantsList = ({ listRef, mapRef, restaurants }: Props) => {
-   let animatedX = new Animated.Value(0)
+   const animatedX = new Animated.Value(0)
    const backgroundColor = useThemeColor('background')
    const { setRestaurant } = useRestaurantsStore()
    const [index, setIndex] = useState<number>(0)
@@ -96,10 +96,11 @@ const PickupRestaurantsList = ({ listRef, mapRef, restaurants }: Props) => {
             if (mapIndex !== i) {
                mapIndex = i
                const { coords } = restaurants[i]
+               if (!coords) return
                mapRef.current?.animateToRegion(
                   {
-                     latitude: coords?.latitude!,
-                     longitude: coords?.longitude!,
+                     latitude: coords?.latitude,
+                     longitude: coords?.longitude,
                      ...DELTA
                   },
                   350

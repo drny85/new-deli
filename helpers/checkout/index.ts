@@ -15,7 +15,7 @@ export const calculateDistanceBetweenDeliveryAddressResturant = (
    if (orderType === 'delivery') {
       if (!restaurant || !restaurant?.coords) return false
       if (restaurant?.deliveryType === 'zips') {
-         const zip = extractZipCode(deliveryAddress?.street!)
+         const zip = extractZipCode(deliveryAddress?.street)
          if (zip === 2) return false
 
          if (!restaurant?.zips?.includes(zip)) {
@@ -30,12 +30,12 @@ export const calculateDistanceBetweenDeliveryAddressResturant = (
       } else if (restaurant?.deliveryType === 'miles') {
          if (!restaurant?.coords) return false
          const loc1 = {
-            latitude: deliveryAddress?.coords.latitude!,
-            longitude: deliveryAddress?.coords.longitude!
+            latitude: deliveryAddress?.coords.latitude,
+            longitude: deliveryAddress?.coords.longitude
          }
          const loc2 = {
-            latitude: restaurant?.coords?.latitude!,
-            longitude: restaurant?.coords?.longitude!
+            latitude: restaurant?.coords?.latitude,
+            longitude: restaurant?.coords?.longitude
          }
 
          const distance = getDistanceFromLatLonInMeters(loc1, loc2)
@@ -48,6 +48,8 @@ export const calculateDistanceBetweenDeliveryAddressResturant = (
 
             return false
          }
+         return true
+      } else {
          return true
       }
    }

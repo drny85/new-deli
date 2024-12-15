@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 import { Feather } from '@expo/vector-icons'
 import AnimatedLottieView from 'lottie-react-native'
 import { MotiView } from 'moti'
@@ -13,7 +14,7 @@ import Animated from 'react-native-reanimated'
 import { useBusinessOrdersStore } from '@/stores/businessOrders'
 import { Text } from './ThemedText'
 
-let TIME_OUT: NodeJS.Timeout | null = null
+const TIME_OUT: NodeJS.Timeout | null = null
 
 type Props = {
    code: number

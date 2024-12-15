@@ -7,7 +7,7 @@ import Input from '@/components/Input'
 import { View } from '@/components/ThemedView'
 import { SIZES } from '@/constants/Colors'
 import { useAuth } from '@/providers/authProvider'
-import { Redirect, router, useLocalSearchParams } from 'expo-router'
+import { Redirect, Route, router, useLocalSearchParams } from 'expo-router'
 
 import Loading from '@/components/Loading'
 import Row from '@/components/Row'
@@ -70,7 +70,7 @@ const Signup = () => {
       }
    }, [])
 
-   if (user) return <Redirect href={params.returnUrl as any} />
+   if (user) return <Redirect href={params.returnUrl as Route} />
 
    if (isSubmitting) return <Loading />
 

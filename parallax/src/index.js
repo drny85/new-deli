@@ -1,7 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
+/* eslint-disable no-undef */
 import React, { Component, createRef } from 'react'
 import { Animated, Dimensions, ScrollView, View } from 'react-native'
 
-const styles = require('./styles')
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const styles = require('./styles').default
 
 import { bool, func, number, string } from 'prop-types'
 

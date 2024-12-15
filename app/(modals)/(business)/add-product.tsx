@@ -54,8 +54,8 @@ const AddProduct = () => {
    const { productId } = useLocalSearchParams<{ productId: string }>()
    const { photo, loading, selectedImage, handleImageUpload, uploadPhoto, resetAll } = usePhoto()
    const [variations, setVariations] = useState<P_Size[]>([])
-   const { loading: loadingCategories, categories } = useAllCategories([user?.id!])
-   const { product: selectedProduct } = useProduct(user?.id!, productId!)
+   const { loading: loadingCategories, categories } = useAllCategories([user?.id || ''])
+   const { product: selectedProduct } = useProduct(user?.id || '', productId)
    const [showCategoryModal, setShowCategoryModal] = useState(false)
    const [category, setCategory] = useState<Category | null>(null)
    const [sizeMode, setSizeMode] = useState<'sizes' | 'addons' | 'none' | 'multiple'>('none')
@@ -100,7 +100,7 @@ const AddProduct = () => {
       price: '',
       category: category ? category : null,
       description: '',
-      businessId: user?.id!,
+      businessId: user?.id || '',
       unitSold: 0,
       sizes: variations.length > 0 ? variations.map((v) => ({ ...v, price: +v.price })) : [],
       available: true,
@@ -149,10 +149,6 @@ const AddProduct = () => {
          )
 
          setReadyToUpload(res)
-      } catch (error) {
-         console.log('Error adding produnct', error)
-      }
-      try {
       } catch (error) {
          console.log('Error adding produnct', error)
       }
@@ -208,7 +204,7 @@ const AddProduct = () => {
          price: '',
          category: null,
          description: '',
-         businessId: user?.id!,
+         businessId: user?.id || '',
          unitSold: 0,
          sizes: [],
          available: true,
@@ -838,7 +834,7 @@ const AddProduct = () => {
                            key={cat.id}
                            index={index}
                            setIndex={() => {}}
-                           setSelected={(c) => {}}
+                           setSelected={() => {}}
                            item={cat}
                            selected={category?.name || ''}
                            onCategoryPress={(c) => {

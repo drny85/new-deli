@@ -27,7 +27,7 @@ const Couriers = () => {
    const { user } = useAuth()
    const ascentColor = useThemeColor('ascent')
    const textColor = useThemeColor('text')
-   const { restaurant, loading } = useRestaurant(user?.id!)
+   const { restaurant, loading } = useRestaurant(user?.id || '')
    const { loading: loadingCouriers, couriers: data } = useCouriers()
    const [submitting, setSubmitting] = useState(false)
    const [option, setOption] = useState(0)

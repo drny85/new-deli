@@ -1,12 +1,6 @@
 import { FontAwesome } from '@expo/vector-icons'
 import React, { useState } from 'react'
-import {
-   Appearance,
-   StyleSheet,
-   View,
-   TouchableWithoutFeedback,
-   useColorScheme
-} from 'react-native'
+import { Appearance, StyleSheet, TouchableWithoutFeedback, useColorScheme } from 'react-native'
 import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated'
 const ICON_SIZE = 70
 const ThemeToggle = () => {

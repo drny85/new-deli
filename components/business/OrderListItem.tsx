@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 import { SIZES } from '@/constants/Colors'
 import { Order, ORDER_TYPE } from '@/shared/types'
 import { dayjsFormat } from '@/utils/dayjs'
@@ -6,7 +7,7 @@ import { statusColor } from '@/utils/statusColor'
 import { Image } from 'expo-image'
 import { router } from 'expo-router'
 import { TouchableOpacity } from 'react-native'
-import NeoView from '../NeoView'
+
 import Row from '../Row'
 import { Text } from '../ThemedText'
 import { View } from '../ThemedView'

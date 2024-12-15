@@ -9,7 +9,7 @@ export const useCouriers = () => {
    const [couriers, setCouriers] = useState<Courier[]>([])
    const [loading, setLoading] = useState(false)
    const { user } = useAuth()
-   const { restaurant } = useRestaurant(user?.id!)
+   const { restaurant } = useRestaurant(user?.id || '')
    const activeCouriers = useMemo(() => {
       return restaurant?.couriers.map((c) => c.id)
    }, [restaurant?.couriers])

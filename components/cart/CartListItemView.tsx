@@ -79,7 +79,7 @@ const CartListItemView = ({ cart }: Props) => {
             <Row containerStyle={{ gap: SIZES.sm }}>
                <Pressable onPress={goToStore}>
                   <Image
-                     source={{ uri: restaurant?.image! }}
+                     source={{ uri: restaurant?.image || '' }}
                      //transition={300}
                      style={{
                         width: IMAGE_HEIGHT,

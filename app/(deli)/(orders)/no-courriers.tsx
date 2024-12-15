@@ -21,7 +21,9 @@ const NoCourriers = () => {
                   router.back()
                } else {
                   console.log('cannot go back')
-                  router.canDismiss() && router.dismiss()
+                  if (router.canDismiss()) {
+                     router.dismiss()
+                  }
                }
             }}
          />

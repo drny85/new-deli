@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 import * as Device from 'expo-device'
 import * as Notifications from 'expo-notifications'
 import { useEffect, useRef } from 'react'
@@ -9,7 +10,7 @@ import { useAuth } from '@/providers/authProvider'
 import { usersCollection } from '@/collections'
 
 Notifications.setNotificationHandler({
-   handleNotification: async (notification) => {
+   handleNotification: async () => {
       return {
          shouldShowAlert: true,
          shouldPlaySound: true,
@@ -20,8 +21,8 @@ Notifications.setNotificationHandler({
 
 export const useNotifications = () => {
    const nColor = useThemeColor('ascent')
-   const notificationListener = useRef<any>()
-   const responseListener = useRef<any>()
+   const notificationListener = useRef<Notifications.EventSubscription | undefined>(undefined)
+   const responseListener = useRef<Notifications.EventSubscription | undefined>(undefined)
    const { user } = useAuth()
 
    useEffect(() => {
@@ -77,7 +78,7 @@ export const useNotifications = () => {
                projectId: Constants.expoConfig?.extra?.eas.projectId
             })
             console.log('Push token', token)
-            if (token) await assignTokenToUser(user?.id!, token.data)
+            if (token && user?.id) await assignTokenToUser(user?.id, token.data)
 
             if (Platform.OS === 'android') {
                Notifications.setNotificationChannelAsync('default', {
@@ -89,7 +90,7 @@ export const useNotifications = () => {
             }
          }
       } catch (error) {
-         const err = error as any
+         const err = error as unknown as Error
          console.log('Error from useNotifications hooks', err.message)
       }
    }

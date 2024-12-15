@@ -1,8 +1,8 @@
-import { View, Text, TouchableOpacity } from 'react-native'
+import { TouchableOpacity } from 'react-native'
 import React from 'react'
 import NeoView from './NeoView'
-import { SymbolView } from 'expo-symbols'
 import * as Linking from 'expo-linking'
+import { AntDesign } from '@expo/vector-icons'
 
 type Props = {
    phone: string
@@ -28,7 +28,7 @@ const PhoneCall = ({ phone, size }: Props) => {
    return (
       <NeoView rounded size={size || 46}>
          <TouchableOpacity onPress={onPressCall}>
-            <SymbolView name="phone" size={size ? size * 0.6 : 46 * 0.6} />
+            <AntDesign name="phone" size={size ? size * 0.6 : 46 * 0.6} />
          </TouchableOpacity>
       </NeoView>
    )

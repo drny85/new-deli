@@ -2,7 +2,6 @@
 import {
    useSharedValue,
    useAnimatedStyle,
-   withRepeat,
    withSequence,
    withTiming,
    Easing

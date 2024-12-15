@@ -149,7 +149,7 @@ const CourierDetails = () => {
                      <View style={{ gap: SIZES.sm * 0.5 }}>
                         <Text>{courier?.email}</Text>
                         <Text>{courier?.phone}</Text>
-                        <PhoneCall phone={courier?.phone!} size={50} />
+                        <PhoneCall phone={courier?.phone || ''} size={50} />
                      </View>
                   </View>
                </Row>

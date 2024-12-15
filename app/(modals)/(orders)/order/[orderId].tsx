@@ -48,12 +48,12 @@ const OrderDetails = () => {
    const { setOrderType, reOrder } = useOrderFlowStore()
    const { order, loading } = useOrder(orderId!)
    const restaurant = restaurants.find((r) => r.id === order?.businessId)
-   const location = useDriverLocation(order?.courier?.id!)
+   const location = useDriverLocation(order?.courier?.id || '')
 
    useEffect(() => {
       if (!order || reOrder) return
       removeCart(order?.businessId)
-      setOrderType('delivery')
+      setOrderType(ORDER_TYPE.delivery)
    }, [order])
 
    useEffect(() => {
@@ -74,8 +74,8 @@ const OrderDetails = () => {
       try {
          console.log('Fetching ETA')
          const duration = await getDurationFromGoogleMaps(
-            location?.location!,
-            order?.address?.coords!,
+            location?.location,
+            order?.address?.coords,
             process.env.EXPO_PUBLIC_GOOGLE_API!
          )
          if (duration !== null) {
@@ -132,7 +132,7 @@ const OrderDetails = () => {
                      </Text>
                      <Text type="muted">{restaurant?.phone}</Text>
                   </View>
-                  <PhoneCall phone={restaurant?.phone!} size={50} />
+                  <PhoneCall phone={restaurant?.phone || ''} size={50} />
                </Row>
                <View style={{ flex: 1, marginTop: SIZES.sm, marginBottom: 60 }}>
                   {order?.otpPickup && (
@@ -145,9 +145,9 @@ const OrderDetails = () => {
                   <OrderProgress
                      eta={eta || 10}
                      onRefresh={fetchEAT}
-                     status={order?.status!}
-                     orderType={order?.orderType!}
-                     orderDate={order?.orderDate!}
+                     status={order?.status}
+                     orderType={order?.orderType}
+                     orderDate={order?.orderDate}
                   />
                </View>
             </ScrollView>
@@ -196,9 +196,9 @@ const OrderDetails = () => {
                </ScrollView>
                <TotalView
                   businessOrderType={order.orderType}
-                  cartQuantity={order?.items.reduce((acc, curr) => curr.quantity + acc, 0)!}
+                  cartQuantity={order?.items.reduce((acc, curr) => curr.quantity + acc, 0)}
                   showFees={true}
-                  cartTotal={order?.total!}
+                  cartTotal={order?.total}
                   onPress={() => {}}
                />
             </View>

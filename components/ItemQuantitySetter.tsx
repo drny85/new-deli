@@ -8,14 +8,6 @@ import NeoView from './NeoView'
 import Row from './Row'
 import { Text } from './ThemedText'
 
-import Animated, {
-   FadeIn,
-   FadeInLeft,
-   FadeInRight,
-   FadeOut,
-   FadeOutLeft
-} from 'react-native-reanimated'
-
 type Props = {
    quantity: number
    onPressAdd: () => void

@@ -18,8 +18,8 @@ export const useFeaturesStore = create<FeaturesParams>((set) => ({
    setPopupParams: (params) =>
       set(() => ({
          popupParams: {
-            title: params?.title!,
-            description: params?.description!
+            title: params?.title || '',
+            description: params?.description || ''
          }
       })),
 

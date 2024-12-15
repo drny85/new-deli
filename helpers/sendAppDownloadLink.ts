@@ -14,7 +14,7 @@ export const sendAppDoanloadLink = async (
          return false
       } else {
          Linking.openURL(smsUrl)
-            .then((res) => {
+            .then(() => {
                Alert.alert('Success', 'SMS sent successfully')
                return true
             })

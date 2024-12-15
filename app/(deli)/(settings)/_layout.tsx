@@ -17,7 +17,7 @@ const SettingsBusinessLayout = () => {
       if (!user) return
       try {
          setLoading(true)
-         const { data } = await getStripeExpressLink({ businessId: user?.id!, mode: 'test' })
+         const { data } = await getStripeExpressLink({ businessId: user?.id || '', mode: 'test' })
          const { success, result } = data
          console.log(data)
          if (success && result) {

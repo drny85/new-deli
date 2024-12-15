@@ -13,7 +13,11 @@ import {
    TouchableOpacity
 } from 'react-native'
 
-import BottomSheet, { BottomSheetBackdrop, BottomSheetTextInput } from '@gorhom/bottom-sheet'
+import BottomSheet, {
+   BottomSheetBackdrop,
+   BottomSheetBackdropProps,
+   BottomSheetTextInput
+} from '@gorhom/bottom-sheet'
 import { router } from 'expo-router'
 
 import { useNotifications } from '../hooks/useNotification'
@@ -46,7 +50,6 @@ export default function ModernSettingsPage() {
    const { photo, selectedImage, handleImageUpload, resetAll, uploadPhoto } = usePhoto()
    const deleteColor = useThemeColor('error')
    const bgColor = useThemeColor('background')
-   const secondaryColor = useThemeColor('primary')
    const [showEditModal, setShowEditModal] = useState(false)
 
    const bottomSheetRef = useRef<BottomSheet>(null)
@@ -98,7 +101,9 @@ export default function ModernSettingsPage() {
    })
 
    const renderBackdrop = useCallback(
-      (props: any) => <BottomSheetBackdrop {...props} disappearsOnIndex={-1} appearsOnIndex={0} />,
+      (props: BottomSheetBackdropProps) => (
+         <BottomSheetBackdrop {...props} disappearsOnIndex={-1} appearsOnIndex={0} />
+      ),
       []
    )
 
@@ -197,7 +202,9 @@ export default function ModernSettingsPage() {
 
       if (photo && photo?.assets![0].uri && !selectedImage) {
          console.log('Uploading photo')
-         uploadPhoto(photo, user?.id!)
+         if (user.id) {
+            uploadPhoto(photo, user?.id)
+         }
       }
    }, [photo, selectedImage])
 
@@ -475,7 +482,7 @@ export default function ModernSettingsPage() {
                            padding: SIZES.sm,
                            backgroundColor: 'rgba(151, 151, 151, 0.25)'
                         }}
-                        defaultValue={user?.phone!}
+                        defaultValue={user?.phone || ''}
                         placeholder="Cell Phone Number"
                         value={phone}
                         keyboardType="numeric"
@@ -516,7 +523,7 @@ export default function ModernSettingsPage() {
 
                                              resetForm()
                                           } catch (error) {
-                                             console.log('Error updating info')
+                                             console.log('Error updating info', error)
                                           }
                                        }
                                     }

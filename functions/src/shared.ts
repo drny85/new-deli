@@ -20,7 +20,7 @@ export const assignUserType = async (uid: string, type: string) => {
          type: type
       })
    } catch (error) {
-      const err = error as any
+      const err = error as unknown as Error
       throw new functions.https.HttpsError('aborted', 'error assigning user type', err.message)
    }
 }
@@ -93,8 +93,8 @@ export const sendPushNotification = async (
 
       console.log('Notification sent successfully:', response.data.status)
    } catch (error) {
-      const err = error as any
-      console.error('Error sending notification:', err.response ? err.response.data : err.message)
+      const err = error
+      console.error('Error sending notification:', err)
    }
 }
 

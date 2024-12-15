@@ -14,16 +14,15 @@ import { concatenateAndReturnNotInArray1 } from '@/helpers/concatinateArrays'
 import { onlyLetters } from '@/helpers/onlyLetters'
 import { useThemeColor } from '@/hooks/useThemeColor'
 import { useRestaurantsStore } from '@/stores/restaurantsStore'
-import { toastAlert, toastMessage } from '@/utils/toast'
 import SegmentedControl from '@react-native-segmented-control/segmented-control'
 import { router } from 'expo-router'
+import { toast } from 'sonner-native'
 
 const BusinessCatyegories = () => {
    const { user } = useAuth()
-
    const ascentColor = useThemeColor('ascent')
    const { restaurants } = useRestaurantsStore()
-   const { categories, loading } = useAllCategories([user?.id!])
+   const { categories, loading } = useAllCategories([user?.id || ''])
    const { categories: cats, loading: lod } = useAllCategories([...restaurants.map((r) => r.id!)])
    const [category, setCategoty] = useState('')
    const data = useMemo(() => concatenateAndReturnNotInArray1(cats, categories), [categories, cats])
@@ -35,22 +34,19 @@ const BusinessCatyegories = () => {
          if (!category) return
          if (categories.some((c) => c.name.toLowerCase() === category.toLowerCase())) {
             setIndex(1)
-            return toastAlert({
-               title: 'Error',
-               preset: 'error',
-               message: 'Category already exists \n Select cayegory from the list'
+            return toast.error('Category already exists', {
+               description: 'Select category from the list'
             })
          }
-
-         const added = await addCategory({ name: category }, user?.id!)
+         if (!user) return
+         const added = await addCategory({ name: category }, user?.id || '')
          if (added) {
             setCategoty('')
             setIndex(1)
-            toastMessage({
-               title: 'Success',
-               preset: 'done',
-               message: 'Category added successfully'
+            toast.success('Success', {
+               description: 'Category added successfully'
             })
+
             router.back()
          }
       } catch (error) {

@@ -7,7 +7,7 @@ import Input from '@/components/Input'
 import { View } from '@/components/ThemedView'
 import { SIZES } from '@/constants/Colors'
 import { useAuth } from '@/providers/authProvider'
-import { Link, Redirect, useLocalSearchParams } from 'expo-router'
+import { Link, Redirect, Route, useLocalSearchParams } from 'expo-router'
 
 import Loading from '@/components/Loading'
 import Row from '@/components/Row'
@@ -15,7 +15,7 @@ import { Text } from '@/components/ThemedText'
 import { useThemeColor } from '@/hooks/useThemeColor'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Controller, useForm } from 'react-hook-form'
-import { KeyboardAvoidingView, Platform, useColorScheme } from 'react-native'
+import { Platform, useColorScheme } from 'react-native'
 import { z } from 'zod'
 import { useEffect, useState } from 'react'
 import { FontAwesome } from '@expo/vector-icons'
@@ -71,7 +71,7 @@ const Login = () => {
       }
    }, [])
 
-   if (user && user.type === 'consumer') return <Redirect href={params.returnUrl as any} />
+   if (user && user.type === 'consumer') return <Redirect href={params.returnUrl as Route} />
    if (user && user.type === 'business') return <Redirect href={'/(deli)/home'} />
 
    if (isSubmitting) return <Loading />

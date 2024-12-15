@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 import { SIZES } from '@/constants/Colors'
 import { CardData } from '@/shared/types'
 import { Image } from 'expo-image'

@@ -8,7 +8,7 @@ type BusinessOrderPrams = {
    setOrders: (orders: Order[]) => void
 }
 
-export const useBusinessOrdersStore = create<BusinessOrderPrams>()((set, get) => ({
+export const useBusinessOrdersStore = create<BusinessOrderPrams>()((set) => ({
    orders: [],
    showOtp: false,
    setShowOtp: (showOtp) => set({ showOtp }),

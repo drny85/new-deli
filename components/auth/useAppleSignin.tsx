@@ -68,7 +68,7 @@ const SigninWithApple = () => {
                   ]
                })
 
-               const { identityToken, fullName, email } = response
+               const { identityToken, fullName } = response
 
                if (!identityToken) {
                   throw new Error('No identityToken')
@@ -85,8 +85,8 @@ const SigninWithApple = () => {
                await createOrSignInFirebaseUser(user, fullName)
 
                // signed in
-            } catch (e: any) {
-               if (e.code === 'ERR_REQUEST_CANCELED') {
+            } catch (e) {
+               if (e) {
                   // handle that the user canceled the sign-in flow
                   toast.warning('Sign In Canceled', {
                      description: 'You canceled this request',

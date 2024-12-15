@@ -2,7 +2,7 @@
 
 declare module 'react-native-parallax-scroll-view' {
    import { Component } from 'react'
-   import { ScrollViewProps, ViewStyle, ImageStyle, TextStyle } from 'react-native'
+   import { ScrollViewProps, ViewStyle } from 'react-native'
 
    export interface ParallaxScrollViewProps extends ScrollViewProps {
       backgroundColor?: string

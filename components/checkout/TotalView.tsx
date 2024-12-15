@@ -1,5 +1,4 @@
 import { SIZES } from '@/constants/Colors'
-import { globalStyle } from '@/constants/styles'
 import { useThemeColor } from '@/hooks/useThemeColor'
 import { useOrderFlowStore } from '@/stores/orderFlowStore'
 import { stripeFee } from '@/utils/stripeFee'

@@ -3,14 +3,15 @@ import React from 'react'
 import { SIZES } from '@/constants/Colors'
 import { globalStyle } from '@/constants/styles'
 import { useThemeColor } from '@/hooks/useThemeColor'
+import { Category } from '@/shared/types'
 
 type Props = {
-   item: any
+   item: Category
    index: number
    selected: string
    setIndex: (index: number) => void
    setSelected: (category: string) => void
-   onCategoryPress: (category: any) => void
+   onCategoryPress: (category: Category) => void
 }
 const CategoryTitle = ({
    index,

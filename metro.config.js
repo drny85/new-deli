@@ -1,8 +1,9 @@
-const { getDefaultConfig } = require('expo/metro-config')
+/* eslint-disable no-undef */
+import { getDefaultConfig } from 'expo/metro-config'
 
 /** @type {import('expo/metro-config').MetroConfig} */
 const config = getDefaultConfig(__dirname, {
    // Additional features...
 })
 
-module.exports = config
+export default config

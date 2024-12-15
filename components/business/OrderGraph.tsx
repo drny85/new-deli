@@ -1,3 +1,4 @@
+/* eslint-disable no-unsafe-optional-chaining */
 import { SIZES } from '@/constants/Colors'
 import { useThemeColor } from '@/hooks/useThemeColor'
 import { Filter, Order } from '@/shared/types'
@@ -39,14 +40,14 @@ const GraphComponent: React.FC<GraphComponentProps> = ({ orders }) => {
                  ? 'Year To Date'
                  : 'All Time'
 
-   const transformDataForPieChart = (values: any[]): pieDataItem[] => {
+   const transformDataForPieChart = (values: pieDataItem[]): pieDataItem[] => {
       // Determine the maximum value in categorized data for the "focused" property
       const maxValue = Math.max(...values?.map(({ value }) => value), 0)
 
-      return values.map(({ label, value }) => ({
+      return values.map(({ text, value }) => ({
          value,
          color: getRandomColor(), // Generate random colors for the chart
-         text: label, // Use category (e.g., Morning, Afternoon, etc.) as text
+         text, // Use category (e.g., Morning, Afternoon, etc.) as text
          focused: value === maxValue
 
          // Mark the highest value as focused

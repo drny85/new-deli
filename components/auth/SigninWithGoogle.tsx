@@ -26,6 +26,7 @@ const SigninWithGoogle = () => {
       androidClientId: '1079176907860-a88guem03pcas0kg9met2c4ejagetapf.apps.googleusercontent.com',
       webClientId: process.env.EXPO_PUBLIC_EXPO_WEB_CLIENT_ID
    })
+   console.log(request?.nonce)
 
    const createOrSignInFirebaseUser = useCallback(async (user: User) => {
       try {

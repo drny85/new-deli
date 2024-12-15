@@ -16,7 +16,7 @@ const StripeOnboarding = () => {
    const { url } = useLocalSearchParams<{ url: string }>()
    const ascentColor = useThemeColor('ascent')
    const { user } = useAuth()
-   const { restaurant } = useRestaurant(user?.id!)
+   const { restaurant } = useRestaurant(user?.id || '')
 
    console.log('RES', JSON.stringify(restaurant, null, 2))
 

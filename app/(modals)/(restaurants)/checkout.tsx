@@ -108,9 +108,9 @@ const Checkout = () => {
          address: deliveryAddress,
          contactPerson: {
             userId: user.id,
-            name: user?.name!,
-            lastName: user?.lastName!,
-            phone: user?.phone!
+            name: user?.name || '',
+            lastName: user?.lastName || '',
+            phone: user?.phone || ''
          },
          tip: {
             amount: tipAmount,

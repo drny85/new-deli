@@ -46,30 +46,17 @@ const Restaurants = () => {
    const restaurantsByDistance = useMemo(() => {
       if (!currentLocationCoords && !deliveryAddress) return resultsAll
 
-      if (currentLocationCoords && !deliveryAddress) {
-         return resultsAll.map((r) => ({
-            ...r,
-            distance: getDistanceFromLatLonInMeters(r.coords!, {
-               latitude: currentLocationCoords.latitude!,
-               longitude: currentLocationCoords.longitude!
-            })
-         }))
-      }
+      const referenceCoords = deliveryAddress?.coords || currentLocationCoords
+      if (!referenceCoords) return resultsAll
+
       return resultsAll
+         .filter((r) => r.coords) // Ensure restaurants have valid coordinates
          .map((r) => ({
             ...r,
-            distance: getDistanceFromLatLonInMeters(r.coords!, deliveryAddress?.coords!)
+            distance: getDistanceFromLatLonInMeters(r.coords, referenceCoords)
          }))
          .sort((a, b) => a.distance - b.distance)
-   }, [currentLocationCoords, deliveryAddress, selectedCategory, restaurants])
-
-   // const results = useMemo(() => {
-   //    if (viewByDistance) {
-   //       return restaurantsByDistance
-   //    }
-   //    return resultsAll
-   // }, [restaurantsByDistance, resultsAll, viewByDistance])
-
+   }, [currentLocationCoords, deliveryAddress, resultsAll])
    const onValueChange = (value: string) => {
       // Update the input value state
       setValue(value)

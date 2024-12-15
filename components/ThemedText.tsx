@@ -24,8 +24,6 @@ export type ThemedTextProps = TextProps & {
 
 export function Text({
    style,
-   lightColor,
-   darkColor,
    textColor,
    fontSize,
    center,

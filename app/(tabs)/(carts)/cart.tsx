@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 import Button from '@/components/Button'
 import CartListItemView from '@/components/cart/CartListItemView'
 import { Container } from '@/components/Container'

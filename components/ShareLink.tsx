@@ -12,7 +12,7 @@ type Props = {
    ascentColor?: boolean
    cartId?: string
    disabled?: boolean
-   params?: {}
+   params?: { [key: string]: string }
 }
 
 const SITE_URL = process.env.EXPO_PUBLIC_WEBSITE_URL

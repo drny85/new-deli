@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 import { updateBusiness } from '@/actions/business'
 import Button from '@/components/Button'
 import { Container } from '@/components/Container'
@@ -36,7 +37,7 @@ const Onboarding = () => {
    useUser()
    const { user, logOut } = useAuth()
    const [processing, setProcessing] = useState(false)
-   const { restaurant, loading } = useRestaurant(user?.id!)
+   const { restaurant, loading } = useRestaurant(user?.id || '')
    const googleRef = useRef<GooglePlacesAutocompleteRef>(null)
    const textColor = useThemeColor('text')
    const [userRecord, setUserRecord] = useState<User | null>(null)
@@ -46,7 +47,7 @@ const Onboarding = () => {
    const [restaurantData, setRestaurantData] = useState<Business | null>(null)
    const bgColor = useThemeColor('background')
 
-   const { handleImageUpload, photo, selectedImage, uploadPhoto, resetAll, progress } = usePhoto()
+   const { handleImageUpload, photo, selectedImage, uploadPhoto, progress } = usePhoto()
 
    const updateRestaurant = async () => {
       try {
@@ -76,7 +77,8 @@ const Onboarding = () => {
          const { name, phone, address, owner } = res
          const params: ConnectedAccountParams = {
             businessName: name,
-            phone: phone?.replace(/[^\d\+]/g, '')!,
+            // eslint-disable-next-line no-useless-escape
+            phone: phone?.replace(/[^\d\+]/g, '') || '',
             address: address!,
             lastName: owner.lastName,
             name: owner.name,
@@ -109,7 +111,7 @@ const Onboarding = () => {
          setRestaurantData({ ...restaurantData!, image: selectedImage })
          updateBusiness({ ...restaurantData!, image: selectedImage })
 
-         getParamsUrl({ ...restaurantData!, image: selectedImage, phone: user?.phone! })
+         getParamsUrl({ ...restaurantData!, image: selectedImage, phone: user?.phone || '' })
       }
    }, [selectedImage, continueToPayment])
 
@@ -242,7 +244,7 @@ const Onboarding = () => {
                            <Input
                               ref={phoneRef}
                               title={`${restaurantData?.name}'s phone number`}
-                              value={restaurantData?.phone!}
+                              value={restaurantData?.phone || ''}
                               onChangeText={(text) => {
                                  setRestaurantData({
                                     ...restaurantData!,

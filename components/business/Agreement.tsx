@@ -5,11 +5,11 @@ import { View } from '../ThemedView'
 import { Text } from '../ThemedText'
 import { useRestaurantsStore } from '@/stores/restaurantsStore'
 import { dayjsFormat } from '@/utils/dayjs'
-import { toastAlert } from '@/utils/toast'
 import { updateBusiness } from '@/actions/business'
-import { router, useLocalSearchParams } from 'expo-router'
+import { Route, router, useLocalSearchParams } from 'expo-router'
 import { useAuth } from '@/providers/authProvider'
 import { useThemeColor } from '@/hooks/useThemeColor'
+import { toast } from 'sonner-native'
 
 type Props = {
    onPressDisagree: () => void
@@ -30,15 +30,14 @@ const TermsOfUse = ({ onPressDisagree }: Props) => {
       })
       router.dismissAll()
       if (returnUrl) {
-         router.push(returnUrl as any)
+         router.push(returnUrl as Route)
       } else {
          router.back()
       }
-      toastAlert({
-         title: 'Terms of Use',
-         message: 'You have agreed to the Terms of Use.',
-         preset: 'heart'
+      toast.warning('Terms of Use', {
+         description: 'You have agreed to the Terms of Use.'
       })
+
       // Implement further actions on agreement, such as navigating to the next screen
    }
 

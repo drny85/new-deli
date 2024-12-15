@@ -1,3 +1,6 @@
+/* eslint-disable no-case-declarations */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 import * as dotenv from 'dotenv'
 import * as functions from 'firebase-functions'
 import {
@@ -30,6 +33,7 @@ getApps().length === 0 ? initializeApp() : getApp()
 
 const accountSid = process.env.TWILIO_ACCOUNT_SID
 const authToken = process.env.TWILIO_AUTH_TOKEN
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 const twilio = require('twilio')(accountSid, authToken)
 
 //import { v4 as UUID } from 'uuid'
@@ -120,7 +124,11 @@ exports.createStripeCustomer = onDocumentCreated(
 
          return assignUserType(event.params.userId, data.type)
       } catch (error) {
-         throw new functions.https.HttpsError('aborted', 'error while creating stripe customer')
+         throw new functions.https.HttpsError(
+            'aborted',
+            'error while creating stripe customer',
+            error
+         )
       }
    }
 )
@@ -237,10 +245,11 @@ exports.webhook = onRequest(
 
             case 'account.updated':
                const updated = event.data.object as Stripe.Account
+
                const { charges_enabled, details_submitted, metadata } = updated
                console.log('DETAILS => ', details_submitted, charges_enabled)
-               const bId = metadata?.businessId! as string
-               const businessType = metadata?.type! as 'business' | 'courier'
+               const bId = metadata?.businessId as string
+               const businessType = metadata?.type as 'business' | 'courier'
                if (charges_enabled) {
                   if (businessType === 'courier') {
                      await getFirestore().collection('users').doc(bId).update({
@@ -433,7 +442,8 @@ exports.addConnectedAccountToBusiness = onCall<{ accountId: string; mode?: 'live
       try {
          if (!auth) return { success: false, result: 'Not authorized' }
          const userId = auth?.uid
-         const isAuth = await isAuthorizedToGrantAccess(auth?.token.email!)
+         if (!auth.token.email) return { success: false, result: 'Not authorized' }
+         const isAuth = await isAuthorizedToGrantAccess(auth?.token.email)
 
          if (!auth || !isAuth) return { success: false, result: 'Not authorized' }
 
@@ -559,9 +569,11 @@ exports.sendOrderStatusUpdates = onDocumentUpdated(
             before.status === ORDER_STATUS.accepted_by_driver
          ) {
             title = 'Great News'
-            body = `${
-               data.courier?.name.charAt(0).toUpperCase() + data.courier?.name.slice(1)!
-            } is on his way to pick up your order`
+            body = data.courier
+               ? `${
+                    data.courier?.name.charAt(0).toUpperCase() + data.courier?.name!.slice(1)
+                 } is on his way to pick up your order`
+               : ''
          } else if (
             data.status === ORDER_STATUS.delivered &&
             before.status === ORDER_STATUS.picked_up_by_driver
@@ -612,10 +624,10 @@ exports.sendOrderStatusUpdates = onDocumentUpdated(
             data.status === ORDER_STATUS.delivered &&
             before.status === ORDER_STATUS.accepted_by_driver
          ) {
-            if (data.courier) {
+            if (data.courier?.id) {
                await getFirestore()
                   .collection('users')
-                  .doc(data.courier?.id!)
+                  .doc(data.courier?.id)
                   .update({ busy: false })
             }
          }
@@ -730,7 +742,7 @@ export const payCourier = async (orderId: string) => {
             orderId: order.id!,
             to: `${order.deliveredBy?.name} ${order.deliveredBy?.lastName}`,
             fromBusinessID: order.businessId,
-            userId: order.deliveredBy?.id!
+            userId: order.deliveredBy?.id || ''
          }
       })
 
@@ -804,19 +816,17 @@ exports.deleteUser = onCall({ secrets: [STRIPE_KEY] }, async ({ auth }): Promise
    }
 })
 
-exports.deletePendingOrdersDaily = functions.pubsub
-   .schedule('00 16 * * *')
-   .onRun(async (context) => {
-      try {
-         const orders = await getFirestore().collection('pendingOrders').get()
-         console.log(orders.size)
-         return orders.forEach(async (order) => await order.ref.delete())
-      } catch (error) {
-         console.log(error)
-         logger.error('Error deleting pending orders', error)
-         return new HttpsError('aborted', 'error deleting pending orders')
-      }
-   })
+exports.deletePendingOrdersDaily = functions.pubsub.schedule('00 16 * * *').onRun(async () => {
+   try {
+      const orders = await getFirestore().collection('pendingOrders').get()
+      console.log(orders.size)
+      return orders.forEach(async (order) => await order.ref.delete())
+   } catch (error) {
+      console.log(error)
+      logger.error('Error deleting pending orders', error)
+      return new HttpsError('aborted', 'error deleting pending orders')
+   }
+})
 
 // exports.notifyUnpickedupOrders = functions.pubsub
 //    .schedule('every hour from 08:00 to 23:00')

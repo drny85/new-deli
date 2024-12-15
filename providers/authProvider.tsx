@@ -9,6 +9,7 @@ import {
    createUserWithEmailAndPassword,
    onAuthStateChanged,
    sendEmailVerification,
+   sendPasswordResetEmail,
    signInWithEmailAndPassword,
    signOut,
    User
@@ -187,7 +188,8 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
 
    const resetPasswordEmail = async (email: string) => {
       try {
-         //   await auth().sendPasswordResetEmail(email);
+         if (!email) return
+         await sendPasswordResetEmail(auth, email)
       } catch (error) {
          console.error('Reset password error:', error)
          throw error

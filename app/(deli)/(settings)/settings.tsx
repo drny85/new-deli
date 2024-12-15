@@ -53,7 +53,7 @@ export default function BusinessSettings() {
       emailNotifications: true,
       otpPIN: true,
       byMiles: restaurant?.deliveryType === 'miles',
-      deliveryType: restaurant?.deliveryType!
+      deliveryType: restaurant?.deliveryType || 'miles'
    })
    const [zip, setZip] = useState('')
    const [miles, setMiles] = useState('')
@@ -184,6 +184,7 @@ export default function BusinessSettings() {
       if (!restaurant) return
       if (restaurant.miles) {
          setMiles(restaurant.miles.toString())
+         console.log(miles)
       }
 
       setForm({
@@ -222,7 +223,7 @@ export default function BusinessSettings() {
                   <Image
                      alt=""
                      source={{
-                        uri: photo?.assets![0].uri ? photo?.assets![0].uri : restaurant?.image!
+                        uri: photo?.assets![0].uri ? photo?.assets![0].uri : restaurant?.image
                      }}
                      style={styles.profileAvatar}
                   />
@@ -255,7 +256,7 @@ export default function BusinessSettings() {
                      onPress={
                         () => {
                            if (photo && photo?.assets![0].uri) {
-                              const updated = uploadPhoto(photo, restaurant?.id!)
+                              const updated = uploadPhoto(photo, restaurant?.id || '')
                               console.log(updated)
                            } else {
                               handleImageUpload()

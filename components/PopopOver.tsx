@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 import { SIZES } from '@/constants/Colors'
 import { useThemeColor } from '@/hooks/useThemeColor'
 import { useFeaturesStore } from '@/stores/featuresStore'

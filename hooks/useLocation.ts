@@ -13,14 +13,14 @@ export const useLocation = (address: OrderAddress | null) => {
       if (address) return
       ;(async () => {
          try {
-            let { status } = await Location.requestForegroundPermissionsAsync()
+            const { status } = await Location.requestForegroundPermissionsAsync()
             if (status !== 'granted') {
                setErrorMsg('Permission to access location was denied')
                return
             }
             setLoading(true)
 
-            let location = await Location.getCurrentPositionAsync({
+            const location = await Location.getCurrentPositionAsync({
                accuracy: Location.Accuracy.High
             })
             if (location) {

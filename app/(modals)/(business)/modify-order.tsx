@@ -16,15 +16,16 @@ import { Text } from '@/components/ThemedText'
 import { View } from '@/components/ThemedView'
 import { SIZES } from '@/constants/Colors'
 import { useOrder } from '@/hooks/orders/useOrder'
-import { CartItem } from '@/stores/cartsStore'
-import { Order, ORDER_STATUS, ORDER_TYPE } from '@/shared/types'
+
+import { CartItem, Order, ORDER_STATUS, ORDER_TYPE } from '@/shared/types'
 import { dayjsFormat } from '@/utils/dayjs'
 import { STATUS_NAME } from '@/utils/orderStatus'
-import { toastMessage } from '@/utils/toast'
+
 import { FontAwesome } from '@expo/vector-icons'
 import { router, useLocalSearchParams } from 'expo-router'
 import { useState } from 'react'
 import { Alert, ScrollView, TouchableOpacity } from 'react-native'
+import { toast } from 'sonner-native'
 
 const ModifyOrder = () => {
    const { orderId } = useLocalSearchParams<{
@@ -57,11 +58,8 @@ const ModifyOrder = () => {
          const updated = await updateOrder({ ...updatedOrder })
          if (updated) {
             setEditApt(false)
-            toastMessage({
-               title: 'Success',
-               preset: 'done',
-
-               message: 'Apt / Flr /Suite updated'
+            toast.success('Success', {
+               description: 'Apt / Flr /Suite updated'
             })
          }
       } catch (error) {
@@ -103,11 +101,10 @@ const ModifyOrder = () => {
          }
          const success = await updateOrder(updatedOrder)
          if (success) {
-            toastMessage({
-               title: 'Removed',
-               preset: 'done',
-               message: `${item.quantity}x ${item.name} removed`
+            toast.success('Success', {
+               description: 'Item removed'
             })
+
             handlePartialRefund(order, removeAmount)
          }
       } catch (error) {

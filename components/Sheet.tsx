@@ -16,17 +16,7 @@ type SheetProps = React.ComponentPropsWithoutRef<typeof BottomSheetModal> & {
 }
 
 const Sheet = React.forwardRef<BottomSheetModal, SheetProps>(
-   (
-      {
-         index = 0,
-         backgroundStyle,
-         style,
-         handleIndicatorStyle,
-         pressBahavior = 'close',
-         ...props
-      },
-      ref
-   ) => {
+   ({ backgroundStyle, style, handleIndicatorStyle, pressBahavior = 'close', ...props }, ref) => {
       const bgColor = useThemeColor('primary')
       const sColor = useThemeColor('secondary')
 

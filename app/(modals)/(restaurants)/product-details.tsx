@@ -114,7 +114,7 @@ const ProductDetail = () => {
          ...product!,
          itemId: new Date().getTime().toString(),
          addons: selectedAddons,
-         price: selected?.price || product?.price!,
+         price: selected?.price || product?.price || 0,
          size: selected,
          quantity,
          instructions
@@ -294,18 +294,15 @@ const ProductDetail = () => {
                resizeMode="cover"
                blurRadius={0.5}
                animate={styles.image1}
-               //@ts-ignore
-               transition={{ duration: 800, type: 'timing' }}
+               transition={{ duration: 800 }}
             />
 
             <Image
                from={{ rotate: '0deg' }}
                animate={{ rotate: '360deg' }}
-               //@ts-ignore
                transition={{
                   duration: 600,
-                  delay: 300,
-                  type: 'timing'
+                  delay: 300
                }}
                resizeMode="cover"
                source={{ uri: product.image! }}

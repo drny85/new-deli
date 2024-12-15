@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 export const fonts = {
    Loster: require('@/assets/fonts/Lobster-Regular.ttf'),
    Montserrat: require('@/assets/fonts/Montserrat-Regular.ttf'),

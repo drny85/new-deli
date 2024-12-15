@@ -28,27 +28,28 @@ const CourierMap: React.FC<Props> = ({ onPress, assigedCourier }) => {
    const { loading, couriers } = useCouriers()
    const restaurant = useRestaurantsStore((s) => s.restaurant)
    const [selectedCourier, setSelectedCourier] = useState<Courier | null>(null)
-   const data = useMemo(
-      () =>
-         couriers
-            .map((c) => ({
-               ...c,
-               distance: getDistanceFromLatLonInMeters(c.coords!, restaurant?.coords!)
-            }))
-            .sort((a, b) => (a.distance > b.distance ? 1 : -1)),
-      [couriers, restaurant?.coords]
-   )
+   const data = useMemo(() => {
+      if (!couriers || !restaurant?.coords) return []
+
+      return couriers
+         .filter((c) => c.coords) // Ensure couriers have coordinates
+         .map((c) => ({
+            ...c,
+            distance: getDistanceFromLatLonInMeters(c.coords!, restaurant?.coords)
+         }))
+         .sort((a, b) => a.distance - b.distance) // Simplify sort logic
+   }, [couriers, restaurant?.coords])
 
    const mapViewRef = useRef<MapView>(null)
    const animation = useRef(new Animated.Value(0)).current
    const CARD_WIDTH = Dimensions.get('window').width * 0.8
 
    const onCardPress = (courier: Courier) => {
-      if (!courier) return
+      if (!courier || !selectedCourier?.coords) return
       setSelectedCourier(courier)
       mapViewRef.current?.animateToRegion({
-         latitude: courier.coords?.latitude!,
-         longitude: courier.coords?.longitude!,
+         latitude: selectedCourier.coords?.latitude,
+         longitude: selectedCourier.coords?.longitude,
          latitudeDelta: 0.0922,
          longitudeDelta: 0.0421
       })
@@ -65,11 +66,11 @@ const CourierMap: React.FC<Props> = ({ onPress, assigedCourier }) => {
 
    useEffect(() => {
       const init = async () => {
-         let { status } = await Location.requestForegroundPermissionsAsync()
+         const { status } = await Location.requestForegroundPermissionsAsync()
          if (status !== 'granted') {
             return
          }
-         let location = await Location.getCurrentPositionAsync({})
+         const location = await Location.getCurrentPositionAsync({})
          setRegion({
             ...region,
             latitude: location.coords.latitude,
@@ -124,8 +125,8 @@ const CourierMap: React.FC<Props> = ({ onPress, assigedCourier }) => {
                      key={courier.id}
                      title={courier.name}
                      coordinate={{
-                        latitude: courier.coords?.latitude!,
-                        longitude: courier.coords?.longitude!
+                        latitude: courier.coords?.latitude || 0,
+                        longitude: courier.coords?.longitude || 0
                      }}
                      onPress={() => onMarkerPress(courier)}>
                      <View style={styles.marker}>

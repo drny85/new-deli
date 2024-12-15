@@ -15,6 +15,7 @@ import {
 } from 'react-native-google-places-autocomplete'
 import MapView, { Marker, Region } from 'react-native-maps'
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated'
+import { OrderAddress } from '@/shared/types'
 
 const AddressScreen = () => {
    const bgColor = useThemeColor('primary')
@@ -22,14 +23,13 @@ const AddressScreen = () => {
    const isDark = useColorScheme() === 'dark'
    const {
       setDeliveryAddress,
-      deliveryAddress,
       addToRecentAddresses,
       changingAddressFromCheckoutScreen,
       setChangingAddressFromCheckoutScreen
    } = useOrderFlowStore()
    const [apt, setApt] = useState<string>('')
    const [label, setLabel] = useState<string>('')
-   const [address, setAddress] = useState<typeof deliveryAddress>(null)
+   const [address, setAddress] = useState<OrderAddress | null>(null)
    const [region, setRegion] = useState<Region | null>(null)
 
    const googleRef = useRef<GooglePlacesAutocompleteRef>(null)
@@ -67,8 +67,8 @@ const AddressScreen = () => {
                         height: '100%'
                      }}
                      region={{
-                        latitude: region?.latitude!,
-                        longitude: region?.longitude!,
+                        latitude: region?.latitude,
+                        longitude: region?.longitude,
                         latitudeDelta: 0.001,
                         longitudeDelta: 0.005
                      }}>

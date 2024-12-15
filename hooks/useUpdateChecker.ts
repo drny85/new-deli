@@ -31,7 +31,7 @@ export const useUpdateChecker = () => {
                            } catch (error) {
                               Alert.alert(
                                  'Error',
-                                 'Could not apply the update. Please try again later.'
+                                 `Could not apply the update. Please try again later. ${error}`
                               )
                            }
                         }

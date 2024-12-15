@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 import { placeOrder } from '@/actions/orders'
 import { ordersCollection } from '@/collections'
 import { SIZES } from '@/constants/Colors'
@@ -82,9 +83,9 @@ const StripeProviderComponent = ({ children, cartTotal, businessName, connectedI
          if (!order || !connectedId) return
          console.log(order.id, total, connectedId)
          const func = fetchPaymentParams()
-
+         if (!order.id) return
          const { data } = await func({
-            orderId: order?.id!,
+            orderId: order?.id,
             total: total,
             connectedId: connectedId
          })

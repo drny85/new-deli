@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 import { useThemeColor } from '@/hooks/useThemeColor'
 import { calculatePercentage } from '@/utils/calculatePercentage'
 
@@ -43,7 +44,8 @@ const CircularProgressBar = ({
 
    const textX = useDerivedValue(() => {
       const _fontSize = font?.measureText(targetText.value)
-      return radius - _fontSize?.width! / 2
+      if (!_fontSize) return 0
+      return radius - _fontSize?.width / 2
    }, [font, fontSize])
    const value = calculatePercentage(currentValue, maxValue)
    useEffect(() => {
@@ -83,7 +85,7 @@ const CircularProgressBar = ({
                />
                <Text
                   x={textX}
-                  y={radius + fontSize?.height! / 2}
+                  y={radius + (fontSize?.height ? fontSize?.height : 2 / 2)}
                   text={targetText}
                   font={font}
                   color={textColor}

@@ -1,6 +1,7 @@
 import { Coords } from '@/shared/types'
 
-export function getDistanceFromLatLonInMeters(loc1: Coords, loc2: Coords): number {
+export function getDistanceFromLatLonInMeters(loc1: Coords | null, loc2: Coords | null): number {
+   if (!loc1 || !loc2) return 0
    function deg2rad(deg: number): number {
       return deg * (Math.PI / 180)
    }

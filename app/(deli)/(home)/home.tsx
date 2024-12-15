@@ -23,7 +23,7 @@ const INDEXES = ['Activities', 'Reports', 'Analytics', 'Customers']
 
 const Home = () => {
    const { user } = useAuth()
-   useRestaurant(user?.id!)
+   useRestaurant(user?.id || '')
    const restaurant = useRestaurantsStore((s) => s.restaurant)
    const ascentColor = useThemeColor('ascent')
    const textColor = useThemeColor('text')
