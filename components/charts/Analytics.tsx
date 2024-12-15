@@ -1,11 +1,12 @@
 import { SIZES } from '@/constants/Colors'
+import { FilterData, sortByMonths, sortByWeekdays } from '@/helpers/charts'
 import { useThemeColor } from '@/hooks/useThemeColor'
 import { FilterDay, Order } from '@/shared/types'
 import { getRandomColor } from '@/utils/getRandomColor'
 import SegmentedControl from '@react-native-segmented-control/segmented-control'
 import { useState } from 'react'
 import { ColorValue, StyleSheet } from 'react-native'
-import { PieChart, pieDataItem } from 'react-native-gifted-charts'
+import { PieChart } from 'react-native-gifted-charts'
 import Animated from 'react-native-reanimated'
 import { filterOrdersByTime } from '../charts'
 import Row from '../Row'
@@ -35,7 +36,7 @@ const Analytics: React.FC<GraphComponentProps> = ({ orders }) => {
                ? 'By Year'
                : ''
 
-   const transformDataForPieChart = (values: any[]): pieDataItem[] => {
+   const transformDataForPieChart = (values: any[]): FilterData[] => {
       // Determine the maximum value in categorized data for the "focused" property
       const maxValue = Math.max(...values?.map(({ value }) => value), 0)
 
@@ -50,7 +51,13 @@ const Analytics: React.FC<GraphComponentProps> = ({ orders }) => {
    }
 
    const data = filterOrdersByTime(orders, filter)
-   const ordersGraph = transformDataForPieChart(data)
+   const transformedData = transformDataForPieChart(data)
+   const ordersGraph =
+      filter === 'dayOfWeek'
+         ? sortByWeekdays(transformedData)
+         : filter === 'month'
+           ? sortByMonths(transformedData)
+           : transformedData
    const higherValueWIthLabel = ordersGraph
       .map((item) => ({ label: item.text, value: item.value }))
       .sort((a, b) => b.value - a.value)[0]

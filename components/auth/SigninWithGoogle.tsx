@@ -1,33 +1,33 @@
 import { usersCollection } from '@/collections'
 import { auth } from '@/firebase'
-import { useThemeColor } from '@/hooks/useThemeColor'
 import { useAuth } from '@/providers/authProvider'
 import { AppUser } from '@/shared/types'
-import { FontAwesome } from '@expo/vector-icons'
+
 import * as Google from 'expo-auth-session/providers/google'
 import * as WebBrowser from 'expo-web-browser'
 import { GoogleAuthProvider, User, signInWithCredential } from 'firebase/auth'
 import { doc, getDoc } from 'firebase/firestore'
-import { useEffect } from 'react'
+import { useCallback, useEffect } from 'react'
 import { TouchableOpacity } from 'react-native'
 import NeoView from '../NeoView'
-import { Image } from 'expo-image'
 import { toastMessage } from '@/utils/toast'
+import { AntDesign } from '@expo/vector-icons'
+import { useThemeColor } from '@/hooks/useThemeColor'
 
 WebBrowser.maybeCompleteAuthSession()
 
 const SigninWithGoogle = () => {
-   const ascent = useThemeColor('ascent')
-   const bgColor = useThemeColor('background')
    const { setUser, createUser } = useAuth()
+   const ascentColor = useThemeColor('ascent')
+
    const [request, response, promptAsync] = Google.useAuthRequest({
       //expoClientId: process.env.EXPO_WEB_CLIENT_ID,
       iosClientId: process.env.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID,
-      androidClientId: process.env.EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID,
+      androidClientId: '1079176907860-a88guem03pcas0kg9met2c4ejagetapf.apps.googleusercontent.com',
       webClientId: process.env.EXPO_PUBLIC_EXPO_WEB_CLIENT_ID
    })
 
-   const createOrSignInFirebaseUser = async (user: User) => {
+   const createOrSignInFirebaseUser = useCallback(async (user: User) => {
       try {
          const userRef = doc(usersCollection, user.uid)
          const currentUser = await getDoc(userRef)
@@ -58,9 +58,10 @@ const SigninWithGoogle = () => {
          const err = error as Error
          return err
       }
-   }
+   }, [])
 
    useEffect(() => {
+      if (!response) return
       if (response?.type === 'success') {
          if (response.params.error || !response.params.id_token) {
             console.log(response.params.error)
@@ -91,10 +92,7 @@ const SigninWithGoogle = () => {
    return (
       <NeoView rounded size={60}>
          <TouchableOpacity onPress={() => promptAsync()}>
-            <Image
-               source={require('@/assets/images/google.png')}
-               style={{ width: 44, height: 44 }}
-            />
+            <AntDesign name="google" size={32} color={ascentColor} />
          </TouchableOpacity>
       </NeoView>
    )

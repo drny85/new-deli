@@ -16,7 +16,8 @@ import { useCallback, useEffect, useState } from 'react'
 import { TouchableOpacity } from 'react-native'
 import 'react-native-gesture-handler'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
-
+import { KeyboardProvider } from 'react-native-keyboard-controller'
+import { Toaster } from 'sonner-native'
 import { configureReanimatedLogger, ReanimatedLogLevel } from 'react-native-reanimated'
 
 // This is the default configuration
@@ -101,103 +102,121 @@ export default function RootLayout() {
                              }
                           }
                   }>
-                  <Stack
-                     screenOptions={{
-                        animation: 'slide_from_bottom'
-                     }}>
-                     <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-                     <Stack.Screen name="(deli)" options={{ headerShown: false }} />
-                     <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-                     <Stack.Screen name="stripe-portal" options={{ headerShown: false }} />
-                     <Stack.Screen name="(onboarding)" options={{ headerShown: false }} />
-                     <Stack.Screen name="(modals)" options={{ headerShown: false }} />
-                     {/* <Stack.Screen name="(modals)/(restaurants)" options={{ headerShown: false }} />
+                  <KeyboardProvider>
+                     <Toaster />
+                     <Stack
+                        screenOptions={{
+                           animation: 'slide_from_bottom'
+                        }}>
+                        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+                        <Stack.Screen name="(deli)" options={{ headerShown: false }} />
+                        <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+                        <Stack.Screen name="stripe-portal" options={{ headerShown: false }} />
+                        <Stack.Screen name="(onboarding)" options={{ headerShown: false }} />
+                        <Stack.Screen name="(modals)" options={{ headerShown: false }} />
+                        {/* <Stack.Screen name="(modals)/(restaurants)" options={{ headerShown: false }} />
                   <Stack.Screen name="(modals)/(orders)" options={{ headerShown: false }} />
                   <Stack.Screen name="(modals)/(business)" options={{ headerShown: false }} /> */}
-                     <Stack.Screen
-                        name="business-terms"
-                        options={{
-                           title: 'Terms of Use',
-                           headerStyle: {
-                              backgroundColor: bgColor
-                           },
-                           headerLeft: ({ canGoBack }) => (
-                              <Feather
-                                 name="chevron-left"
-                                 size={26}
-                                 color={iconColor}
-                                 onPress={() => canGoBack && router.back()}
-                              />
-                           ),
+                        <Stack.Screen
+                           name="business-terms"
+                           options={{
+                              title: 'Terms of Use',
+                              headerStyle: {
+                                 backgroundColor: bgColor
+                              },
+                              headerLeft: ({ canGoBack }) => (
+                                 <Feather
+                                    name="chevron-left"
+                                    size={32}
+                                    style={{ padding: 10 }}
+                                    color={iconColor}
+                                    onPress={() => canGoBack && router.back()}
+                                 />
+                              ),
 
-                           presentation: 'fullScreenModal'
-                        }}
-                     />
-                     <Stack.Screen
-                        name="terms"
-                        options={{
-                           title: 'Terms of Use',
-                           headerLeft: ({ canGoBack }) => (
-                              <FontAwesome
-                                 name="chevron-left"
-                                 size={26}
-                                 color={iconColor}
-                                 onPress={() => canGoBack && router.back()}
-                              />
-                           ),
+                              presentation: 'fullScreenModal'
+                           }}
+                        />
+                        <Stack.Screen
+                           name="terms"
+                           options={{
+                              title: 'Terms of Use',
+                              headerLeft: ({ canGoBack }) => (
+                                 <Feather
+                                    name="chevron-left"
+                                    size={32}
+                                    style={{ marginRight: 10, padding: 10 }}
+                                    color={iconColor}
+                                    onPress={() => canGoBack && router.back()}
+                                 />
+                              ),
 
-                           presentation: 'fullScreenModal'
-                        }}
-                     />
-                     <Stack.Screen
-                        name="privacy"
-                        options={{
-                           headerLeft: ({ canGoBack }) => (
-                              <Feather
-                                 name="chevron-left"
-                                 size={28}
-                                 color={iconColor}
-                                 onPress={() => canGoBack && router.back()}
-                              />
-                           ),
-                           title: 'Privacy Policy',
-                           headerBackTitle: 'Back',
-                           presentation: 'fullScreenModal'
-                        }}
-                     />
-                     <Stack.Screen name="+not-found" />
-                     <Stack.Screen
-                        name="address"
-                        options={{
-                           presentation: 'modal',
+                              presentation: 'fullScreenModal'
+                           }}
+                        />
+                        <Stack.Screen
+                           name="privacy"
+                           options={{
+                              headerLeft: ({ canGoBack }) => (
+                                 <Feather
+                                    name="chevron-left"
+                                    size={32}
+                                    style={{ padding: 10 }}
+                                    color={iconColor}
+                                    onPress={() => canGoBack && router.back()}
+                                 />
+                              ),
+                              title: 'Privacy Policy',
+                              headerBackTitle: 'Back',
+                              presentation: 'fullScreenModal'
+                           }}
+                        />
+                        <Stack.Screen name="+not-found" />
+                        <Stack.Screen
+                           name="address"
+                           options={{
+                              presentation: 'modal',
 
-                           title: 'Addresses',
-                           headerStyle: { backgroundColor: bgColor },
-                           headerLeft: () => (
-                              <TouchableOpacity
-                                 style={{ padding: 6 }}
-                                 onPress={() => router.back()}>
-                                 <FontAwesome name="close" size={28} color={iconColor} />
-                              </TouchableOpacity>
-                           )
-                        }}
-                     />
-                     <Stack.Screen
-                        name="second-address"
-                        options={{
-                           presentation: 'modal',
-                           animation: 'fade',
+                              title: 'Addresses',
+                              headerStyle: { backgroundColor: bgColor },
+                              headerLeft: () => (
+                                 <TouchableOpacity
+                                    style={{ padding: 6 }}
+                                    onPress={() => router.back()}>
+                                    <FontAwesome
+                                       name="close"
+                                       size={28}
+                                       style={{ marginRight: 20 }}
+                                       color={iconColor}
+                                    />
+                                 </TouchableOpacity>
+                              )
+                           }}
+                        />
+                        <Stack.Screen
+                           name="second-address"
+                           options={{
+                              presentation: 'modal',
+                              animation: 'fade',
 
-                           title: 'Address Info',
-                           headerStyle: { backgroundColor: bgColor },
-                           headerLeft: () => (
-                              <TouchableOpacity onPress={() => router.back()}>
-                                 <Feather name="chevron-left" size={28} color={iconColor} />
-                              </TouchableOpacity>
-                           )
-                        }}
-                     />
-                  </Stack>
+                              title: 'Address Info',
+                              headerStyle: { backgroundColor: bgColor },
+                              headerLeft: () => (
+                                 <TouchableOpacity
+                                    style={{ marginRight: 10 }}
+                                    onPress={() => router.back()}>
+                                    <Feather
+                                       name="chevron-left"
+                                       size={28}
+                                       style={{ padding: 8 }}
+                                       color={iconColor}
+                                    />
+                                 </TouchableOpacity>
+                              )
+                           }}
+                        />
+                     </Stack>
+                  </KeyboardProvider>
                </ThemeProvider>
             </AuthProvider>
          </BottomSheetModalProvider>

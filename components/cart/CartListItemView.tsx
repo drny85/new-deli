@@ -1,19 +1,19 @@
-import React from 'react'
-import NeoView from '../NeoView'
 import { SIZES } from '@/constants/Colors'
-import { Cart, useCartsStore } from '@/stores/cartsStore'
+import { useRestaurant } from '@/hooks/restaurants/useRestaurant'
+import { useThemeColor } from '@/hooks/useThemeColor'
+import { Cart, ORDER_TYPE } from '@/shared/types'
+import { useCartsStore } from '@/stores/cartsStore'
+import { Feather, FontAwesome, Ionicons } from '@expo/vector-icons'
+import { router } from 'expo-router'
+import { SymbolView } from 'expo-symbols'
+import React from 'react'
+import { Image, Platform, Pressable, TouchableOpacity, useColorScheme } from 'react-native'
+import { toast } from 'sonner-native'
+import Button from '../Button'
+import NeoView from '../NeoView'
 import Row from '../Row'
 import { Text } from '../ThemedText'
-import { useRestaurant } from '@/hooks/restaurants/useRestaurant'
 import { View } from '../ThemedView'
-import Button from '../Button'
-import { Alert, Image, Platform, Pressable, TouchableOpacity, useColorScheme } from 'react-native'
-import { SymbolView } from 'expo-symbols'
-import { router } from 'expo-router'
-import { toastMessage } from '@/utils/toast'
-import { useThemeColor } from '@/hooks/useThemeColor'
-import { ORDER_TYPE } from '@/shared/types'
-import { Feather, FontAwesome } from '@expo/vector-icons'
 
 const IMAGE_HEIGHT = 80
 
@@ -35,28 +35,38 @@ const CartListItemView = ({ cart }: Props) => {
    }
 
    const confirmDeletion = () => {
-      Alert.alert('Are you sure?', 'This action cannot be undone', [
-         {
-            text: 'Cancel',
-            style: 'cancel'
+      toast('Are you sure?', {
+         description: 'This action cannot be undone',
+         cancel: {
+            label: 'Cancel',
+            onClick: () => {}
          },
-         {
-            text: 'Delete',
-            style: 'destructive',
-            onPress: deleteStoreCart
-         }
-      ])
+         action: {
+            label: 'Delete',
+            onClick: deleteStoreCart
+         },
+         duration: 10000,
+         icon: <Ionicons name="trash-outline" size={28} color={ascent} />
+      })
+      // Alert.alert('Are you sure?', 'This action cannot be undone', [
+      //    {
+      //       text: 'Cancel',
+      //       style: 'cancel'
+      //    },
+      //    {
+      //       text: 'Delete',
+      //       style: 'destructive',
+      //       onPress: deleteStoreCart
+      //    }
+      // ])
    }
 
    const deleteStoreCart = () => {
       if (!restaurant?.id) return
       removeCart(restaurant.id)
-      toastMessage({
-         message: 'Cart deleted',
-         title: 'Success',
-         preset: 'done',
-         duration: 2,
-         haptic: 'success'
+      toast.dismiss()
+      toast.success('Cart Deleted', {
+         description: 'Your cart has been deleted'
       })
    }
    if (loading) return null
@@ -102,7 +112,7 @@ const CartListItemView = ({ cart }: Props) => {
                {Platform.OS === 'ios' ? (
                   <SymbolView name="trash.circle" tintColor={ascent} size={28} />
                ) : (
-                  <FontAwesome name="trash-o" size={26} color={ascent} />
+                  <FontAwesome name="trash-o" size={28} color={ascent} />
                )}
             </TouchableOpacity>
          </Row>

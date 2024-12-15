@@ -87,6 +87,7 @@ export const statusListForPickup: OrderStatus[] = [
 
 export type Filter = 'thisWeek' | 'lastWeek' | 'monthToDate' | 'yearToDate' | 'today' | 'all'
 export type FilterDay = 'timeOfDay' | 'dayOfWeek' | 'month' | 'year'
+export const weekdaysOrder = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 
 export interface Order {
    id?: string

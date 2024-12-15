@@ -5,7 +5,6 @@ import ItemQuantitySetter from '@/components/ItemQuantitySetter'
 import Loading from '@/components/Loading'
 import NeoView from '@/components/NeoView'
 
-import AnimatedNumber from '@/components/AnimatedNumber'
 import { DescriptionText } from '@/components/checkout/DescriptionText'
 import SizePicker from '@/components/restaurants/SizePicker'
 import Row from '@/components/Row'
@@ -19,8 +18,7 @@ import { useThemeColor } from '@/hooks/useThemeColor'
 import { Cart, CART_ALLOWED, CartItem, ORDER_TYPE, P_Size } from '@/shared/types'
 import { useCartsStore } from '@/stores/cartsStore'
 import { useOrderFlowStore } from '@/stores/orderFlowStore'
-import { toastAlert, toastMessage } from '@/utils/toast'
-import { Feather } from '@expo/vector-icons'
+import { Feather, Ionicons } from '@expo/vector-icons'
 import { BottomSheetTextInput } from '@gorhom/bottom-sheet'
 import * as Haptics from 'expo-haptics'
 import { router, useLocalSearchParams } from 'expo-router'
@@ -28,6 +26,8 @@ import { Image } from 'moti'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Keyboard, ScrollView, StyleSheet, TouchableOpacity } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import NeumorphismView from '@/components/NeumorphismView'
+import { toast } from 'sonner-native'
 
 const PIC_DIMENSIONS = SIZES.height * 0.5
 
@@ -92,22 +92,34 @@ const ProductDetail = () => {
          carts.findIndex((c) => c.items.find((i) => i.businessId === product?.businessId)) === -1
       ) {
          Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error)
-         return toastAlert({
-            title: 'Error',
-            message: 'You can only have 10 carts',
-            preset: 'error',
-            duration: 1
+         return toast.warning('You can only have 10 carts', {
+            description: 'You can only have 10 carts',
+            duration: 2000,
+            icon: '🛒',
+            position: 'top-center'
          })
+         // return toastAlert({
+         //    title: 'Error',
+         //    message: 'You can only have 10 carts',
+         //    preset: 'error',
+         //    duration: 1
+         // })
       }
       if (!selected && product?.sizes && product.sizes.length > 0) {
          Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error)
-         return toastAlert({
-            title: 'Pick One',
-            message: 'You must pick a size',
-            preset: 'custom',
-            iconName: 'hand.raised.fill',
-            duration: 2
+         return toast.warning('Please select a size', {
+            description: 'You must select a size to add to cart',
+            duration: 2000,
+
+            position: 'top-center'
          })
+         // return toastAlert({
+         //    title: 'Pick One',
+         //    message: 'You must pick a size',
+         //    preset: 'custom',
+         //    iconName: 'hand.raised.fill',
+         //    duration: 2
+         // })
       }
 
       if (!cart) {
@@ -125,32 +137,39 @@ const ProductDetail = () => {
 
       if (product?.multipleAddons && product.addons.length > 0) {
          if (item.addons.length === 0) {
-            toastAlert({
-               title: 'Error',
-               message: 'Please select at least one addon',
-               preset: 'error',
-               duration: 1
+            toast.warning('Please select at least one addon', {
+               description: 'You must select at least one addon',
+               duration: 2000,
+               icon: '🛒',
+               position: 'top-center'
             })
+            // toastAlert({
+            //    title: 'Error',
+            //    message: 'Please select at least one addon',
+            //    preset: 'error',
+            //    duration: 1
+            // })
             Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error)
             return
          }
       }
 
       const added = await addToCart(item)
-      if (!added)
-         return toastAlert({
-            title: 'Error',
-            message: 'Something went wrong',
-            preset: 'error',
-            duration: 1
+      if (!added) {
+         toast.warning('Item already in cart', {
+            description: 'This item is already in your cart',
+            duration: 2000,
+            icon: <Ionicons name="cart-outline" size={28} color={textColor} />,
+            position: 'top-center'
          })
+         return
+      }
 
-      toastMessage({
-         title: 'Success',
-         message: 'Added to cart',
-         preset: 'custom',
-         iconName: 'cart.badge.plus',
-         duration: 1
+      toast.success('Added to cart', {
+         description: 'Your item has been added to cart',
+         duration: 2000,
+         icon: <Ionicons name="cart-outline" size={28} color={textColor} />,
+         position: 'top-center'
       })
       router.back()
    }
@@ -190,13 +209,19 @@ const ProductDetail = () => {
 
       if (!businessId) return
       updateCart(businessId, updatedWithNewTotalAndQuantity!)
-      toastMessage({
-         title: 'Success',
-         message: 'Updated cart',
-         duration: 2,
-         preset: 'custom',
-         iconName: 'cart.circle.fill',
-         haptic: 'success'
+      // toastMessage({
+      //    title: 'Success',
+      //    message: 'Updated cart',
+      //    duration: 2,
+      //    preset: 'custom',
+      //    iconName: 'cart.circle.fill',
+      //    haptic: 'success'
+      // })
+      toast.success('Updated cart', {
+         description: 'Your cart has been updated',
+         duration: 2000,
+         icon: '🛒',
+         position: 'top-center'
       })
       router.back()
    }
@@ -233,9 +258,32 @@ const ProductDetail = () => {
    if (loading || !product) return <Loading />
 
    return (
-      <View style={{ flex: 1, backgroundColor, justifyContent: 'space-between' }}>
-         <BackButton />
-         <View style={{ position: 'absolute', right: 30, top: SIZES.statusBarHeight, zIndex: 99 }}>
+      <View
+         style={{
+            flex: 1,
+            backgroundColor,
+            justifyContent: 'space-between',
+            marginBottom: SIZES.md
+         }}>
+         <View
+            style={{
+               position: 'absolute',
+               paddingHorizontal: SIZES.lg,
+               top: SIZES.statusBarHeight,
+               zIndex: 99,
+               width: '100%',
+               flexDirection: 'row',
+               justifyContent: 'space-between'
+            }}>
+            <BackButton
+               containerStyle={{
+                  position: 'relative',
+                  marginTop: undefined,
+                  left: undefined,
+                  right: undefined,
+                  top: undefined
+               }}
+            />
             <NeoView rounded size={50} containerStyle={{ shadowColor: 'transparent' }}>
                <ShareButton
                   id={productId}
@@ -368,22 +416,14 @@ const ProductDetail = () => {
          </ScrollView>
 
          <View style={[styles.totalView, { marginBottom: bottom }]}>
-            <NeoView
-               containerStyle={{ borderRadius: SIZES.lg * 2, width: SIZES.width * 0.45 }}
-               innerStyleContainer={{
-                  borderRadius: SIZES.lg * 2,
-                  paddingHorizontal: SIZES.lg * 2,
-                  paddingVertical: SIZES.sm,
-                  height: 50
-               }}>
-               <AnimatedNumber
-                  fontSize={22}
-                  value={+((selected ? +selected.price : +product.price) * quantity).toFixed(2)}
-               />
-               {/* <Text type="defaultSemiBold" fontSize="large">
-                  $ {}
-               </Text> */}
-            </NeoView>
+            <NeumorphismView
+               borderRadius={SIZES.lg}
+               padding={10}
+               style={{ paddingHorizontal: SIZES.lg * 1.5 }}>
+               <Text type="title">
+                  $ {((selected ? +selected.price : +product.price) * quantity).toFixed(2)}
+               </Text>
+            </NeumorphismView>
 
             <View style={{ flexGrow: 1, marginRight: SIZES.lg }}>
                <Button

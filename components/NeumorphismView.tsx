@@ -16,7 +16,7 @@ interface NeumorphismViewProps {
 const NeumorphismView: React.FC<NeumorphismViewProps> = ({
    children,
    style,
-   lightColor = 'rgba(0,0,0,0.1)', // Default light shadow
+
    darkColor = 'rgba(0,0,0,0.1)', // Default dark shadow
    borderRadius = 12,
    shadowOffset = 8,
@@ -31,11 +31,7 @@ const NeumorphismView: React.FC<NeumorphismViewProps> = ({
             {
                backgroundColor,
                borderRadius,
-               shadowColor: lightColor,
-               shadowOffset: { width: -shadowOffset, height: -shadowOffset },
-               shadowOpacity: 1,
-               padding: padding,
-               shadowRadius: shadowOffset
+               padding: padding
             },
             style
          ]}>
@@ -48,6 +44,7 @@ const NeumorphismView: React.FC<NeumorphismViewProps> = ({
                   shadowColor: darkColor,
                   shadowOffset: { width: shadowOffset, height: shadowOffset },
                   shadowOpacity: 1,
+                  // For Android shadow effect
                   shadowRadius: shadowOffset
                }
             ]}
@@ -60,8 +57,7 @@ const NeumorphismView: React.FC<NeumorphismViewProps> = ({
 const styles = StyleSheet.create({
    container: {
       position: 'relative',
-      shadowOpacity: 0.5,
-      shadowRadius: 8,
+      boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
       elevation: 10 // For Android shadow effect
    }
 })

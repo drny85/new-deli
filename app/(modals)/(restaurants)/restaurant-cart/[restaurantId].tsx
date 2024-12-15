@@ -97,7 +97,11 @@ const RestaurantCart = () => {
                }}
             />
 
-            <Text style={{ marginTop: 4 }} type="header">
+            <Text
+               style={{ marginTop: 4, fontFamily: 'Lobster', fontSize: 22 }}
+               adjustsFontSizeToFit
+               numberOfLines={1}
+               ellipsizeMode="tail">
                {restaurant?.name}
             </Text>
 

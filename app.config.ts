@@ -43,7 +43,7 @@ const config: ExpoConfig = {
          backgroundColor: '#ffffff'
       },
 
-      package: 'net.robertdev.yourdeli',
+      package: 'net.robertdev.newdeli',
       versionCode: 1,
       googleServicesFile: './google-services.json',
       config: {

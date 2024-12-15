@@ -15,11 +15,12 @@ import { Text } from '@/components/ThemedText'
 import { useThemeColor } from '@/hooks/useThemeColor'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Controller, useForm } from 'react-hook-form'
-import { KeyboardAvoidingView, Platform } from 'react-native'
+import { KeyboardAvoidingView, Platform, useColorScheme } from 'react-native'
 import { z } from 'zod'
 import { useEffect, useState } from 'react'
 import { FontAwesome } from '@expo/vector-icons'
 import { useMMKV } from 'react-native-mmkv'
+import KeyboardScreen from '@/components/KeyboardScreen'
 
 const loginSchema = z.object({
    email: z.string().email(),
@@ -32,6 +33,7 @@ const Login = () => {
    const params = useLocalSearchParams<{ returnUrl: string }>()
    const { signIn, user } = useAuth()
    const bgColor = useThemeColor('icon')
+   const isDark = useColorScheme() === 'dark'
    const [showPassword, setShowPassword] = useState(false)
    console.log(params, user)
 
@@ -77,11 +79,7 @@ const Login = () => {
    return (
       <Container center>
          <BackButton />
-         <KeyboardAvoidingView
-            style={{ flex: 1 }}
-            contentContainerStyle={{ padding: SIZES.md }}
-            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-            keyboardVerticalOffset={2}>
+         <KeyboardScreen style={{ flex: 1 }}>
             <View
                style={{
                   width: '100%',
@@ -100,11 +98,12 @@ const Login = () => {
                            value={value}
                            placeholder="Email Address"
                            error={errors.email?.message}
+                           keyboardType="email-address"
                            onChangeText={(text) => onChange(text.toLowerCase())}
                         />
                      )}
                   />
-                  <View style={{ height: SIZES.md }} />
+                  <View style={{ height: SIZES.lg }} />
                   <Controller
                      name="password"
                      control={control}
@@ -128,11 +127,11 @@ const Login = () => {
                         />
                      )}
                   />
-                  <View style={{ height: SIZES.md }} />
+                  <View style={{ height: SIZES.lg }} />
                   <Button
                      disabled={isLoading}
                      title="Login"
-                     type="soft"
+                     type={isDark ? 'secondary' : 'soft'}
                      onPress={handleSubmit(handleLogin)}
                   />
                </View>
@@ -154,7 +153,7 @@ const Login = () => {
                   Create Account
                </Text>
             </Link>
-         </KeyboardAvoidingView>
+         </KeyboardScreen>
       </Container>
    )
 }

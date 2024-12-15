@@ -48,6 +48,7 @@ const Input = forwardRef<TextInput, Props>(
 
                   <TextInput
                      ref={ref}
+                     placeholderTextColor={textColor + 80}
                      style={[
                         styles.input,
                         {

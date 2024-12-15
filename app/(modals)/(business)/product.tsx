@@ -116,8 +116,8 @@ const BusinessProduct = () => {
                style={{
                   flexDirection: 'row',
                   gap: SIZES.md,
-                  //alignItems: 'center',
-                  //alignSelf: 'center',
+                  alignItems: 'center',
+                  alignSelf: 'center',
                   marginTop: SIZES.md
                }}>
                {product && product.sizes.length > 0 && (
@@ -158,7 +158,7 @@ const BusinessProduct = () => {
 
             <View style={{ marginVertical: SIZES.lg }}>
                <Text type="defaultSemiBold">Description</Text>
-               <Text style={{ fontStyle: 'italic' }}>{product.description}</Text>
+               <Text type="italic">{product.description}</Text>
             </View>
          </View>
       </View>

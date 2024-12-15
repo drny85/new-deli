@@ -8,6 +8,7 @@ import { View } from '../ThemedView'
 import { Text } from '../ThemedText'
 import * as Haptics from 'expo-haptics'
 import { letterSizes } from '@/helpers/lettersSizes'
+import NeumorphismView from '../NeumorphismView'
 
 type Props = {
    sizes: P_Size[]
@@ -59,10 +60,13 @@ const SizePicker = ({
                         onPress(p)
                      }}>
                      {letterSize ? (
-                        <NeoView
-                           rounded
-                           size={radius}
-                           innerStyleContainer={{
+                        <NeumorphismView
+                           borderRadius={radius}
+                           style={{
+                              height: radius,
+                              width: radius,
+                              justifyContent: 'center',
+                              alignItems: 'center',
                               borderColor:
                                  selected && selected.id === p.id ? ascent : 'transparent',
                               borderWidth: 2
@@ -75,7 +79,7 @@ const SizePicker = ({
                               }>
                               {p.id}
                            </Text>
-                        </NeoView>
+                        </NeumorphismView>
                      ) : (
                         <NeoView
                            containerStyle={{

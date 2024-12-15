@@ -12,6 +12,7 @@ import { View } from '../ThemedView'
 import { useAuth } from '@/providers/authProvider'
 import AnimatedNumber from '../AnimatedNumber'
 import { MY_TRANSACTION_FEE } from '@/shared/types'
+import NeumorphismView from '../NeumorphismView'
 
 type Props = {
    title?: string
@@ -39,7 +40,7 @@ const TotalView = ({
    const { orderType, tipAmount } = useOrderFlowStore()
 
    return (
-      <View
+      <NeumorphismView
          style={[
             styles.bottom,
             {
@@ -113,14 +114,13 @@ const TotalView = ({
                />
             )}
          </View>
-      </View>
+      </NeumorphismView>
    )
 }
 
 export default TotalView
 const styles = StyleSheet.create({
    bottom: {
-      ...globalStyle.shadow,
       borderTopLeftRadius: SIZES.lg * 2,
       borderTopRightRadius: SIZES.lg * 2,
       padding: SIZES.sm
