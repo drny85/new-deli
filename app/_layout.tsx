@@ -103,7 +103,6 @@ export default function RootLayout() {
                           }
                   }>
                   <KeyboardProvider>
-                     <Toaster />
                      <Stack
                         screenOptions={{
                            animation: 'slide_from_bottom'
@@ -198,24 +197,35 @@ export default function RootLayout() {
                            options={{
                               presentation: 'modal',
                               animation: 'fade',
-
                               title: 'Address Info',
                               headerStyle: { backgroundColor: bgColor },
-                              headerLeft: () => (
+                              headerLeft: ({ canGoBack }) => (
                                  <TouchableOpacity
-                                    style={{ marginRight: 10 }}
-                                    onPress={() => router.back()}>
+                                    style={{
+                                       marginRight: 10,
+                                       padding: 10,
+
+                                       borderRadius: 30
+                                    }}
+                                    onPress={() => {
+                                       console.log('GO BACK 1')
+                                       if (canGoBack) {
+                                          console.log('GO BACK')
+                                          router.back()
+                                       }
+                                    }}>
                                     <Feather
                                        name="chevron-left"
-                                       size={28}
-                                       style={{ padding: 8 }}
+                                       size={30}
                                        color={iconColor}
+                                       style={{ flex: 1 }}
                                     />
                                  </TouchableOpacity>
                               )
                            }}
                         />
                      </Stack>
+                     <Toaster richColors closeButton />
                   </KeyboardProvider>
                </ThemeProvider>
             </AuthProvider>

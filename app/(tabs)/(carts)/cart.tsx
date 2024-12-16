@@ -7,14 +7,15 @@ import { Text } from '@/components/ThemedText'
 import { View } from '@/components/ThemedView'
 import { SIZES } from '@/constants/Colors'
 import { useColorScheme } from '@/hooks/useColorScheme.web'
+import { useThemeColor } from '@/hooks/useThemeColor'
 import { useCartsStore } from '@/stores/cartsStore'
+import { Feather } from '@expo/vector-icons'
+import { FlashList } from '@shopify/flash-list'
 import { router } from 'expo-router'
 import { SymbolView } from 'expo-symbols'
 import LottieView from 'lottie-react-native'
-import React from 'react'
-import { Alert, TouchableOpacity } from 'react-native'
-import { ScrollView } from 'react-native-gesture-handler'
-import Animated, { SlideInLeft } from 'react-native-reanimated'
+import React, { useMemo } from 'react'
+import { Alert, Platform, TouchableOpacity } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { toast } from 'sonner-native'
 
@@ -22,6 +23,7 @@ const Cart = () => {
    const { clearCarts, carts } = useCartsStore()
    const { top } = useSafeAreaInsets()
    const isDark = useColorScheme() === 'dark'
+   const ascent = useThemeColor('ascent')
 
    const deleteAllCarts = () => {
       Alert.alert('Delete all carts?', 'Are you sure?', [
@@ -41,6 +43,10 @@ const Cart = () => {
       ])
    }
 
+   const data = useMemo(() => {
+      return carts.sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1))
+   }, [carts])
+
    return (
       <Container>
          <Row containerStyle={{ paddingHorizontal: SIZES.md }} align="between">
@@ -48,7 +54,10 @@ const Cart = () => {
 
             {carts.length > 0 && (
                <TouchableOpacity onPress={deleteAllCarts}>
-                  <SymbolView name="trash" />
+                  {Platform.OS === 'ios' && <SymbolView name="trash" />}
+                  {Platform.OS !== 'ios' && (
+                     <Feather name="trash" size={24} color={isDark ? 'white' : ascent} />
+                  )}
                </TouchableOpacity>
             )}
          </Row>
@@ -57,46 +66,45 @@ const Cart = () => {
                Carts
             </Text>
          </View>
-         {carts.length > 0 && (
-            <ScrollView
-               contentInsetAdjustmentBehavior="automatic"
-               style={{ flex: 1 }}
-               contentContainerStyle={{ padding: SIZES.md, gap: SIZES.md }}>
-               {carts
-                  .sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1))
-                  .map((cart, index) => {
-                     return (
-                        <Animated.View
-                           key={cart.restaurantId + index}
-                           entering={SlideInLeft.delay(index * 200).duration(600)}>
-                           <CartListItemView cart={cart} />
-                        </Animated.View>
-                     )
-                  })}
-            </ScrollView>
-         )}
-         {carts.length === 0 && (
-            <View style={{ flex: 1, justifyContent: 'center' }}>
-               <LottieView
-                  style={{ flex: 0.8 }}
-                  autoPlay
-                  loop={false}
-                  resizeMode="contain"
-                  source={
-                     isDark
-                        ? require('@/assets/animations/empty_cart_dark.json')
-                        : require('@/assets/animations/empty_cart_light.json')
-                  }
-               />
-               <View style={{ width: '60%', alignSelf: 'center' }}>
-                  <Button
-                     title="Shop Now"
-                     contentTextStyle={{ color: '#ffffff' }}
-                     onPress={() => router.replace('/(restaurants)')}
+         <FlashList
+            data={data}
+            ListEmptyComponent={
+               <View
+                  style={{
+                     justifyContent: 'center',
+                     height: SIZES.height * 0.8
+                  }}>
+                  <LottieView
+                     style={{
+                        height: SIZES.height * 0.6,
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                     }}
+                     autoPlay
+                     loop={false}
+                     resizeMode="contain"
+                     source={
+                        isDark
+                           ? require('@/assets/animations/empty_cart_dark.json')
+                           : require('@/assets/animations/empty_cart_light.json')
+                     }
                   />
+                  <View style={{ width: '60%', alignSelf: 'center', height: SIZES.height * 0.2 }}>
+                     <Button
+                        title="Shop Now"
+                        contentTextStyle={{ color: '#ffffff' }}
+                        onPress={() => router.replace('/(restaurants)')}
+                     />
+                  </View>
                </View>
-            </View>
-         )}
+            }
+            contentContainerStyle={{
+               padding: 10,
+               paddingVertical: SIZES.md
+            }}
+            estimatedItemSize={206}
+            renderItem={({ item }) => <CartListItemView cart={item} />}
+         />
       </Container>
    )
 }

@@ -10,9 +10,9 @@ import { View } from '@/components/ThemedView'
 import { SIZES } from '@/constants/Colors'
 import { categoriedData } from '@/helpers/categorizedProducts'
 import { useProducts } from '@/hooks/restaurants/useProducts'
+import { useRestaurant } from '@/hooks/restaurants/useRestaurant'
 import { useThemeColor } from '@/hooks/useThemeColor'
 import { useCartsStore } from '@/stores/cartsStore'
-import { useRestaurantsStore } from '@/stores/restaurantsStore'
 import { FontAwesome } from '@expo/vector-icons'
 import { router, useLocalSearchParams } from 'expo-router'
 import { useMemo } from 'react'
@@ -28,9 +28,10 @@ const RestaurantDetails = () => {
    const { restaurantId, categoryName } = useLocalSearchParams<Params>()
 
    //const { restaurant, loading } = useRestaurant(restaurantId!);
-   const getRestaurant = useRestaurantsStore((s) => s.getRestaurant)
-   const restaurant = getRestaurant(restaurantId!)
-   const { products, loading: loadingProducts } = useProducts(restaurantId!)
+
+   const { restaurant, loading } = useRestaurant(restaurantId)
+
+   const { products, loading: loadingProducts } = useProducts(restaurantId)
    const data = categoriedData(products)
    const { getCart, carts } = useCartsStore()
 
@@ -48,7 +49,7 @@ const RestaurantDetails = () => {
       return cart?.quantity || 0
    }, [restaurantId, carts])
 
-   if (!restaurant || loadingProducts) return <Loading />
+   if (!restaurant || loadingProducts || loading) return <Loading />
    return (
       <ParallaxViewWithStickyHeader
          backgroundImage={restaurant.image!}

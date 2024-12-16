@@ -31,7 +31,7 @@ export const Container = ({
 const styles = StyleSheet.create({
    container: {
       flex: 1,
-      padding: 20,
+      padding: 16,
       width: '100%'
    }
 })

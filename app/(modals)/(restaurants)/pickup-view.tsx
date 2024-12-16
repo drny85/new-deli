@@ -1,5 +1,5 @@
 import MapHeader from '@/components/maps/MapHeader'
-import NeoView from '@/components/NeoView'
+import NeumorphismView from '@/components/NeumorphismView'
 import PickupRestaurantsList from '@/components/restaurants/PickupRestaurantsList'
 import { View } from '@/components/ThemedView'
 import { SIZES } from '@/constants/Colors'
@@ -8,10 +8,11 @@ import { ORDER_TYPE } from '@/shared/types'
 import { useOrderFlowStore } from '@/stores/orderFlowStore'
 import { useRestaurantsStore } from '@/stores/restaurantsStore'
 import { customMapStyleLight } from '@/utils/customMap'
+import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { router } from 'expo-router'
 import { SymbolView } from 'expo-symbols'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { FlatList, useColorScheme } from 'react-native'
+import { FlatList, Platform, useColorScheme } from 'react-native'
 import MapView, { Marker, MarkerPressEvent, Region } from 'react-native-maps'
 
 const CARD_HEIGHT = 220
@@ -122,13 +123,30 @@ const PickUpView = () => {
                         identifier={restaurant.id}
                         title={restaurant.name}
                         description={restaurant.address?.slice(0, -15)}>
-                        <NeoView rounded size={50}>
-                           <SymbolView
-                              name="fork.knife"
-                              size={30}
-                              tintColor={isDark ? '#ffffff' : ascentColor}
-                           />
-                        </NeoView>
+                        <NeumorphismView
+                           borderRadius={50}
+                           style={{
+                              height: 50,
+                              width: 50,
+                              justifyContent: 'center',
+                              alignItems: 'center'
+                           }}
+                           backgroundColor="#fff">
+                           {Platform.OS === 'ios' && (
+                              <SymbolView
+                                 name="fork.knife"
+                                 size={30}
+                                 tintColor={isDark ? '#ffffff' : ascentColor}
+                              />
+                           )}
+                           {Platform.OS !== 'ios' && (
+                              <MaterialCommunityIcons
+                                 name="silverware-fork-knife"
+                                 size={20}
+                                 color={isDark ? '#ffffff' : ascentColor}
+                              />
+                           )}
+                        </NeumorphismView>
                      </Marker>
                   ))}
                </MapView>

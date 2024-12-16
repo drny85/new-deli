@@ -10,10 +10,10 @@ import React from 'react'
 import { Image, Platform, Pressable, TouchableOpacity, useColorScheme } from 'react-native'
 import { toast } from 'sonner-native'
 import Button from '../Button'
-import NeoView from '../NeoView'
 import Row from '../Row'
 import { Text } from '../ThemedText'
 import { View } from '../ThemedView'
+import NeumorphismView from '../NeumorphismView'
 
 const IMAGE_HEIGHT = 80
 
@@ -43,22 +43,18 @@ const CartListItemView = ({ cart }: Props) => {
          },
          action: {
             label: 'Delete',
+
             onClick: deleteStoreCart
          },
-         duration: 10000,
+         actionButtonStyle: {
+            backgroundColor: ascent
+         },
+         actionButtonTextStyle: {
+            color: '#ffffff'
+         },
+         duration: Infinity,
          icon: <Ionicons name="trash-outline" size={28} color={ascent} />
       })
-      // Alert.alert('Are you sure?', 'This action cannot be undone', [
-      //    {
-      //       text: 'Cancel',
-      //       style: 'cancel'
-      //    },
-      //    {
-      //       text: 'Delete',
-      //       style: 'destructive',
-      //       onPress: deleteStoreCart
-      //    }
-      // ])
    }
 
    const deleteStoreCart = () => {
@@ -71,15 +67,14 @@ const CartListItemView = ({ cart }: Props) => {
    }
    if (loading) return null
    return (
-      <NeoView
-         containerStyle={{ borderRadius: SIZES.lg }}
-         innerStyleContainer={{ padding: SIZES.md, borderRadius: SIZES.md }}
-         key={cart.restaurantId}>
+      <NeumorphismView key={cart.restaurantId} padding={SIZES.md}>
          <Row align="between">
             <Row containerStyle={{ gap: SIZES.sm }}>
                <Pressable onPress={goToStore}>
                   <Image
-                     source={{ uri: restaurant?.image || '' }}
+                     source={{
+                        uri: restaurant?.image || 'https://picsum.photos/seed/picsum/200/300'
+                     }}
                      //transition={300}
                      style={{
                         width: IMAGE_HEIGHT,
@@ -143,7 +138,7 @@ const CartListItemView = ({ cart }: Props) => {
                onPress={goToStore}
             />
          </View>
-      </NeoView>
+      </NeumorphismView>
    )
 }
 

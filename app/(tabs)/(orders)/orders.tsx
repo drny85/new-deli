@@ -69,7 +69,9 @@ const Orders = () => {
             <View center style={{ gap: 60 }}>
                <Text type="title">No Orders</Text>
                <Button
-                  onPress={() => router.replace('/(restaurants)')}
+                  onPress={() =>
+                     router.push({ pathname: '/favorite-search', params: { from: 'orders' } })
+                  }
                   title="Place My First Order"
                   contentTextStyle={{ paddingHorizontal: SIZES.lg, color: '#ffffff' }}
                />

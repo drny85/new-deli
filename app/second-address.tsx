@@ -8,7 +8,7 @@ import { useThemeColor } from '@/hooks/useThemeColor'
 import { useOrderFlowStore } from '@/stores/orderFlowStore'
 import { router } from 'expo-router'
 import { useEffect, useRef, useState } from 'react'
-import { KeyboardAvoidingView, Platform, TextInput, useColorScheme } from 'react-native'
+import { TextInput, useColorScheme } from 'react-native'
 import {
    GooglePlacesAutocomplete,
    GooglePlacesAutocompleteRef
@@ -16,6 +16,7 @@ import {
 import MapView, { Marker, Region } from 'react-native-maps'
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated'
 import { OrderAddress } from '@/shared/types'
+import KeyboardScreen from '@/components/KeyboardScreen'
 
 const AddressScreen = () => {
    const bgColor = useThemeColor('primary')
@@ -56,15 +57,17 @@ const AddressScreen = () => {
    }, [mapRef.current])
 
    return (
-      <Container>
+      <Container contentContainerStyle={{ marginTop: 20 }}>
          <Animated.View style={{ flex: 1 }} entering={FadeIn} exiting={FadeOut}>
             {address && region && (
-               <View style={{ height: SIZES.height * 0.25, width: 'auto' }}>
+               <View style={{ height: SIZES.height * 0.25, width: 'auto', borderRadius: SIZES.lg }}>
                   <MapView
                      ref={mapRef}
                      style={{
                         width: 'auto',
-                        height: '100%'
+                        height: '100%',
+                        borderRadius: SIZES.lg,
+                        overflow: 'hidden'
                      }}
                      region={{
                         latitude: region?.latitude,
@@ -135,11 +138,7 @@ const AddressScreen = () => {
                      }
                   }}
                />
-               <KeyboardAvoidingView
-                  style={{ flex: 1 }}
-                  behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-                  contentContainerStyle={{ gap: SIZES.md }}
-                  keyboardVerticalOffset={40}>
+               <KeyboardScreen style={{ flex: 1 }}>
                   {address && (
                      <View style={{ gap: SIZES.lg * 1.3 }}>
                         <Input
@@ -182,7 +181,7 @@ const AddressScreen = () => {
                         </View>
                      </View>
                   )}
-               </KeyboardAvoidingView>
+               </KeyboardScreen>
             </View>
          </Animated.View>
       </Container>

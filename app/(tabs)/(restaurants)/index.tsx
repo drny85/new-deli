@@ -14,21 +14,29 @@ import { useOrderFlowStore } from '@/stores/orderFlowStore'
 import { Business, Category, ORDER_TYPE } from '@/shared/types'
 import { getDistanceFromLatLonInMeters } from '@/utils/getDistanceInMeters'
 import { FlashList } from '@shopify/flash-list'
-import { router, useFocusEffect } from 'expo-router'
+import { router, useFocusEffect, useLocalSearchParams } from 'expo-router'
 import { useCallback, useMemo, useRef, useState } from 'react'
 import { Keyboard, TouchableOpacity } from 'react-native'
 import { useRestaurantsStore } from '@/stores/restaurantsStore'
+import { Feather } from '@expo/vector-icons'
+import { useThemeColor } from '@/hooks/useThemeColor'
+import { onRestaurantSearch } from '@/helpers/restaurantsSearch'
 
 const ALL = { id: 'all', name: 'All Categories' }
+type ParamsProps = {
+   from: string
+}
 
 const Restaurants = () => {
    const { loading, products, restaurants: res } = useAllProducts()
+   const { from } = useLocalSearchParams<ParamsProps>()
    const { restaurants, setRestaurants } = useRestaurantsStore()
    const [search, setValue] = useState('')
    const { orderType, setOrderType, currentLocationCoords, deliveryAddress } = useOrderFlowStore()
    const flashListRef = useRef<FlashList<Business>>(null)
    const [selectedCategory, setSelectedCategory] = useState<Category>(ALL)
    const [viewByDistance, setViewDyDistance] = useState(true)
+   const ascentColor = useThemeColor('ascent')
 
    const onOptionChange = (value: ORDER_TYPE) => {
       setOrderType(value)
@@ -57,38 +65,9 @@ const Restaurants = () => {
          }))
          .sort((a, b) => a.distance - b.distance)
    }, [currentLocationCoords, deliveryAddress, resultsAll])
+
    const onValueChange = (value: string) => {
-      // Update the input value state
-      setValue(value)
-
-      // Sanitize and prepare the search term
-      const searchTerm = value
-         .trim()
-         .replace(/[^a-z]/gi, '')
-         .toLowerCase()
-      if (!searchTerm) {
-         // Reset restaurants when search term is empty
-         setRestaurants(res)
-         return
-      }
-
-      // Combine filters for restaurants and products
-      const filteredRestaurants = restaurants.filter((restaurant) => {
-         const restaurantMatch = restaurant.name.toLowerCase().includes(searchTerm)
-
-         // Check if any product matches for the current restaurant
-         const productMatch = products.some(
-            (product) =>
-               product.businessId === restaurant.id &&
-               (product.name.toLowerCase().includes(searchTerm) ||
-                  product.keywords?.some((keyword) => keyword.toLowerCase().includes(searchTerm)))
-         )
-
-         return restaurantMatch || productMatch
-      })
-
-      // Update the restaurant list with filtered results
-      setRestaurants(filteredRestaurants)
+      onRestaurantSearch(value, restaurants, products, res, setRestaurants, setValue)
    }
 
    const onCategoryPress = (category: Category) => {
@@ -118,11 +97,17 @@ const Restaurants = () => {
          }
       }, [orderType])
    )
+
    if (loading) return <HomeSkelenton />
 
    return (
       <Container>
-         <View style={{ flex: 1, paddingHorizontal: SIZES.sm }}>
+         {from && (
+            <TouchableOpacity style={{ padding: 6, marginLeft: 2 }} onPress={router.back}>
+               <Feather name="x-circle" size={26} color={ascentColor} />
+            </TouchableOpacity>
+         )}
+         <View style={{ flex: 1, padding: SIZES.sm }}>
             <RestaurantsHeader onOptionChange={onOptionChange} />
             <View style={{ marginBottom: SIZES.md }}>
                <RestaurantSearch

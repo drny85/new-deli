@@ -100,7 +100,7 @@ const AddressScreen = () => {
             keyboardVerticalOffset={40}>
             <Animated.View>
                <TouchableOpacity
-                  onPress={() => router.push('/second-address')}
+                  onPress={() => router.push({ pathname: '/second-address' })}
                   style={{
                      padding: SIZES.sm,
                      gap: SIZES.lg * 2,

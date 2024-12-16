@@ -3,12 +3,15 @@ import { addNewProduct, updateProduct } from '@/actions/products'
 import BackButton from '@/components/BackButton'
 import BottomSheetModal, { BottomSheetModalRef } from '@/components/BottomSheetModal'
 import AddonsHeader from '@/components/business/AddonsHeader'
+import KeywordsList from '@/components/business/KeywordsList'
 import Button from '@/components/Button'
 import AddonsSelector from '@/components/cart/MultipleAddonsSelection'
 import Input from '@/components/Input'
 import ItemQuantitySetter from '@/components/ItemQuantitySetter'
+import KeyboardScreen from '@/components/KeyboardScreen'
 import Loading from '@/components/Loading'
 import NeoView from '@/components/NeoView'
+import NeumorphismView from '@/components/NeumorphismView'
 import CategoryTitle from '@/components/restaurants/CategoryTitle'
 import ProductCard from '@/components/restaurants/ProductCart'
 import Row from '@/components/Row'
@@ -70,6 +73,7 @@ const AddProduct = () => {
    const [selectedAddons, setSelectedAddons] = useState<string[]>([])
    const [newAddon, setNewAddon] = useState('')
    const [addingNewAddon, setAddingNewAddon] = useState(false)
+   const keywordRef = useRef<TextInput>(null)
 
    const toggleAddonSelection = (addonName: string, maxSelectable: number) => {
       const isSelected = selectedAddons.includes(addonName)
@@ -105,6 +109,7 @@ const AddProduct = () => {
       sizes: variations.length > 0 ? variations.map((v) => ({ ...v, price: +v.price })) : [],
       available: true,
       addons: [...selectedAddons],
+      keywords: [],
       multipleAddons: qty > 0 ? qty : null
    })
 
@@ -396,22 +401,13 @@ const AddProduct = () => {
    //       router.canGoBack() && router.replace('/(modals)/(business)/categories')
    //    }
    // }, [categories])
+
+   console.log(JSON.stringify(product.keywords, null, 2))
    if (loadingCategories) return <Loading />
 
    return (
-      <View style={{ flex: 1 }}>
-         <View
-            style={{
-               flexDirection: 'row',
-               justifyContent: 'space-between',
-               width: '100%',
-               alignItems: 'center',
-               backgroundColor: 'rgba(0,0,0,0.3)',
-               position: 'absolute',
-               paddingTop: SIZES.statusBarHeight,
-               paddingHorizontal: SIZES.lg,
-               zIndex: 10
-            }}>
+      <KeyboardScreen>
+         <View style={styles.main}>
             <TouchableOpacity style={{ padding: SIZES.sm }} onPress={router.back}>
                <FontAwesome name="chevron-left" size={24} color={'#ffffff'} />
             </TouchableOpacity>
@@ -492,25 +488,53 @@ const AddProduct = () => {
                               }
                            />
                            {product.price !== '' && product.name !== '' && (
-                              <TouchableOpacity onPress={() => setShowCategoryModal(true)}>
-                                 <Text
-                                    type="defaultSemiBold"
-                                    style={{ marginLeft: SIZES.sm, marginBottom: SIZES.sm }}>
-                                    Category
-                                 </Text>
-                                 <NeoView
-                                    containerStyle={{ borderRadius: SIZES.lg }}
-                                    innerStyleContainer={{
-                                       borderRadius: SIZES.lg,
-                                       padding: SIZES.sm
-                                    }}>
+                              <View style={{ gap: SIZES.lg }}>
+                                 <TouchableOpacity onPress={() => setShowCategoryModal(true)}>
                                     <Text
-                                       style={{ marginLeft: SIZES.sm * 0.5 }}
-                                       type="defaultSemiBold">
-                                       {category ? category.name : 'Pick a Category'}
+                                       type="defaultSemiBold"
+                                       style={{ marginLeft: SIZES.sm, marginBottom: SIZES.sm }}>
+                                       Category
                                     </Text>
-                                 </NeoView>
-                              </TouchableOpacity>
+                                    <NeumorphismView padding={SIZES.sm}>
+                                       <Text
+                                          style={{ marginLeft: SIZES.sm * 0.5 }}
+                                          type="defaultSemiBold">
+                                          {category ? category.name : 'Pick a Category'}
+                                       </Text>
+                                    </NeumorphismView>
+                                 </TouchableOpacity>
+                                 <View>
+                                    <Input
+                                       title="Keywords"
+                                       ref={keywordRef}
+                                       placeholder="Type any keyword for this item"
+                                       onSubmitEditing={(e) => {
+                                          console.log('Keyword', e.nativeEvent.text)
+                                          if (e.nativeEvent.text !== '') {
+                                             setProduct((prev) => ({
+                                                ...prev,
+                                                keywords: [
+                                                   ...new Set([
+                                                      ...(prev.keywords || []),
+                                                      e.nativeEvent.text
+                                                   ])
+                                                ]
+                                             }))
+                                             keywordRef.current?.clear()
+                                          }
+                                       }}
+                                    />
+                                    <KeywordsList
+                                       keywords={product.keywords || []}
+                                       onPress={(keyword) => {
+                                          setProduct((prev) => ({
+                                             ...prev,
+                                             keywords: prev.keywords?.filter((k) => k !== keyword)
+                                          }))
+                                       }}
+                                    />
+                                 </View>
+                              </View>
                            )}
 
                            {product.category && (
@@ -788,23 +812,23 @@ const AddProduct = () => {
                         </View>
                      )}
                   </View>
+                  {product.description && (
+                     <View style={{ width: '60%', alignSelf: 'center', paddingBottom: bottom }}>
+                        <Button
+                           disabled={loading}
+                           title={productId ? 'Update Product' : 'Add Product'}
+                           onPress={handleAddProduct}
+                           contentTextStyle={{ color: '#ffffff' }}
+                        />
+                     </View>
+                  )}
                </ScrollView>
             </View>
-            {product.description && (
-               <View style={{ width: '60%', alignSelf: 'center', paddingBottom: bottom }}>
-                  <Button
-                     disabled={loading}
-                     title={productId ? 'Update Product' : 'Add Product'}
-                     onPress={handleAddProduct}
-                     contentTextStyle={{ color: '#ffffff' }}
-                  />
-               </View>
-            )}
          </View>
          <Modal
             visible={showCategoryModal}
             style={{ backgroundColor }}
-            presentationStyle="fullScreen"
+            //presentationStyle="fullScreen"
             animationType="slide">
             <View
                style={{
@@ -813,12 +837,19 @@ const AddProduct = () => {
                   marginTop: SIZES.statusBarHeight,
                   backgroundColor
                }}>
-               <BackButton />
+               <BackButton onPress={() => setShowCategoryModal(false)} />
                <Text center type="title" style={{ marginTop: SIZES.md }}>
                   Pick One
                </Text>
 
-               <ScrollView contentContainerStyle={{ padding: 20, gap: SIZES.lg }}>
+               <ScrollView
+                  contentContainerStyle={{
+                     padding: 20,
+                     gap: SIZES.lg,
+                     maxWidth: 400,
+                     alignSelf: 'center',
+                     width: '100%'
+                  }}>
                   {categories
                      .sort((a, b) => (a.name > b.name ? 1 : -1))
                      .map((cat, index) => (
@@ -865,23 +896,9 @@ const AddProduct = () => {
                onPressSetSeletecAddons={() => setSelectedAddons(product.addons)}
             />
 
-            <View
-               style={{
-                  flex: 1,
-                  width: '80%',
-                  alignSelf: 'center',
-                  justifyContent: 'space-evenly',
-                  gap: SIZES.sm
-               }}>
+            <View style={styles.addonsContainer}>
                <View style={{ flex: 1 }}>
-                  <View
-                     style={{
-                        alignSelf: 'center',
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        gap: 16,
-                        marginTop: SIZES.md
-                     }}>
+                  <View style={styles.addonsInner}>
                      <Text center type="title">
                         Addons Allowed for this Product
                      </Text>
@@ -1012,7 +1029,7 @@ const AddProduct = () => {
                </AnimatePresence>
             </View>
          </Sheet>
-      </View>
+      </KeyboardScreen>
    )
 }
 
@@ -1030,5 +1047,30 @@ const styles = StyleSheet.create({
       height: '100%',
       borderRadius: 50,
       objectFit: 'cover'
+   },
+   main: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      width: '100%',
+      alignItems: 'center',
+      backgroundColor: 'rgba(0,0,0,0.3)',
+      position: 'absolute',
+      paddingTop: SIZES.statusBarHeight,
+      paddingHorizontal: SIZES.lg,
+      zIndex: 10
+   },
+   addonsContainer: {
+      flex: 1,
+      width: '80%',
+      alignSelf: 'center',
+      justifyContent: 'space-evenly',
+      gap: SIZES.sm
+   },
+   addonsInner: {
+      alignSelf: 'center',
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 16,
+      marginTop: SIZES.md
    }
 })

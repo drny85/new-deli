@@ -3,16 +3,22 @@ import { CategorizedProduct } from '@/helpers/categorizedProducts'
 import { useThemeColor } from '@/hooks/useThemeColor'
 import { FlashList } from '@shopify/flash-list'
 import { router } from 'expo-router'
-import { useEffect, useRef } from 'react'
+import { forwardRef, useEffect, useRef } from 'react'
 import { Text } from '../ThemedText'
 import { View } from '../ThemedView'
 import ProductCard from './ProductCart'
+import { ViewStyle } from 'react-native'
+import { Product } from '@/shared/types'
 
 let timer: NodeJS.Timeout
 
 type Props = {
    items: CategorizedProduct[]
    categoryName: string | undefined
+}
+interface ProductsViewProps {
+   item: CategorizedProduct
+   style?: ViewStyle
 }
 
 const Products = ({ items, categoryName }: Props) => {
@@ -21,12 +27,13 @@ const Products = ({ items, categoryName }: Props) => {
    const index = items.findIndex((c) => c.title?.toLowerCase() === categoryName?.toLowerCase())
 
    useEffect(() => {
-      if (items.length === 0 || !categoryName) return
+      if (items.length === 0 || !categoryName || categoryName === 'All Categories') return
+      console.log(categoryName)
       if (index !== -1) {
          listRef.current?.scrollToIndex({ index, animated: true })
          timer = setTimeout(() => {
             listRef.current?.scrollToIndex({
-               index: index,
+               index,
                animated: true
             })
          }, 800)
@@ -39,12 +46,12 @@ const Products = ({ items, categoryName }: Props) => {
    if (items.length === 0) return null
    return (
       <FlashList
-         ref={listRef}
          scrollEnabled={false}
          initialScrollIndex={0}
-         estimatedItemSize={SIZES.height * 0.22}
+         estimatedItemSize={205}
          contentContainerStyle={{ paddingBottom: SIZES.lg }}
          data={items}
+         ref={listRef}
          //getItemType={getItemLayout}
 
          keyExtractor={(item) => item.title}
@@ -55,28 +62,32 @@ const Products = ({ items, categoryName }: Props) => {
 
 export default Products
 
-const ProductsView = ({ item }: { item: CategorizedProduct }) => {
+const ProductsView = forwardRef<FlashList<Product>, ProductsViewProps>(({ item, style }, ref) => {
    const backgroundColor = useThemeColor('background')
    return (
       <View
-         style={{
-            flex: 1,
-            gap: SIZES.sm,
-            backgroundColor,
-            marginBottom: 30
-         }}>
+         style={[
+            {
+               flex: 1,
+               gap: SIZES.sm,
+               backgroundColor,
+               marginBottom: 30
+            },
+            style
+         ]}>
          <Text type="defaultSemiBold" fontSize="large">
             {item.title}
          </Text>
          <FlashList
             data={item.data}
+            ref={ref}
             horizontal
             pagingEnabled
             keyExtractor={(item) => item.id!}
-            estimatedItemSize={SIZES.height * 0.22}
+            estimatedItemSize={210}
             showsHorizontalScrollIndicator={false}
             renderItem={({ item }) => (
-               <View style={{ marginHorizontal: 2, borderRadius: SIZES.lg * 2 }}>
+               <View style={{ marginRight: 20, borderRadius: SIZES.lg * 2 }}>
                   <ProductCard
                      product={item}
                      onPress={() =>
@@ -95,4 +106,4 @@ const ProductsView = ({ item }: { item: CategorizedProduct }) => {
          />
       </View>
    )
-}
+})

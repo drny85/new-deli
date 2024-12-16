@@ -1,8 +1,8 @@
 import { SIZES } from '@/constants/Colors'
 import { useThemeColor } from '@/hooks/useThemeColor'
-import { FontAwesome, MaterialIcons } from '@expo/vector-icons'
+import { AntDesign, FontAwesome, MaterialIcons } from '@expo/vector-icons'
 import { SymbolView } from 'expo-symbols'
-import { TouchableOpacity, useColorScheme } from 'react-native'
+import { Platform, TouchableOpacity, useColorScheme } from 'react-native'
 import NeoView from '../NeoView'
 import Row from '../Row'
 import { Text } from '../ThemedText'
@@ -57,16 +57,36 @@ const MapHeader = ({ onPressBack, onCenter, onZoomIn, onZoomOut }: Props) => {
                </TouchableOpacity>
                <TouchableOpacity onPress={onZoomIn}>
                   <NeoView rounded size={48}>
-                     <SymbolView
-                        name="plus"
-                        weight="bold"
-                        tintColor={isDark ? '#ffffff' : ascentColor}
-                     />
+                     {Platform.OS === 'ios' && (
+                        <SymbolView
+                           name="plus.circle"
+                           tintColor={isDark ? '#ffffff' : ascentColor}
+                        />
+                     )}
+                     {Platform.OS !== 'ios' && (
+                        <AntDesign
+                           name="pluscircleo"
+                           size={24}
+                           color={isDark ? '#ffffff' : ascentColor}
+                        />
+                     )}
                   </NeoView>
                </TouchableOpacity>
                <TouchableOpacity onPress={onZoomOut}>
                   <NeoView rounded size={48}>
-                     <SymbolView name="minus.circle" tintColor={isDark ? '#ffffff' : ascentColor} />
+                     {Platform.OS === 'ios' && (
+                        <SymbolView
+                           name="minus.circle"
+                           tintColor={isDark ? '#ffffff' : ascentColor}
+                        />
+                     )}
+                     {Platform.OS !== 'ios' && (
+                        <AntDesign
+                           name="minuscircleo"
+                           size={24}
+                           color={isDark ? '#ffffff' : ascentColor}
+                        />
+                     )}
                   </NeoView>
                </TouchableOpacity>
             </View>

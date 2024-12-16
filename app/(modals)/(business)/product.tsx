@@ -1,5 +1,6 @@
 import { deleteProduct } from '@/actions/products'
 import BackButton from '@/components/BackButton'
+import KeywordsList from '@/components/business/KeywordsList'
 import { Container } from '@/components/Container'
 import Loading from '@/components/Loading'
 import SizePicker from '@/components/restaurants/SizePicker'
@@ -155,6 +156,12 @@ const BusinessProduct = () => {
                   </View>
                )}
             </View>
+            {product.keywords && product.keywords?.length > 0 && (
+               <View style={{ padding: SIZES.md, justifyContent: 'center', alignItems: 'center' }}>
+                  <Text type="defaultSemiBold">Keywords</Text>
+                  <KeywordsList disabled keywords={product.keywords} onPress={() => {}} />
+               </View>
+            )}
 
             <View style={{ marginVertical: SIZES.lg }}>
                <Text type="defaultSemiBold">Description</Text>

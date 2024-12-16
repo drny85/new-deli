@@ -62,59 +62,56 @@ const Products = () => {
          columnWrapperStyle={{ justifyContent: 'space-between' }}
          contentInsetAdjustmentBehavior="automatic"
          renderItem={({ item }) => (
-            <View style={{ width: '50%', padding: SIZES.sm }}>
-               <NeumorphismView borderRadius={SIZES.lg}>
-                  <TouchableOpacity
-                     onPress={() =>
-                        router.push({
-                           pathname: '/(modals)/(business)/product',
-                           params: { productId: item.id! }
-                        })
-                     }
+            <NeumorphismView borderRadius={SIZES.md} style={{ width: '49%', marginBottom: 10 }}>
+               <TouchableOpacity
+                  onPress={() =>
+                     router.push({
+                        pathname: '/(modals)/(business)/product',
+                        params: { productId: item.id! }
+                     })
+                  }
+                  style={{
+                     width: '100%',
+                     flexDirection: 'row'
+                  }}>
+                  <Image
+                     source={{ uri: item.image! }}
                      style={{
-                        height: SIZES.height * 0.1,
-                        width: '100%',
-                        flexDirection: 'row'
-                     }}>
-                     <Image
-                        source={{ uri: item.image! }}
-                        style={{
-                           width: '30%',
-                           height: '100%',
-                           borderTopLeftRadius: SIZES.lg,
-                           borderBottomLeftRadius: SIZES.lg
-                        }}
-                     />
-                     <View style={{ padding: SIZES.sm }}>
-                        <Row align="between" containerStyle={{ flexGrow: 1, gap: 20 }}>
-                           <Text type="defaultSemiBold">{item.name}</Text>
-                           {item.sizes.length > 0 && <Text>From ${item.price}</Text>}
-                        </Row>
-                        {item.sizes.length > 0 && (
-                           <View style={{ marginBottom: 10 }}>
-                              <SizePicker
-                                 selected={item.sizes[0]}
-                                 radius={36}
-                                 showTitle={false}
-                                 disabled
-                                 sizes={item.sizes}
-                                 onPress={() => {
-                                    //setSelected(size)
-                                 }}
-                              />
-                           </View>
-                        )}
-                        {item.addons.length > 0 && item.multipleAddons && (
-                           <View style={{ padding: SIZES.sm }}>
-                              <Text type="subtitle">Multiple Choices</Text>
-                              <Text type="italic">Select up to {item.multipleAddons}</Text>
-                              <Text type="title">${item.price}</Text>
-                           </View>
-                        )}
-                     </View>
-                  </TouchableOpacity>
-               </NeumorphismView>
-            </View>
+                        width: '30%',
+                        height: '100%',
+                        borderTopLeftRadius: SIZES.lg,
+                        borderBottomLeftRadius: SIZES.lg
+                     }}
+                  />
+                  <View style={{ padding: SIZES.sm }}>
+                     <Row align="between" containerStyle={{ flexGrow: 1, gap: 20 }}>
+                        <Text type="defaultSemiBold">{item.name}</Text>
+                        {item.sizes.length > 0 && <Text>From ${item.price}</Text>}
+                     </Row>
+                     {item.sizes.length > 0 && (
+                        <View style={{ marginBottom: 10 }}>
+                           <SizePicker
+                              selected={item.sizes[0]}
+                              radius={36}
+                              showTitle={false}
+                              disabled
+                              sizes={item.sizes}
+                              onPress={() => {
+                                 //setSelected(size)
+                              }}
+                           />
+                        </View>
+                     )}
+                     {item.addons.length > 0 && item.multipleAddons && (
+                        <View style={{ padding: SIZES.sm }}>
+                           <Text type="subtitle">Multiple Choices</Text>
+                           <Text type="italic">Select up to {item.multipleAddons}</Text>
+                           <Text type="title">${item.price}</Text>
+                        </View>
+                     )}
+                  </View>
+               </TouchableOpacity>
+            </NeumorphismView>
          )}
       />
    )

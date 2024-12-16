@@ -24,7 +24,7 @@ import * as Haptics from 'expo-haptics'
 import { router, useLocalSearchParams } from 'expo-router'
 import { Image } from 'moti'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { Keyboard, ScrollView, StyleSheet, TouchableOpacity } from 'react-native'
+import { Keyboard, ScrollView, StyleSheet, TouchableOpacity, useColorScheme } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import NeumorphismView from '@/components/NeumorphismView'
 import { toast } from 'sonner-native'
@@ -40,6 +40,7 @@ type PropsParams = {
 const ProductDetail = () => {
    const { productId, businessId, itemId } = useLocalSearchParams<PropsParams>()
    const backgroundColor = useThemeColor('background')
+   const isDark = useColorScheme() === 'dark'
    const ascent = useThemeColor('ascent')
    const secondary = useThemeColor('secondary')
    const textColor = useThemeColor('text')
@@ -294,7 +295,7 @@ const ProductDetail = () => {
                resizeMode="cover"
                blurRadius={0.5}
                animate={styles.image1}
-               transition={{ duration: 800 }}
+               transition={{ duration: 800, type: 'timing' }}
             />
 
             <Image
@@ -302,7 +303,8 @@ const ProductDetail = () => {
                animate={{ rotate: '360deg' }}
                transition={{
                   duration: 600,
-                  delay: 300
+                  delay: 300,
+                  type: 'timing'
                }}
                resizeMode="cover"
                source={{ uri: product.image! }}
@@ -331,6 +333,7 @@ const ProductDetail = () => {
                   <ItemQuantitySetter
                      disabled={quantity === 1}
                      quantity={quantity}
+                     iconSize={28}
                      onPressAdd={() => setQuantity((prev) => prev + 1)}
                      onPressSub={() => setQuantity((prev) => (prev > 1 ? prev - 1 : prev))}
                   />
@@ -393,7 +396,7 @@ const ProductDetail = () => {
 
          <View style={[styles.totalView, { marginBottom: bottom }]}>
             <NeumorphismView
-               borderRadius={SIZES.lg}
+               borderRadius={SIZES.lg * 1.5}
                padding={10}
                style={{ paddingHorizontal: SIZES.lg * 1.5 }}>
                <Text type="title">
@@ -428,12 +431,13 @@ const ProductDetail = () => {
                   value={instructions}
                   multiline
                   maxLength={160}
+                  placeholderTextColor={textColor + 80}
                   onChangeText={setInstructions}
                   //placeholderTextColor={theme.TEXT_COLOR + 90}
                />
                <View style={{ width: '60%', alignSelf: 'center', marginVertical: SIZES.lg }}>
                   <Button
-                     type="soft"
+                     type={isDark ? 'secondary' : 'soft'}
                      title={'Done'}
                      onPress={() => {
                         Keyboard.dismiss()

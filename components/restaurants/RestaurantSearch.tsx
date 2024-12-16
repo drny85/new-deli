@@ -9,13 +9,14 @@ type Props = {
    onClose: () => void
    value: string
    contentContainerStyle?: ViewStyle
-}
+} & React.ComponentProps<typeof Input>
 const RestaurantSearch = ({
    placeholder,
    value,
    onValueChange,
    onClose,
-   contentContainerStyle
+   contentContainerStyle,
+   ...rest
 }: Props) => {
    return (
       <Input
@@ -36,6 +37,7 @@ const RestaurantSearch = ({
             },
             contentContainerStyle
          ]}
+         {...rest}
          containerStyle={{ borderRadius: SIZES.lg * 3 }}
          placeholder={placeholder}
          value={value}
