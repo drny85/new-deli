@@ -95,16 +95,16 @@ const ProductDetail = () => {
          Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error)
          return toast.warning('You can only have 10 carts', {
             description: 'You can only have 10 carts',
-            duration: 2000,
+            duration: 3000,
             position: 'top-center'
          })
       }
       if (!selected && product?.sizes && product.sizes.length > 0) {
          Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error)
-         return toast.warning('Please select a size', {
-            description: 'You must select a size to add to cart',
-            duration: 2000,
-            position: 'top-center'
+         return toast.warning('Please select a size / addons', {
+            description: 'You must select at least one to add to cart',
+            position: 'top-center',
+            duration: 3000
          })
       }
 

@@ -28,14 +28,11 @@ const Products = ({ items, categoryName }: Props) => {
 
    useEffect(() => {
       if (items.length === 0 || !categoryName || categoryName === 'All Categories') return
-      console.log(categoryName)
+      console.log(categoryName, index)
       if (index !== -1) {
-         listRef.current?.scrollToIndex({ index, animated: true })
+         // listRef.current?.scrollToIndex({ index, animated: true })
          timer = setTimeout(() => {
-            listRef.current?.scrollToIndex({
-               index,
-               animated: true
-            })
+            scrollToIndex(index)
          }, 800)
       }
       return () => {
@@ -43,12 +40,22 @@ const Products = ({ items, categoryName }: Props) => {
       }
    }, [index, categoryName, items.length, listRef])
 
+   const scrollToIndex = (index: number) => {
+      if (listRef.current) {
+         listRef.current.scrollToIndex({
+            index,
+            animated: true
+         })
+      }
+   }
+
    if (items.length === 0) return null
    return (
       <FlashList
          scrollEnabled={false}
-         initialScrollIndex={0}
+         initialScrollIndex={index}
          estimatedItemSize={205}
+         keyboardShouldPersistTaps="always"
          contentContainerStyle={{ paddingBottom: SIZES.lg }}
          data={items}
          ref={listRef}

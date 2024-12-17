@@ -87,6 +87,9 @@ const Restaurants = () => {
          pathname: '/restaurant',
          params: { restaurantId, categoryName: selectedCategory.name }
       })
+      if (search) {
+         setValue('')
+      }
       setSelectedCategory(ALL)
    }
 
@@ -125,7 +128,7 @@ const Restaurants = () => {
                <AllCategoriesView
                   onCategoryPress={onCategoryPress}
                   ids={restaurants.map((r) => r.id!)}
-                  products={[...products]}
+                  products={products}
                />
             </View>
             <Row containerStyle={{ paddingBottom: SIZES.sm }} align="between">
@@ -162,7 +165,9 @@ const Restaurants = () => {
                            marginVertical: SIZES.sm * 0.5
                         }}
                         item={item}
-                        onPress={() => onRestaurantPress(item.id!)}
+                        onPress={() => {
+                           onRestaurantPress(item.id!)
+                        }}
                      />
                   )
                }}

@@ -21,7 +21,7 @@ import { View } from '@/components/ThemedView'
 import { ADDONS, SIZES_ADDONS } from '@/constants'
 import { SIZES } from '@/constants/Colors'
 import { letterSizes } from '@/helpers/lettersSizes'
-import { onlyLetters } from '@/helpers/onlyLetters'
+import { onlyLetters, onlyNumbers } from '@/helpers/onlyLetters'
 import { useAllCategories } from '@/hooks/category/useAllCategories'
 import { useProduct } from '@/hooks/restaurants/useProduct'
 import { usePhoto } from '@/hooks/usePhoto'
@@ -484,7 +484,7 @@ const AddProduct = () => {
                               keyboardType="numeric"
                               value={product.price as string}
                               onChangeText={(text) =>
-                                 setProduct((prev) => ({ ...prev, price: +text }))
+                                 setProduct((prev) => ({ ...prev, price: onlyNumbers(text) }))
                               }
                            />
                            {product.price !== '' && product.name !== '' && (
@@ -765,11 +765,11 @@ const AddProduct = () => {
                                              onChangeText={(text) => {
                                                 setVariations((prev) => {
                                                    const newVariations = [...prev]
-                                                   newVariations[index].price! = text
+                                                   newVariations[index].price! = onlyNumbers(text)
                                                    if (index === 0 && text) {
                                                       setProduct((prev) => ({
                                                          ...prev,
-                                                         price: text
+                                                         price: onlyNumbers(text)
                                                       }))
                                                    }
                                                    return newVariations

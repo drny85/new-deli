@@ -1,5 +1,4 @@
-import { View, Text, TouchableOpacity } from 'react-native'
-import React from 'react'
+import { View, Text, TouchableOpacity, ViewStyle } from 'react-native'
 import { SIZES } from '@/constants/Colors'
 import { globalStyle } from '@/constants/styles'
 import { useThemeColor } from '@/hooks/useThemeColor'
@@ -12,6 +11,7 @@ type Props = {
    setIndex: (index: number) => void
    setSelected: (category: string) => void
    onCategoryPress: (category: Category) => void
+   containerStyle?: ViewStyle
 }
 const CategoryTitle = ({
    index,
@@ -19,11 +19,13 @@ const CategoryTitle = ({
    onCategoryPress,
    selected,
    setSelected,
-   setIndex
+   setIndex,
+   containerStyle
 }: Props) => {
    const ascentColor = useThemeColor('ascent')
    const backgroundColor = useThemeColor('primary')
    const textColor = useThemeColor('text')
+
    return (
       <View style={{ marginHorizontal: SIZES.sm * 0.5 }}>
          <TouchableOpacity
@@ -33,16 +35,21 @@ const CategoryTitle = ({
                   ...globalStyle.shadow,
                   paddingHorizontal: SIZES.md,
                   paddingVertical: SIZES.sm,
-                  backgroundColor: selected === item.name ? ascentColor : backgroundColor,
+                  backgroundColor:
+                     selected.toLowerCase() === item.name.toLowerCase()
+                        ? ascentColor
+                        : backgroundColor,
                   shadowColor: 'rgba(0,0,0,0.2)',
                   shadowRadius: 2,
                   marginVertical: 2
-               }
+               },
+               containerStyle
             ]}
             onPress={() => {
                setSelected(item.name)
                setIndex(index)
                onCategoryPress(item)
+
                // dispatch(setCurrentCategory(item));
             }}>
             <Text

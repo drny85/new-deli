@@ -9,6 +9,7 @@ import { Text } from '@/components/ThemedText'
 import { View } from '@/components/ThemedView'
 import { Colors, SIZES } from '@/constants/Colors'
 import { categoriedData, CategorizedProduct } from '@/helpers/categorizedProducts'
+import { letterSizes } from '@/helpers/lettersSizes'
 import { useProducts } from '@/hooks/restaurants/useProducts'
 import { useNavigationSearch } from '@/hooks/useNavigationSearch'
 import { useThemeColor } from '@/hooks/useThemeColor'
@@ -88,7 +89,8 @@ const Products = () => {
                         <Text type="defaultSemiBold">{item.name}</Text>
                         {item.sizes.length > 0 && <Text>From ${item.price}</Text>}
                      </Row>
-                     {item.sizes.length > 0 && (
+                     {/* and sizes do nto contain letter s m d or xl */}
+                     {letterSizes(item.sizes) && item.sizes.length > 0 && (
                         <View style={{ marginBottom: 10 }}>
                            <SizePicker
                               selected={item.sizes[0]}
@@ -100,6 +102,23 @@ const Products = () => {
                                  //setSelected(size)
                               }}
                            />
+                        </View>
+                     )}
+                     {!letterSizes(item.sizes) && item.sizes.length > 0 && (
+                        <View
+                           style={{
+                              marginVertical: 10,
+                              flexDirection: 'row',
+                              flexWrap: 'wrap',
+                              gap: SIZES.sm
+                           }}>
+                           {item.sizes.map((size, index) => (
+                              <NeumorphismView key={index} padding={SIZES.sm * 0.5}>
+                                 <Text type="defaultSemiBold">
+                                    ${size.size} ${item.price}
+                                 </Text>
+                              </NeumorphismView>
+                           ))}
                         </View>
                      )}
                      {item.addons.length > 0 && item.multipleAddons && (
@@ -157,7 +176,7 @@ const Products = () => {
                }}>
                {data.length > 0 && (
                   <AllCategoriesView
-                     products={data}
+                     products={products}
                      ids={[user?.id || '']}
                      onCategoryPress={(category) => {
                         const index = items.findIndex((item) => item.title === category.name)

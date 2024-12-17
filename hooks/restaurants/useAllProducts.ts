@@ -4,8 +4,10 @@ import { Product } from '@/shared/types'
 import { getDocs } from 'firebase/firestore'
 import { useCallback, useEffect, useState } from 'react'
 import { useRestaurants } from './useRestaurants'
+import { useAuth } from '@/providers/authProvider'
 
-export const useAllProducts = () => {
+export const useAllProducts = (refetch?: boolean) => {
+   const { user } = useAuth()
    const [products, setProducts] = useState<Product[]>([])
 
    const { restaurants, loading } = useRestaurants()
@@ -16,7 +18,7 @@ export const useAllProducts = () => {
          console.log('getting products and restaurants')
 
          if (restaurants.length === 0) return
-         const ids = restaurants.map((r) => r.id)
+         const ids = user && user.type === 'business' ? [user.id] : restaurants.map((r) => r.id)
          const items: Product[] = []
 
          const promises = ids.map((p) => getDocs(productsCollection(p!)))
@@ -35,7 +37,7 @@ export const useAllProducts = () => {
       if (loading) return
 
       getProducts()
-   }, [loading, restaurants])
+   }, [loading, restaurants, refetch])
 
    return { products, restaurants, loading }
 }

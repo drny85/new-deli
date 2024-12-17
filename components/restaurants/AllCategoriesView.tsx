@@ -1,10 +1,9 @@
 import { SIZES } from '@/constants/Colors'
-
-import { useAllCategories } from '@/hooks/category/useAllCategories'
+import { useAllProducts } from '@/hooks/restaurants/useAllProducts'
 import { Category, Product } from '@/shared/types'
 import { FlashList } from '@shopify/flash-list'
 import { useNavigation } from 'expo-router'
-import React, { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { View } from 'react-native'
 import Loading from '../Loading'
 import CategoryTitle from './CategoryTitle'
@@ -14,16 +13,33 @@ type Props = {
    products: Product[]
    onCategoryPress: (category: Category) => void
 }
-const AllCategoriesView = ({ ids, products, onCategoryPress }: Props) => {
-   const { categories, isPending } = useAllCategories(ids)
+const AllCategoriesView = ({ onCategoryPress }: Props) => {
    const navigation = useNavigation()
+   const [refetch, setRefetch] = useState(true)
+   const { products, loading } = useAllProducts(refetch)
    const [index, setIndex] = useState<number>(0)
    const [selected, setSelected] = useState('All Categories')
-   const availableCategories = useMemo(() => {
-      return categories.filter((c) => products.some((p) => p.category?.id === c.id))
-   }, [categories, products])
+   const viewRef = useRef<FlashList<Category>>(null)
+   const data = useMemo(() => {
+      // Deduplicate categories using a Set for IDs
+      const seenIds = new Set<string>()
 
-   const viewRef = React.useRef<FlashList<Category>>(null)
+      const uniqueCategories = products
+         .map((p) => p.category)
+         .filter((category): category is { id: string; name: string } => {
+            // TypeScript narrowing with type predicate
+            if (!category || !category.id) return false // Exclude null/undefined
+            if (seenIds.has(category.id)) return false // Deduplicate by ID
+            seenIds.add(category.id)
+            return true // Valid category
+         })
+
+      // Add "All Categories" and sort alphabetically
+      return [
+         { id: 'all', name: 'All Categories' },
+         ...uniqueCategories.sort((a, b) => (a.name > b.name ? 1 : -1))
+      ]
+   }, [products])
 
    useEffect(() => {
       viewRef.current?.scrollToIndex({
@@ -37,6 +53,7 @@ const AllCategoriesView = ({ ids, products, onCategoryPress }: Props) => {
       const subs = navigation.addListener('blur', () => {
          setIndex(0)
          setSelected('All Categories')
+         setRefetch((prev) => !prev)
       })
 
       return () => navigation.removeListener('blur', subs)
@@ -44,7 +61,7 @@ const AllCategoriesView = ({ ids, products, onCategoryPress }: Props) => {
 
    return (
       <View style={{ height: SIZES.height * 0.07 }}>
-         {isPending ? (
+         {loading ? (
             <Loading />
          ) : (
             <FlashList
@@ -57,9 +74,7 @@ const AllCategoriesView = ({ ids, products, onCategoryPress }: Props) => {
                }}
                showsHorizontalScrollIndicator={false}
                horizontal
-               data={[{ id: 'all', name: 'All Categories' }, ...availableCategories].sort((a, b) =>
-                  a.name.localeCompare(b.name)
-               )}
+               data={data}
                renderItem={({ item, index }) => {
                   return (
                      <CategoryTitle
