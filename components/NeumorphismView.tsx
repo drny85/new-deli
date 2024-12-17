@@ -1,6 +1,6 @@
 import { useThemeColor } from '@/hooks/useThemeColor'
 import React from 'react'
-import { View, StyleSheet, StyleProp, ViewStyle } from 'react-native'
+import { View, StyleSheet, StyleProp, ViewStyle, ColorValue } from 'react-native'
 
 interface NeumorphismViewProps {
    children?: React.ReactNode
@@ -9,27 +9,29 @@ interface NeumorphismViewProps {
    darkColor?: string // Color for bottom-right shadow
    borderRadius?: number
    shadowOffset?: number // Size of the shadow
-   backgroundColor?: string
+   backgroundColor?: ColorValue
    padding?: number
+   containerStyle?: StyleProp<ViewStyle>
 }
 
 const NeumorphismView: React.FC<NeumorphismViewProps> = ({
    children,
    style,
-
    darkColor = 'rgba(0,0,0,0.1)', // Default dark shadow
    borderRadius = 12,
    shadowOffset = 8,
-   padding = 0
+   backgroundColor,
+   padding = 0,
+   containerStyle
    // Default background color
 }) => {
-   const backgroundColor = useThemeColor('background')
+   const bg = useThemeColor('background')
    return (
       <View
          style={[
             styles.container,
             {
-               backgroundColor,
+               backgroundColor: backgroundColor || bg,
                borderRadius,
                padding: padding
             },
@@ -40,13 +42,14 @@ const NeumorphismView: React.FC<NeumorphismViewProps> = ({
                StyleSheet.absoluteFillObject,
                {
                   borderRadius,
-                  backgroundColor,
+                  backgroundColor: backgroundColor || bg,
                   shadowColor: darkColor,
                   shadowOffset: { width: shadowOffset, height: shadowOffset },
                   shadowOpacity: 1,
                   // For Android shadow effect
                   shadowRadius: shadowOffset
-               }
+               },
+               containerStyle
             ]}
          />
          {children}

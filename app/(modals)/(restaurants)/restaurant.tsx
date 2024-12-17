@@ -52,7 +52,7 @@ const RestaurantDetails = () => {
    const { restaurant, loading } = useRestaurant(restaurantId)
    const { products, loading: loadingProducts } = useProducts(restaurantId)
 
-   const data = categoriedData(products)
+   const data = categoriedData(products.filter((p) => p.available))
    const { getCart, carts } = useCartsStore()
 
    const popularProducts = useMemo(

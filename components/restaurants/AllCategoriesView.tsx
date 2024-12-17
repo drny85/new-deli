@@ -1,25 +1,22 @@
 import { SIZES } from '@/constants/Colors'
 import { useAllProducts } from '@/hooks/restaurants/useAllProducts'
 import { Category, Product } from '@/shared/types'
-import { FlashList } from '@shopify/flash-list'
 import { useNavigation } from 'expo-router'
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { View } from 'react-native'
+import { FlatList, View } from 'react-native'
 import Loading from '../Loading'
 import CategoryTitle from './CategoryTitle'
 
 type Props = {
-   ids: string[]
    products: Product[]
    onCategoryPress: (category: Category) => void
 }
 const AllCategoriesView = ({ onCategoryPress }: Props) => {
    const navigation = useNavigation()
-   const [refetch, setRefetch] = useState(true)
-   const { products, loading } = useAllProducts(refetch)
+   const { products, loading } = useAllProducts()
    const [index, setIndex] = useState<number>(0)
    const [selected, setSelected] = useState('All Categories')
-   const viewRef = useRef<FlashList<Category>>(null)
+   const viewRef = useRef<FlatList<Category>>(null)
    const data = useMemo(() => {
       // Deduplicate categories using a Set for IDs
       const seenIds = new Set<string>()
@@ -53,7 +50,6 @@ const AllCategoriesView = ({ onCategoryPress }: Props) => {
       const subs = navigation.addListener('blur', () => {
          setIndex(0)
          setSelected('All Categories')
-         setRefetch((prev) => !prev)
       })
 
       return () => navigation.removeListener('blur', subs)
@@ -64,26 +60,31 @@ const AllCategoriesView = ({ onCategoryPress }: Props) => {
          {loading ? (
             <Loading />
          ) : (
-            <FlashList
+            <FlatList
                ref={viewRef}
                initialScrollIndex={index}
-               estimatedItemSize={SIZES.width}
-               estimatedListSize={{
-                  width: SIZES.width,
-                  height: SIZES.height * 0.07
-               }}
                showsHorizontalScrollIndicator={false}
                horizontal
                data={data}
+               onScrollToIndexFailed={(info) => {
+                  const wait = new Promise((resolve) => setTimeout(resolve, 500))
+                  wait.then(() => {
+                     viewRef.current?.scrollToIndex({
+                        index: info.index,
+                        animated: true,
+                        viewPosition: 0.5
+                     })
+                  })
+               }}
                renderItem={({ item, index }) => {
                   return (
                      <CategoryTitle
                         index={index}
                         item={item}
                         selected={selected}
-                        setSelected={setSelected}
-                        setIndex={setIndex}
-                        onCategoryPress={onCategoryPress}
+                        setSelected={() => setSelected(item.name)}
+                        setIndex={() => setIndex(index)}
+                        onCategoryPress={() => onCategoryPress(item)}
                      />
                   )
                }}

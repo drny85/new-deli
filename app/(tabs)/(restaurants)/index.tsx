@@ -75,7 +75,7 @@ const Restaurants = () => {
          setSelectedCategory(ALL)
          return
       }
-      if (category.id!.toLowerCase() === 'all') {
+      if (category.id && category.id.toLowerCase() === 'all') {
          setSelectedCategory(ALL)
       } else {
          setSelectedCategory(category)
@@ -125,11 +125,7 @@ const Restaurants = () => {
                />
             </View>
             <View>
-               <AllCategoriesView
-                  onCategoryPress={onCategoryPress}
-                  ids={restaurants.map((r) => r.id!)}
-                  products={products}
-               />
+               <AllCategoriesView onCategoryPress={onCategoryPress} products={products} />
             </View>
             <Row containerStyle={{ paddingBottom: SIZES.sm }} align="between">
                <Text type="muted" fontSize="large">

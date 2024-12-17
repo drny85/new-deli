@@ -1,6 +1,7 @@
 import { deleteProduct } from '@/actions/products'
 import BackButton from '@/components/BackButton'
 import KeywordsList from '@/components/business/KeywordsList'
+import ProductAvailability from '@/components/business/ProductAvailability'
 import { Container } from '@/components/Container'
 import Loading from '@/components/Loading'
 import SizePicker from '@/components/restaurants/SizePicker'
@@ -112,7 +113,7 @@ const BusinessProduct = () => {
             <Text center type="title">
                Units Sold: {product.unitSold}
             </Text>
-
+            <ProductAvailability product={product} />
             <View
                style={{
                   flexDirection: 'row',

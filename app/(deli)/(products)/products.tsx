@@ -34,6 +34,19 @@ const Products = () => {
          hintTextColor: 'white'
       }
    })
+
+   const scrollToSection = (index: number) => {
+      if (sectionListRef.current) {
+         sectionListRef.current.scrollToLocation({
+            sectionIndex: index,
+            itemIndex: 0,
+            animated: true,
+            viewOffset: 20,
+            viewPosition: 0.5
+         })
+      }
+   }
+
    const data = useMemo(() => {
       if (!search) return products
       return products.filter(
@@ -42,16 +55,6 @@ const Products = () => {
             product.category?.name.toLowerCase().includes(search.toLowerCase())
       )
    }, [products, search])
-
-   const scrollToSection = (index: number) => {
-      if (sectionListRef.current) {
-         sectionListRef.current.scrollToLocation({
-            sectionIndex: index,
-            itemIndex: 0,
-            animated: true
-         })
-      }
-   }
 
    const items = categoriedData(data)
 
@@ -62,76 +65,7 @@ const Products = () => {
          numColumns={2}
          columnWrapperStyle={{ justifyContent: 'space-between' }}
          contentInsetAdjustmentBehavior="automatic"
-         renderItem={({ item }) => (
-            <NeumorphismView borderRadius={SIZES.md} style={{ width: '49%', marginBottom: 10 }}>
-               <TouchableOpacity
-                  onPress={() =>
-                     router.push({
-                        pathname: '/(modals)/(business)/product',
-                        params: { productId: item.id! }
-                     })
-                  }
-                  style={{
-                     width: '100%',
-                     flexDirection: 'row'
-                  }}>
-                  <Image
-                     source={{ uri: item.image! }}
-                     style={{
-                        width: '30%',
-                        height: '100%',
-                        borderTopLeftRadius: SIZES.lg,
-                        borderBottomLeftRadius: SIZES.lg
-                     }}
-                  />
-                  <View style={{ padding: SIZES.sm }}>
-                     <Row align="between" containerStyle={{ flexGrow: 1, gap: 20 }}>
-                        <Text type="defaultSemiBold">{item.name}</Text>
-                        {item.sizes.length > 0 && <Text>From ${item.price}</Text>}
-                     </Row>
-                     {/* and sizes do nto contain letter s m d or xl */}
-                     {letterSizes(item.sizes) && item.sizes.length > 0 && (
-                        <View style={{ marginBottom: 10 }}>
-                           <SizePicker
-                              selected={item.sizes[0]}
-                              radius={36}
-                              showTitle={false}
-                              disabled
-                              sizes={item.sizes}
-                              onPress={() => {
-                                 //setSelected(size)
-                              }}
-                           />
-                        </View>
-                     )}
-                     {!letterSizes(item.sizes) && item.sizes.length > 0 && (
-                        <View
-                           style={{
-                              marginVertical: 10,
-                              flexDirection: 'row',
-                              flexWrap: 'wrap',
-                              gap: SIZES.sm
-                           }}>
-                           {item.sizes.map((size, index) => (
-                              <NeumorphismView key={index} padding={SIZES.sm * 0.5}>
-                                 <Text type="defaultSemiBold">
-                                    ${size.size} ${item.price}
-                                 </Text>
-                              </NeumorphismView>
-                           ))}
-                        </View>
-                     )}
-                     {item.addons.length > 0 && item.multipleAddons && (
-                        <View style={{ padding: SIZES.sm }}>
-                           <Text type="subtitle">Multiple Choices</Text>
-                           <Text type="italic">Select up to {item.multipleAddons}</Text>
-                           <Text type="title">${item.price}</Text>
-                        </View>
-                     )}
-                  </View>
-               </TouchableOpacity>
-            </NeumorphismView>
-         )}
+         renderItem={({ item }) => <ItemList item={item} color={backgroundColor} />}
       />
    )
 
@@ -177,9 +111,9 @@ const Products = () => {
                {data.length > 0 && (
                   <AllCategoriesView
                      products={products}
-                     ids={[user?.id || '']}
                      onCategoryPress={(category) => {
                         const index = items.findIndex((item) => item.title === category.name)
+                        console.log('index', index)
                         if (index !== -1) {
                            scrollToSection(index)
                         }
@@ -196,7 +130,8 @@ const Products = () => {
                renderSectionHeader={({ section }) => (
                   <View style={[styles.sectionHeader, { backgroundColor }]}>
                      <Text fontSize="large" type="defaultSemiBold" style={{ marginLeft: SIZES.md }}>
-                        {section.title}
+                        {section.title}{' '}
+                        {section.data.length > 2 && <Text>({section.data.length})</Text>}
                      </Text>
                   </View>
                )}
@@ -212,6 +147,100 @@ const Products = () => {
 }
 
 export default Products
+
+type Props = {
+   item: Product
+   color: string
+}
+const ItemList = ({ item, color }: Props) => {
+   return (
+      <NeumorphismView
+         borderRadius={SIZES.md}
+         style={{
+            width: '49%',
+            marginBottom: 10,
+            minHeight: SIZES.height * 0.1,
+            backgroundColor: 'blue'
+         }}>
+         <TouchableOpacity
+            onPress={() =>
+               router.push({
+                  pathname: '/(modals)/(business)/product',
+                  params: { productId: item.id! }
+               })
+            }
+            style={{
+               width: '100%',
+               minHeight: SIZES.height * 0.1,
+               backgroundColor: color,
+               borderRadius: SIZES.md,
+               flexDirection: 'row'
+            }}>
+            <Image
+               source={{ uri: item.image! }}
+               style={{
+                  width: '30%',
+                  height: '100%',
+                  borderTopLeftRadius: SIZES.lg,
+                  borderBottomLeftRadius: SIZES.lg
+               }}
+            />
+            <View style={{ padding: SIZES.sm }}>
+               <Row containerStyle={{ gap: 20 }}>
+                  <Text type="defaultSemiBold">{item.name} </Text>
+                  {item.sizes.length > 0 && <Text>From ${item.price}</Text>}
+               </Row>
+               {/* and sizes do nto contain letter s m d or xl */}
+               {letterSizes(item.sizes) && item.sizes.length > 0 && (
+                  <View style={{ marginBottom: 10 }}>
+                     <SizePicker
+                        selected={item.sizes[0]}
+                        radius={36}
+                        showTitle={false}
+                        disabled
+                        sizes={item.sizes}
+                        onPress={() => {
+                           //setSelected(size)
+                        }}
+                     />
+                  </View>
+               )}
+               {item.sizes.length === 0 && (
+                  <View style={{ marginBottom: 10 }}>
+                     <Text fontSize="large" type="defaultSemiBold">
+                        ${item.price}
+                     </Text>
+                  </View>
+               )}
+               {!letterSizes(item.sizes) && item.sizes.length > 0 && (
+                  <View
+                     style={{
+                        marginVertical: 10,
+                        flexDirection: 'row',
+                        flexWrap: 'wrap',
+                        gap: SIZES.sm
+                     }}>
+                     {item.sizes.map((size, index) => (
+                        <NeumorphismView key={index} padding={SIZES.sm * 0.5}>
+                           <Text type="defaultSemiBold">
+                              ${size.size} ${item.price}
+                           </Text>
+                        </NeumorphismView>
+                     ))}
+                  </View>
+               )}
+               {item.addons.length > 0 && item.multipleAddons && (
+                  <View style={{ paddingVertical: SIZES.sm }}>
+                     <Text type="subtitle">Multiple Choices</Text>
+                     <Text type="italic">Select up to {item.multipleAddons}</Text>
+                     <Text type="title">${item.price}</Text>
+                  </View>
+               )}
+            </View>
+         </TouchableOpacity>
+      </NeumorphismView>
+   )
+}
 
 const styles = StyleSheet.create({
    sectionHeader: {
