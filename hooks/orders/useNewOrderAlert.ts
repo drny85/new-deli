@@ -1,13 +1,18 @@
-import { useEffect } from 'react'
 import { ordersCollection } from '@/collections'
 import { useAuth } from '@/providers/authProvider'
-import { useFeaturesStore } from '@/stores/featuresStore'
 import { dayjsFormat } from '@/utils/dayjs'
 import { limit, onSnapshot, orderBy, query, where } from 'firebase/firestore'
+import { useEffect } from 'react'
+import { toast } from 'sonner-native'
+import { useAudioPlayer } from 'expo-audio'
+
+import audioSource from '@/assets/audio/new_order.wav'
+import { router } from 'expo-router'
+import { SIZES } from '@/constants/Colors'
 
 const useNewOrderAlert = () => {
    const { user } = useAuth()
-   const { setShowNewOrderPopup, setPopupParams } = useFeaturesStore()
+   const player = useAudioPlayer(audioSource)
    useEffect(() => {
       // Subscribe to Firestore orders collection
       // const unsubscribe = firestore()
@@ -31,11 +36,32 @@ const useNewOrderAlert = () => {
                if (Math.abs(canPlay) > 5) return
                console.log('new order #', order.orderNumber)
                // Show popup
-               setShowNewOrderPopup(true)
-               setPopupParams({
-                  title: 'New Order',
-                  description: `Total: $${order.total.toFixed(2)}, Items: ${order.items.reduce((acc, curr) => acc + curr.quantity, 0)}`
+
+               toast('New Order', {
+                  duration: 5000,
+                  action: {
+                     label: 'View',
+                     onClick: () => {
+                        // Navigate to order details
+                        toast.dismiss()
+                        router.push({
+                           pathname: '/order',
+                           params: { orderId: order.id }
+                        })
+                     }
+                  },
+                  actionButtonStyle: {
+                     paddingHorizontal: SIZES.lg
+                  },
+                  cancel: {
+                     label: 'Dismiss',
+                     onClick: () => {
+                        console.log('dismissed')
+                     }
+                  },
+                  description: `Order #${order.orderNumber}\nType:${order.orderType}\nTotal: $${order.total.toFixed(2)}, Items: ${order.items.reduce((acc, curr) => acc + curr.quantity, 0)}`
                })
+               player.play()
             }
          }
       })

@@ -123,15 +123,7 @@ export default function RootLayout() {
                               headerStyle: {
                                  backgroundColor: bgColor
                               },
-                              headerLeft: ({ canGoBack }) => (
-                                 <Feather
-                                    name="chevron-left"
-                                    size={32}
-                                    style={{ padding: 10 }}
-                                    color={iconColor}
-                                    onPress={() => canGoBack && router.back()}
-                                 />
-                              ),
+                              headerLeft: ({ canGoBack }) => <Back canGoBack={canGoBack} />,
 
                               presentation: 'fullScreenModal'
                            }}
@@ -140,15 +132,7 @@ export default function RootLayout() {
                            name="terms"
                            options={{
                               title: 'Terms of Use',
-                              headerLeft: ({ canGoBack }) => (
-                                 <Feather
-                                    name="chevron-left"
-                                    size={32}
-                                    style={{ marginRight: 10, padding: 10 }}
-                                    color={iconColor}
-                                    onPress={() => canGoBack && router.back()}
-                                 />
-                              ),
+                              headerLeft: ({ canGoBack }) => <Back canGoBack={canGoBack} />,
 
                               presentation: 'fullScreenModal'
                            }}
@@ -193,35 +177,21 @@ export default function RootLayout() {
                            }}
                         />
                         <Stack.Screen
+                           name="store-info"
+                           options={{
+                              presentation: 'modal',
+                              title: 'Business Information',
+                              headerLeft: ({ canGoBack }) => <Back canGoBack={canGoBack} />
+                           }}
+                        />
+                        <Stack.Screen
                            name="second-address"
                            options={{
                               presentation: 'modal',
                               animation: 'fade',
                               title: 'Address Info',
                               headerStyle: { backgroundColor: bgColor },
-                              headerLeft: ({ canGoBack }) => (
-                                 <TouchableOpacity
-                                    style={{
-                                       marginRight: 10,
-                                       padding: 10,
-
-                                       borderRadius: 30
-                                    }}
-                                    onPress={() => {
-                                       console.log('GO BACK 1')
-                                       if (canGoBack) {
-                                          console.log('GO BACK')
-                                          router.back()
-                                       }
-                                    }}>
-                                    <Feather
-                                       name="chevron-left"
-                                       size={30}
-                                       color={iconColor}
-                                       style={{ flex: 1 }}
-                                    />
-                                 </TouchableOpacity>
-                              )
+                              headerLeft: ({ canGoBack }) => <Back canGoBack={canGoBack} />
                            }}
                         />
                      </Stack>
@@ -231,5 +201,21 @@ export default function RootLayout() {
             </AuthProvider>
          </BottomSheetModalProvider>
       </GestureHandlerRootView>
+   )
+}
+
+const Back = ({ canGoBack }: { canGoBack?: boolean }) => {
+   const iconColor = useThemeColor('text')
+   return (
+      <TouchableOpacity
+         disabled={!canGoBack}
+         style={{
+            marginRight: 10,
+            padding: 10,
+            borderRadius: 30
+         }}
+         onPress={router.back}>
+         <Feather name="chevron-left" size={30} color={iconColor} style={{ flex: 1 }} />
+      </TouchableOpacity>
    )
 }

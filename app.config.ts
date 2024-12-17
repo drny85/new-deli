@@ -61,6 +61,8 @@ const config: ExpoConfig = {
       'expo-router',
       'expo-apple-authentication',
       'expo-build-properties',
+      'expo-localization',
+      'expo-audio',
       'expo-font',
       [
          'expo-splash-screen',

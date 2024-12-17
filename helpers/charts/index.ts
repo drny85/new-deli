@@ -2,7 +2,7 @@ import { weekdaysOrder } from '@/shared/types'
 import { pieDataItem } from 'react-native-gifted-charts'
 
 export type FilterData = pieDataItem & {
-   color: string
+   label: string
 }
 
 export const sortByWeekdays = (data: FilterData[]) => {

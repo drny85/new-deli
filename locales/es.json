@@ -1,0 +1,420 @@
+{
+   "welcome": "Hola, {{name}}",
+   "tabs": {
+      "home": "Inicio",
+      "barbers": "Barberos",
+      "appointments": "Citas",
+      "profile": "Perfil",
+      "stuffs": "Utilidades",
+      "earnings": "Ganancias"
+   },
+
+   "login": {
+      "username": "Nombre de usuario",
+      "password": "Contraseña",
+      "button": "Iniciar sesión",
+      "no_login": "Favor de ingresar a tu cuenta para ver {{name}}"
+   },
+   "register": {
+      "username": "Nombre de usuario",
+      "email": "Correo electrónico",
+      "password": "XXXXXXXXña",
+      "button": "Registrarse"
+   },
+
+   "profile": {
+      "theme": "Tema",
+      "preferences": "Preferencias",
+      "communication": "Comunicación",
+      "language": "Idioma",
+      "contact": "Contactanos",
+      "logout": "Salir",
+      "name": "Cambiar Nombre / Telefono",
+      "terms": "Terminos y Condiciones",
+      "privacy": "Politica de Privacidad",
+      "susbcription": "Suscripcion",
+      "delete": "Eliminar Cuenta",
+      "minutes_interval": "Frequencia en Citas",
+      "delete_account": "Eliminar Cuenta",
+      "update_profile": "Actualizar Perfil",
+      "available": "Estoy Disponible",
+      "confirmation": {
+         "delete": {
+            "title": "Eliminar Cuenta",
+            "message": "¿Seguro que quieres eliminar tu cuenta?",
+            "yes": "Si"
+         },
+         "logout": {
+            "title": "Cerrar Sesión",
+            "message": "¿Seguro que quieres cerrar sesión?",
+            "yes": "Si"
+         }
+      }
+   },
+   "settings": {
+      "title": "Configuración",
+      "language": "Idioma",
+      "theme": "Tema",
+      "logout": "Cerrar sesión"
+   },
+   "days": {
+      "Mon": "Lunes",
+      "Tue": "Martes",
+      "Wed": "Miércoles",
+      "Thu": "Jueves",
+      "Fri": "Viernes",
+      "Sat": "Sábado",
+      "Sun": "Domingo"
+   },
+   "longDays": {
+      "Monday": "Lunes",
+      "Tuesday": "Martes",
+      "Wednesday": "Miércoles",
+      "Thursday": "Jueves",
+      "Friday": "Viernes",
+      "Saturday": "Sábado",
+      "Sunday": "Domingo"
+   },
+   "months": {
+      "January": "Enero",
+      "February": "Febrero",
+      "March": "Marzo",
+      "April": "Abril",
+      "May": "Mayo",
+      "June": "Junio",
+      "July": "Julio",
+      "August": "Agosto",
+      "September": "Septiembre",
+      "October": "Octubre",
+      "November": "Noviembre",
+      "December": "Diciembre"
+   },
+   "schedule": {
+      "name": "Horario Final",
+      "off": "Dia Libre",
+      "break": "Hora de lonche",
+      "startTime": "Hora de Inicio",
+      "endTime": "Hora que termina",
+      "message": "Este dia esta marcado como dia libre",
+      "button": {
+         "review": "Revisar & Salvar",
+         "update": "Actualizar Horario",
+         "close": "Cerrar"
+      }
+   },
+
+   "booking": {
+      "cash": "Solo Efectivo",
+      "select_service": "Seleccione un Servicio",
+      "service_required": "Servicio Requerido",
+      "service_required_message": "Favor de seleccionar un servicio",
+      "payment": "Pago sera coletado en la barberia una vez el servicio sea completado",
+      "confirm": "Confirmar & Reservar",
+      "review": "Revisar & Confirmar",
+      "clients": "Clientes",
+      "search_clients": "Buscar Clientes",
+      "name_required": "Nombre & Numero son requerido",
+      "no_services": "{{name}} no tiene servicios disponible, dejale saber!.",
+      "no_date_title": "Selecciona Dia y Hora",
+      "no_date_message": "Debe elegir el dia y la hora"
+   },
+   "service": {
+      "title": "Servicios",
+      "search": "Buscar Servicios",
+      "no_services": "No servicios disponible",
+      "deatils": "Detalles del Servicio",
+      "edit": {
+         "title": "Editar Servicio",
+         "update": "Actualizar Servicio",
+         "placeholder": "Recorte Para Adulto",
+         "duration": "Duración",
+         "price": "Precio",
+         "add": "Agregar Servicio",
+         "description": "Descripción",
+         "name": "Nombre del Servicio",
+         "image": "Selecione una imagen para el servicio"
+      }
+   },
+   "reviews": {
+      "add": "Añadir Reseña",
+      "no_review": "no reseñas",
+      "alert": {
+         "title": "No Citas Completada",
+         "message": "Favor de completar tu cita para dejar una reseña"
+      }
+   },
+
+   "button": {
+      "book": "Reserva ya",
+      "cancel": "Cancelar",
+      "reschedule": "Reprogramar",
+      "continue": "Continuar",
+      "update": "Actualizar",
+      "back": "Atras",
+      "edit": "Editar",
+      "save": "Guardar",
+      "close": "Cerrar",
+      "confirm": "Confirmar",
+      "complete": "Completar",
+      "delete": "Borrar",
+      "no_action": "No accion"
+   },
+   "alerts": {
+      "cancel": {
+         "title": "Cancelar Cita",
+         "message": "Esta seguro que quiere cancelar esta cita?",
+         "yes": "Si"
+      },
+      "success": "Listo",
+      "error": "Error",
+      "warning": "Advertencia",
+      "info": "Aviso",
+      "maximum_services": "Solo puedes seleccionar {{number}} servicios",
+      "cannot": "No se pudo completar la acción",
+      "updated": "Cita Actualizado",
+      "confirmed": "Cita Confirmada",
+      "cancelled": "Cita Cancelada",
+      "completed": "Cita Completada",
+      "booked": "Cita agendada!",
+      "no_subscription": "{{name}} no esta tomando citas",
+      "no_show": {
+         "title": "No llego",
+         "message": "Esta seguro que quiere marcar que nunca llego a la cita?",
+         "yes": "Si"
+      },
+      "conflicts": {
+         "title": "Conflicto de Horario",
+         "message": "Ya hay una cita agendada para este horario"
+      }
+   },
+   "appointment": {
+      "changes": "Cambios Hecho",
+      "today": "Hoy",
+      "new": "Citas Nueva",
+      "details": {
+         "main": "Detalles de la Cita",
+         "title": "Detalles del Servicio"
+      },
+      "no_appointment": "No Citas",
+      "available_today": "Citas disponible hoy",
+      "toggle": {
+         "upcoming": "Próximas",
+         "past": "Pasadas"
+      },
+      "status": "Estado",
+      "date": "Fecha",
+      "time": "Hora",
+      "save": "Guardar Cita",
+      "mark_completed": "Completar",
+      "filter": {
+         "title": "Filtrar Citas Por",
+         "Pending": "Pendiente",
+         "Confirmed": "Confirmado",
+         "Cancelled": "Cancelado",
+         "Completed": "Completado",
+         "No-show": "No Mostrar",
+         "button": "Aplicar Filtro",
+         "clear": "Limpiar Filtro"
+      },
+      "broadcast": {
+         "heading": "Mensaje Para Los Clientes",
+         "title": "Titulo",
+         "placeholder": "Mensaje Para Los Clientes",
+         "message": "Mensaje",
+         "button": "Enviar Mensaje",
+         "verify": "Revisar y Enviar Mensaje"
+      },
+      "confirmation": {
+         "cancel": {
+            "title": "Cancelar Cita",
+            "message": "¿Seguro que quieres cancelar esta cita?",
+            "yes": "Si"
+         }
+      }
+   },
+
+   "barber": {
+      "search": "Buscar Barberos",
+      "title": "Barberos",
+      "rating": "estrellas",
+      "distance": "Distancia",
+      "no_barber": "No barbero disponible",
+      "review": "reseñas",
+      "no_review": "no reseñas",
+      "about": "Acerca de {{name}}",
+      "top_services": "Servicios Populares",
+      "no_services": "No hay servicios disponible",
+      "schedule": "Horario",
+      "no_available": "no esta disponible hoy",
+      "available": "Disponible Hoy",
+      "filter": "Filtrar Barberos",
+      "clear": "Eliminar Filtro",
+      "info_options": {
+         "info": "Information",
+         "gallery": "Galleria",
+         "reviews": "Reseñas",
+         "services": "Servicios",
+         "schedule": "Horario"
+      }
+   },
+   "signup": {
+      "login": "Ingresar",
+      "signup": "Registrarse",
+      "title": "Bienvenido",
+      "name": "Nombre Completo",
+      "phone": "Teléfono",
+      "email": "Correo electrónico",
+      "password": "Contraseña",
+      "confirmPassword": "Confirmar Contraseña",
+      "forgot": "¿Olvidaste tu contraseña?",
+      "placeholder": {
+         "name": "Nombre Completo",
+         "phone": "Teléfono",
+         "email": "Correo electrónico",
+         "password": "Escribe tu contraseña",
+         "confirmPassword": "Confirma tu contraseña"
+      },
+      "complition": {
+         "name": "Nombre de la Barberia",
+         "address": "Escribe la direcion",
+         "about": "Hablanos acerca de ti (opcional)"
+      },
+
+      "button": "Registrarme",
+      "toggle": "¿Te esta registrando como Barbero?"
+   },
+   "home": {
+      "my_barber": "Mi Barbero",
+      "find_barber": "Encontrar Barbero",
+      "miles": "millas",
+      "signup": "Quieres regístrarte como Barbero?",
+      "signup_title": "Regístrate",
+      "rating": "estrellas",
+      "estimated": "Estimado de hoy",
+      "earned": "Ganado",
+      "pending": "Pendiente",
+      "waiting": {
+         "completion": "Esperando por completar",
+         "confirmation": "Esperando por confirmacion",
+         "cashout": "Esperando para cobrar"
+      },
+      "appointment": {
+         "upcoming": "Siguiente Cita",
+         "no_appointment": "No Citas",
+         "no_barber": "No barbero"
+      },
+      "greeting": "¡Hola, {{name}}!"
+   },
+   "subscription": {
+      "end": "Terminar Prueba & Subscribirme Ya",
+      "pay": "Subscribirme",
+      "title:": "Susbcripción",
+      "heading": "Impulsa Tu Negocio de Barbería con la App FadeFlow",
+      "button": "Suscríbete Ahora",
+      "monthly": "Facturado mensualmente",
+      "trial_bold": "Prueba Gratis de 14 Días",
+      "trial": "Prueba todas las funciones premium sin riesgo",
+      "exclusive_bold": "Beneficios Exclusivos",
+      "exclusive": "Accede a funciones y beneficios exclusivos, acepta reservas prioritarias y utiliza herramientas avanzadas de gestión de clientes",
+      "business_bold": "Información Empresarial",
+      "business": "Obtén valiosa información sobre el rendimiento de tu negocio y la interacción con los clientes, rastrea tus ingresos y gestiona tu horario",
+      "cancel": "Cancela en cualquier momento - Sin compromiso a largo plazo"
+   },
+   "sorting": {
+      "sortBy": "Ordenar Por",
+      "date": "Fecha",
+      "amount": "Cantidad",
+      "status": "Estado",
+      "customer": "Cliente",
+      "search": "Buscar por nombre, estado o precio",
+      "name": "Buscar por nombre del cliente",
+      "show": {
+         "all": "Mostrar",
+         "hide": "Ocultar"
+      }
+   },
+   "misc": {
+      "of": "de",
+      "trial_expired": "Tu dias de pruebas terminaron",
+      "created_at": "creado el",
+      "subscribe": "Subscribete Ahora",
+      "remaining_days": "Dias Restante",
+      "free_trial": "Tu Cuenta esta en {{days}} Dias de Prueba",
+      "add_service": "Agregar Servicio",
+      "no_data": "No hay datos disponible",
+      "no_available": "no esta disponible hoy",
+      "must_subscribe": "Tiene que subscribirte para poder recibir citas",
+      "no_available_message": "Si no esta disponible, clientes no padran hacer citas contigo.",
+      "no_services_added": "Agregar aunque sea un servicio. Sin ningun servicio, tus clientes no pueden hacer citas contigo"
+   },
+
+   "terms": {
+      "section1": {
+         "title": "1. Introducción",
+         "message": "¡Bienvenido a FadeFlow! Al usar nuestra plataforma, usted acepta cumplir y estar sujeto a los siguientes términos de uso. Por favor, léalos cuidadosamente."
+      },
+      "section2": {
+         "title": "2. Responsabilidades del Barbero",
+         "message": "Como barbero, usted es responsable de proporcionar servicios profesionales y corteses a sus clientes. Acepta cumplir con todas las reservas realizadas a través de nuestra aplicación y mantener los más altos estándares de higiene y seguridad."
+      },
+      "section3": {
+         "title": "3. Reservas y Cancelaciones",
+         "message": "Debe gestionar con precisión su disponibilidad en la aplicación. Cualquier cancelación debe realizarse de manera oportuna, y debe notificar a sus clientes de inmediato si no puede cumplir con una reserva."
+      },
+      "section4": {
+         "title": "4. Pagos y Reembolsos",
+         "message": "Todos los pagos son finales y no reembolsables. Si un cliente cancela una reserva, usted será responsable de reembolsar el pago del cliente. Si el pago se realiza en efectivo en la tienda, la declaración anterior no se aplica."
+      },
+      "section5": {
+         "title": "5. Privacidad y Protección de Datos",
+         "message": "Su privacidad es importante para nosotros. Valoramos su privacidad y no compartiremos su información personal con terceros sin su consentimiento."
+      },
+      "section6": {
+         "title": "6. Terminación de Cuenta",
+         "message": "Nos reservamos el derecho de terminar su cuenta en cualquier momento si no cumple con estos términos o si se involucra en un comportamiento perjudicial para la plataforma o sus usuarios."
+      },
+      "section7": {
+         "title": "7. Modificaciones a los Términos",
+         "message": "Nos reservamos el derecho de modificar estos términos en cualquier momento. Si realizamos cambios significativos, le notificaremos por correo electrónico o a través de la aplicación, y el uso continuo de la aplicación constituye su aceptación de los nuevos términos."
+      },
+      "section8": {
+         "title": "8. Información de Contacto",
+         "message": "Si tiene alguna pregunta o inquietud sobre estos términos, por favor contáctenos en {{email}}."
+      }
+   },
+
+   "privacy": {
+      "section1": {
+         "title": "1. Introducción",
+         "message": "Esta Política de Privacidad describe cómo {{name}} recopila, utiliza y protege su información personal. Al usar nuestra aplicación, usted acepta las prácticas de datos descritas en esta política."
+      },
+      "section2": {
+         "title": "2. Recopilación de Información",
+         "message": "Recopilamos información personal como su nombre, dirección de correo electrónico y número de teléfono cuando se registra para una cuenta o utiliza nuestra aplicación."
+      },
+      "section3": {
+         "title": "3. Uso de la Información",
+         "message": "Utilizamos su información personal para proporcionar y mejorar nuestros servicios, comunicarnos con usted y personalizar su experiencia."
+      },
+      "section4": {
+         "title": "4. Compartir Información",
+         "message": "No vendemos ni compartimos su información personal con terceros sin su consentimiento."
+      },
+      "section5": {
+         "title": "5. Seguridad de los Datos",
+         "message": "Implementamos medidas de seguridad para proteger su información personal del acceso o divulgación no autorizados. Sin embargo, tenga en cuenta que ningún método de transmisión por Internet o de almacenamiento electrónico es 100% seguro."
+      },
+      "section6": {
+         "title": "6. Cambios en la Política de Privacidad",
+         "message": "Nos reservamos el derecho de actualizar esta política de privacidad en cualquier momento. Si realizamos cambios significativos, le notificaremos por correo electrónico o a través de la aplicación, y el uso continuo de la aplicación constituye su aceptación de la nueva política."
+      },
+      "section7": {
+         "title": "7. Terminación de la Cuenta",
+         "message": "Si desea terminar su cuenta, puede hacerlo contactándonos a {{email}} o accediendo a la sección de su perfil dentro de la aplicación. Tenga en cuenta que podemos retener alguna información con fines de auditoría, y es su responsabilidad eliminar o desactivar su cuenta después de la terminación."
+      },
+      "section8": {
+         "title": "8. Información de Contacto",
+         "message": "Si tiene alguna pregunta o inquietud sobre esta política de privacidad, por favor contáctenos en {{email}}."
+      }
+   }
+}

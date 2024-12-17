@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 import { Redirect, Tabs } from 'expo-router'
 import React from 'react'
 
@@ -8,7 +9,8 @@ import { useThemeColor } from '@/hooks/useThemeColor'
 
 import { useAuth } from '@/providers/authProvider'
 import { useCartsStore } from '@/stores/cartsStore'
-import { FontAwesome5 } from '@expo/vector-icons'
+
+import { Image } from 'expo-image'
 
 export default function TabLayout() {
    const colorScheme = useColorScheme()
@@ -52,11 +54,11 @@ export default function TabLayout() {
             name="(orders)"
             options={{
                title: 'Orders',
-               tabBarIcon: ({ color, focused, size }) => (
-                  <FontAwesome5
-                     name="clipboard-list"
-                     size={focused ? size + 4 : size}
-                     color={color}
+               tabBarIcon: ({ color, size }) => (
+                  <Image
+                     source={require('@/assets/images/orders.png')}
+                     tintColor={color}
+                     style={{ width: size, height: size, objectFit: 'contain' }}
                   />
                )
             }}

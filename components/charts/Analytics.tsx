@@ -6,22 +6,24 @@ import { FilterDay, Order } from '@/shared/types'
 import { getRandomColor } from '@/utils/getRandomColor'
 import SegmentedControl from '@react-native-segmented-control/segmented-control'
 import { useState } from 'react'
-import { ColorValue, StyleSheet } from 'react-native'
-import { PieChart, pieDataItem } from 'react-native-gifted-charts'
+import { ColorValue, Dimensions, ScrollView, StyleSheet } from 'react-native'
+import { LineChart, PieChart } from 'react-native-gifted-charts'
 import Animated from 'react-native-reanimated'
 import { filterOrdersByTime } from '../charts'
 import Row from '../Row'
 import { Text } from '../ThemedText'
 import { View } from '../ThemedView'
+import NeumorphismView from '../NeumorphismView'
 
 interface GraphComponentProps {
    orders: Order[]
 }
-
+const SCREEN_WIDTH = Dimensions.get('window').width
 const SIZE = SIZES.width / 6 / 2
 
 const Analytics: React.FC<GraphComponentProps> = ({ orders }) => {
    const textColor = useThemeColor('text')
+   const ascentColor = useThemeColor('ascent')
    const [filter, setFilter] = useState<FilterDay>('timeOfDay')
 
    const [selectedIndex, setSelectedIndex] = useState(0)
@@ -37,16 +39,17 @@ const Analytics: React.FC<GraphComponentProps> = ({ orders }) => {
                ? 'By Year'
                : ''
 
-   const transformDataForPieChart = (values: pieDataItem[]): FilterData[] => {
+   const transformDataForPieChart = (values: FilterData[]): FilterData[] => {
       // Determine the maximum value in categorized data for the "focused" property
       if (!values) return []
       const maxValue = Math.max(...values?.map(({ value }) => value), 0)
 
-      return values.map(({ text, value }) => ({
+      return values.map(({ label, value }) => ({
          value,
          color: getRandomColor(), // Generate random colors for the chart
-         text, // Use category (e.g., Morning, Afternoon, etc.) as text
-         focused: value === maxValue
+         text: label || '', // Use category (e.g., Morning, Afternoon, etc.) as text
+         focused: value === maxValue,
+         label
 
          // Mark the highest value as focused
       }))
@@ -65,7 +68,10 @@ const Analytics: React.FC<GraphComponentProps> = ({ orders }) => {
       .sort((a, b) => b.value - a.value)[0]
 
    return (
-      <View style={{ flex: 1 }}>
+      <ScrollView
+         style={{ flex: 1 }}
+         showsVerticalScrollIndicator={false}
+         contentContainerStyle={{ gap: SIZES.sm }}>
          <View style={{ width: '80%', alignSelf: 'center', marginVertical: SIZES.md }}>
             <SegmentedControl
                values={['Time of Day', 'Day of The Week', 'By Month', 'By Year']}
@@ -116,7 +122,7 @@ const Analytics: React.FC<GraphComponentProps> = ({ orders }) => {
             <Row
                containerStyle={{
                   width: '70%',
-                  gap: 20,
+                  gap: SIZES.md,
                   alignItems: 'center',
                   alignSelf: 'center'
                }}>
@@ -169,7 +175,7 @@ const Analytics: React.FC<GraphComponentProps> = ({ orders }) => {
                )}
             </Row>
             {higherValueWIthLabel && (
-               <View style={{ marginVertical: 20 }}>
+               <View style={{ marginVertical: SIZES.md }}>
                   <Text type="title">
                      {higherValueWIthLabel.label}{' '}
                      <Text type="default" style={{ fontWeight: 'condensed', fontSize: 20 }}>
@@ -180,7 +186,44 @@ const Analytics: React.FC<GraphComponentProps> = ({ orders }) => {
                </View>
             )}
          </View>
-      </View>
+         <NeumorphismView
+            borderRadius={SIZES.md}
+            style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 16 }}>
+            <LineChart
+               areaChart
+               curved
+               data={data}
+               width={SCREEN_WIDTH * 0.9} // 90% of screen width
+               height={SIZES.height * 0.25}
+               spacing={(SCREEN_WIDTH * 0.9) / (data.length + 1)} // Equal spacing
+               startFillColor={getRandomColor()}
+               endFillColor={getRandomColor()}
+               startOpacity={0.8}
+               endOpacity={0.3}
+               isAnimated
+               xAxisTextNumberOfLines={2}
+               xAxisLabelTextStyle={{
+                  color: textColor,
+                  fontSize: 12,
+                  fontWeight: '600',
+                  textAlign: 'center'
+               }}
+               xAxisLabelsVerticalShift={4}
+               yAxisTextStyle={{
+                  color: textColor,
+                  fontSize: 12,
+                  fontWeight: '600'
+               }}
+               initialSpacing={filter === 'timeOfDay' ? 30 : 20}
+               yAxisLabelPrefix="$"
+               adjustToWidth
+               color={ascentColor}
+               noOfSections={6}
+               xAxisThickness={2}
+               yAxisThickness={2}
+            />
+         </NeumorphismView>
+      </ScrollView>
    )
 }
 

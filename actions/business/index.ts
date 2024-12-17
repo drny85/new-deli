@@ -46,7 +46,11 @@ export const updateETA = async (orders: Order[]) => {
    }
 }
 
-export const updateBusinessCourier = (courierId: string, businessId: string): Promise<boolean> => {
+export const updateBusinessCourier = async (
+   courierId: string,
+   businessId: string
+): Promise<boolean> => {
+   // eslint-disable-next-line no-async-promise-executor
    return new Promise(async (resolve) => {
       try {
          const user = auth.currentUser

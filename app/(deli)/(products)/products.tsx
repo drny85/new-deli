@@ -113,7 +113,6 @@ const Products = () => {
                      products={products}
                      onCategoryPress={(category) => {
                         const index = items.findIndex((item) => item.title === category.name)
-                        console.log('index', index)
                         if (index !== -1) {
                            scrollToSection(index)
                         }
@@ -160,7 +159,8 @@ const ItemList = ({ item, color }: Props) => {
             width: '49%',
             marginBottom: 10,
             minHeight: SIZES.height * 0.1,
-            backgroundColor: 'blue'
+            borderColor: 'red',
+            borderWidth: !item.available ? 2 : 0
          }}>
          <TouchableOpacity
             onPress={() =>
@@ -223,7 +223,7 @@ const ItemList = ({ item, color }: Props) => {
                      {item.sizes.map((size, index) => (
                         <NeumorphismView key={index} padding={SIZES.sm * 0.5}>
                            <Text type="defaultSemiBold">
-                              ${size.size} ${item.price}
+                              ${size.size} ${item.sizes[index].price}
                            </Text>
                         </NeumorphismView>
                      ))}

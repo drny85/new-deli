@@ -1,5 +1,6 @@
 import Loading from '@/components/Loading'
 import NeoView from '@/components/NeoView'
+import PhoneCall from '@/components/PhoneCall'
 import MostPopularProducts from '@/components/restaurants/MostPopularProducts'
 import ProductsView from '@/components/restaurants/ProductsView'
 import Row from '@/components/Row'
@@ -12,7 +13,7 @@ import { useProducts } from '@/hooks/restaurants/useProducts'
 import { useRestaurant } from '@/hooks/restaurants/useRestaurant'
 import { useThemeColor } from '@/hooks/useThemeColor'
 import { useCartsStore } from '@/stores/cartsStore'
-import { FontAwesome } from '@expo/vector-icons'
+import { Feather, FontAwesome } from '@expo/vector-icons'
 import { FlashList } from '@shopify/flash-list'
 
 import { router, useLocalSearchParams } from 'expo-router'
@@ -36,8 +37,9 @@ import Animated, {
 
 const { height: screenHeight } = Dimensions.get('window')
 const HEADER_HEIGHT = screenHeight * 0.25 // 30% of the screen height
-const BAGDE_SIZE = 24
-const HEADER = SIZES.statusBarHeight + BAGDE_SIZE * 2 + SIZES.sm
+const BAGDE_SIZE = 30
+const HEADER = SIZES.statusBarHeight * 2.1
+const INFO_HEIGHT = screenHeight * 0.12
 
 type Params = {
    restaurantId: string
@@ -47,6 +49,7 @@ type Params = {
 const RestaurantDetails = () => {
    const scrollY = useSharedValue<number>(0)
    const backgroundColor = useThemeColor('background')
+   const ascentColor = useThemeColor('ascent')
    const { restaurantId, categoryName } = useLocalSearchParams<Params>()
    const listRef = useRef<FlashList<CategorizedProduct>>(null)
    const { restaurant, loading } = useRestaurant(restaurantId)
@@ -84,24 +87,45 @@ const RestaurantDetails = () => {
          }
       ]
    }))
-
-   const animatedImageStyle = useAnimatedStyle(() => ({
-      opacity: interpolate(
-         scrollY.value,
-         [0, HEADER_HEIGHT / 2, HEADER_HEIGHT],
-         [1, 0.5, 0],
-         'clamp'
-      )
+   const animatedBannerStyle = useAnimatedStyle(() => ({
+      transform: [
+         {
+            translateY: interpolate(scrollY.value, [0, HEADER_HEIGHT], [0, -HEADER_HEIGHT], 'clamp')
+         }
+      ],
+      height: interpolate(scrollY.value, [0, HEADER_HEIGHT], [INFO_HEIGHT, HEADER], 'clamp')
    }))
 
-   const animatedHeaderOpacity = useAnimatedStyle(() => ({
-      opacity: interpolate(scrollY.value, [0, HEADER], [1, 0], 'clamp')
+   const animatedImageStyle = useAnimatedStyle(() => ({
+      opacity: interpolate(scrollY.value, [0, HEADER_HEIGHT / 2], [1, 0], 'clamp')
+   }))
+
+   const opacity = useAnimatedStyle(() => ({
+      opacity: interpolate(scrollY.value, [0, HEADER_HEIGHT / 2], [1, 0], 'clamp')
+   }))
+
+   const animatedHeaderTitle = useAnimatedStyle(() => ({
+      top: interpolate(
+         scrollY.value,
+         [0, HEADER_HEIGHT / 2],
+         [0, SIZES.statusBarHeight + SIZES.md],
+         'clamp'
+      ),
+      transform: [
+         {
+            scale: interpolate(
+               scrollY.value,
+               [0, HEADER_HEIGHT, HEADER_HEIGHT + SIZES.statusBarHeight],
+               [1, 0, 1],
+               'clamp'
+            )
+         }
+      ]
    }))
 
    const index = data.findIndex((c) => c.title?.toLowerCase() === categoryName?.toLowerCase())
 
    useEffect(() => {
-      console.log(categoryName, index)
       if (data.length === 0 || !categoryName || categoryName === 'All Categories') return
       let timer: NodeJS.Timeout
 
@@ -142,24 +166,69 @@ const RestaurantDetails = () => {
                resizeMode="cover"
             />
          </Animated.View>
-
          <Animated.View
             style={[
+               styles.header,
                {
-                  height: HEADER,
-                  backgroundColor: backgroundColor,
-                  position: 'sticky',
-                  top: 0
+                  top: HEADER_HEIGHT,
+                  position: 'absolute',
+                  height: INFO_HEIGHT,
+                  backgroundColor,
+                  width: '100%',
+                  zIndex: 1
                },
-               animatedHeaderOpacity
-            ]}
-         />
+               animatedBannerStyle
+            ]}>
+            <Animated.View>
+               <Animated.Text
+                  numberOfLines={1}
+                  adjustsFontSizeToFit
+                  ellipsizeMode={'tail'}
+                  style={[
+                     {
+                        fontFamily: 'Lobster',
+                        position: 'sticky',
+                        fontSize: 24,
+                        top: 0,
+                        textAlign: 'center'
+                     },
+                     animatedHeaderTitle
+                  ]}>
+                  {restaurant.name}
+               </Animated.Text>
+               <Animated.View style={[{ padding: SIZES.sm }, opacity]}>
+                  <Row align="between">
+                     <View>
+                        <Text
+                           numberOfLines={1}
+                           adjustsFontSizeToFit
+                           ellipsizeMode="tail"
+                           type="defaultSemiBold"
+                           fontSize="medium">
+                           {restaurant.address?.slice(0, -5)}
+                        </Text>
+                        <Row containerStyle={{ gap: SIZES.lg, marginTop: 4 }}>
+                           <Text type="subtitle">{restaurant.phone}</Text>
+                           <PhoneCall phone={restaurant.phone || ''} size={26} />
+                        </Row>
+                     </View>
+                     <TouchableOpacity
+                        style={{ padding: SIZES.sm }}
+                        onPress={() =>
+                           router.push({ pathname: '/store-info', params: { id: restaurantId } })
+                        }>
+                        <Feather name="chevron-right" size={20} color={ascentColor} />
+                     </TouchableOpacity>
+                  </Row>
+               </Animated.View>
+            </Animated.View>
+         </Animated.View>
 
          <Header
             restaurantId={restaurantId!}
             cartQuantity={cartQuantity}
             scrollY={scrollY}
-            title={restaurant.name}
+            //title={restaurant.name}
          />
 
          <FlashList
@@ -170,12 +239,12 @@ const RestaurantDetails = () => {
             ref={listRef}
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{
-               paddingTop: SIZES.md,
-               paddingHorizontal: SIZES.md,
-               paddingBottom: SIZES.lg
+               paddingTop: HEADER + HEADER_HEIGHT + SIZES.md,
+               paddingHorizontal: SIZES.sm,
+               paddingBottom: SIZES.md
             }}
             ListHeaderComponent={
-               <View style={{ paddingTop: SIZES.statusBarHeight * 1.7 }}>
+               <View>
                   {products.some((p) => p.unitSold > 0) && (
                      <>
                         <Text type="header">Most Popular</Text>

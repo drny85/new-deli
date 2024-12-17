@@ -36,7 +36,7 @@ const ProductsView = forwardRef<FlashList<Product>, ProductsViewProps>(({ item, 
             estimatedItemSize={210}
             showsHorizontalScrollIndicator={false}
             renderItem={({ item }) => (
-               <View style={{ marginRight: 20, borderRadius: SIZES.lg * 2 }}>
+               <View style={{ marginRight: SIZES.sm, borderRadius: SIZES.lg * 2 }}>
                   <ProductCard
                      product={item}
                      onPress={() =>

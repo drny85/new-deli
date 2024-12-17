@@ -35,55 +35,68 @@ const Home = () => {
    if (loading) return <Loading />
    return (
       <Container>
-         <View style={{ width: '80%', alignSelf: 'center', marginVertical: SIZES.md }}>
-            <SegmentedControl
-               values={INDEXES}
-               selectedIndex={selectedIndex}
-               activeFontStyle={{
-                  fontSize: 20,
-                  fontFamily: 'Montserrat-Bold',
-                  color: ascentColor
-               }}
-               style={{ height: 42 }}
-               fontStyle={{ fontSize: 18, fontFamily: 'Montserrat', color: textColor }}
-               onChange={(event) => {
-                  setSelectedIndex(event.nativeEvent.selectedSegmentIndex)
-               }}
-            />
-         </View>
-         {!restaurant?.isOpen && (
+         <View
+            style={{
+               flex: 1,
+               width: '100%',
+               margin: 'auto'
+            }}>
             <View
                style={{
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  backgroundColor: errorColor,
-                  alignSelf: 'center',
                   width: '80%',
-                  borderRadius: SIZES.lg
+                  alignSelf: 'center',
+                  marginVertical: SIZES.md,
+                  justifyContent: 'center'
                }}>
-               <Row containerStyle={{ gap: SIZES.lg }}>
-                  <Text textColor="white" type="title">
-                     Store is closed
-                  </Text>
-                  <Button
-                     containerStyle={{ paddingHorizontal: SIZES.lg }}
-                     title="Open Store"
-                     type="soft"
-                     onPress={() => {
-                        if (!restaurant) return
-                        updateBusiness({
-                           ...restaurant,
-                           isOpen: true
-                        })
-                     }}
-                  />
-               </Row>
+               <SegmentedControl
+                  values={INDEXES}
+                  selectedIndex={selectedIndex}
+                  activeFontStyle={{
+                     fontSize: 20,
+                     fontFamily: 'Montserrat-Bold',
+                     color: ascentColor
+                  }}
+                  style={{ height: 42 }}
+                  fontStyle={{ fontSize: 18, fontFamily: 'Montserrat', color: textColor }}
+                  onChange={(event) => {
+                     setSelectedIndex(event.nativeEvent.selectedSegmentIndex)
+                  }}
+               />
             </View>
-         )}
-         {selectedIndex === 0 && <Dashboard orders={orders} />}
-         {selectedIndex === 1 && <GraphComponent orders={orders} />}
-         {selectedIndex === 2 && <Analytics orders={orders} />}
-         {selectedIndex === 3 && <Customers orders={orders} />}
+            {!restaurant?.isOpen && (
+               <View
+                  style={{
+                     justifyContent: 'center',
+                     alignItems: 'center',
+                     backgroundColor: errorColor,
+                     alignSelf: 'center',
+                     width: '80%',
+                     borderRadius: SIZES.lg
+                  }}>
+                  <Row containerStyle={{ gap: SIZES.lg }}>
+                     <Text textColor="white" type="title">
+                        Store is closed
+                     </Text>
+                     <Button
+                        containerStyle={{ paddingHorizontal: SIZES.lg }}
+                        title="Open Store"
+                        type="soft"
+                        onPress={() => {
+                           if (!restaurant) return
+                           updateBusiness({
+                              ...restaurant,
+                              isOpen: true
+                           })
+                        }}
+                     />
+                  </Row>
+               </View>
+            )}
+            {selectedIndex === 0 && <Dashboard orders={orders} />}
+            {selectedIndex === 1 && <GraphComponent orders={orders} />}
+            {selectedIndex === 2 && <Analytics orders={orders} />}
+            {selectedIndex === 3 && <Customers orders={orders} />}
+         </View>
       </Container>
    )
 }

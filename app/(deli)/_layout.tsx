@@ -1,13 +1,13 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 import { Redirect, Tabs } from 'expo-router'
 
 import { TabBarIcon } from '@/components/navigation/TabBarIcon'
 import { Colors } from '@/constants/Colors'
 import { useColorScheme } from '@/hooks/useColorScheme'
-
-import PopopOver from '@/components/PopopOver'
 import { useAuth } from '@/providers/authProvider'
 import { useRestaurant } from '@/hooks/restaurants/useRestaurant'
 import { useNotifications } from '@/hooks/useNotification'
+import { Image } from 'expo-image'
 
 export default function TabLayout() {
    const colorScheme = useColorScheme()
@@ -23,7 +23,6 @@ export default function TabLayout() {
 
    return (
       <>
-         <PopopOver />
          <Tabs
             screenOptions={{
                headerShadowVisible: false,
@@ -48,8 +47,12 @@ export default function TabLayout() {
                name="(orders)"
                options={{
                   title: 'Orders',
-                  tabBarIcon: ({ color, focused }) => (
-                     <TabBarIcon name={focused ? 'heart' : 'heart-outline'} color={color} />
+                  tabBarIcon: ({ color, size }) => (
+                     <Image
+                        source={require('@/assets/images/orders.png')}
+                        tintColor={color}
+                        style={{ width: size, height: size, objectFit: 'contain' }}
+                     />
                   )
                }}
             />

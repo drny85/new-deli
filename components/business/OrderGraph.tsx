@@ -6,13 +6,14 @@ import { getRandomColor } from '@/utils/getRandomColor'
 import SegmentedControl from '@react-native-segmented-control/segmented-control'
 import { useState } from 'react'
 import { ColorValue, ScrollView, StyleSheet } from 'react-native'
-import { PieChart, pieDataItem } from 'react-native-gifted-charts'
+import { PieChart } from 'react-native-gifted-charts'
 import Animated from 'react-native-reanimated'
 import { filterDataForGraph } from '../charts'
 import Row from '../Row'
 import { Text } from '../ThemedText'
 import { View } from '../ThemedView'
 import useOrientation from '@/hooks/useOrientation'
+import { FilterData } from '@/helpers/charts'
 
 interface GraphComponentProps {
    orders: Order[]
@@ -40,15 +41,16 @@ const GraphComponent: React.FC<GraphComponentProps> = ({ orders }) => {
                  ? 'Year To Date'
                  : 'All Time'
 
-   const transformDataForPieChart = (values: pieDataItem[]): pieDataItem[] => {
+   const transformDataForPieChart = (values: FilterData[]): FilterData[] => {
       // Determine the maximum value in categorized data for the "focused" property
       const maxValue = Math.max(...values?.map(({ value }) => value), 0)
 
-      return values.map(({ text, value }) => ({
+      return values.map(({ label, value }) => ({
          value,
          color: getRandomColor(), // Generate random colors for the chart
-         text, // Use category (e.g., Morning, Afternoon, etc.) as text
-         focused: value === maxValue
+         text: label || '', // Use category (e.g., Morning, Afternoon, etc.) as text
+         focused: value === maxValue,
+         label
 
          // Mark the highest value as focused
       }))

@@ -1,0 +1,413 @@
+{
+   "welcome": "Hi, {{name}}",
+   "tabs": {
+      "home": "Home",
+      "appointments": "Appointments",
+      "barbers": "Barbers",
+      "profile": "Profile",
+      "stuffs": "Utills",
+      "earnings": "Earnings"
+   },
+   "login": {
+      "username": "Username",
+      "password": "Password",
+      "button": "Login",
+      "no_login": "Please login to view your appointments"
+   },
+   "profile": {
+      "theme": "Theme",
+      "preferences": "Preferences",
+      "communication": "Communication",
+      "language": "Language",
+      "contact": "Contact Us",
+      "logout": "Log Out",
+      "name": "Change Name / Phone",
+      "terms": "Terms and Conditions",
+      "privacy": "Privacy Policy",
+      "susbcription": "Suscription",
+      "minutes_interval": "Booking Interval",
+      "delete": "Delete Account",
+      "available": "I am Available",
+      "update_profile": "Update Profile",
+      "confirmation": {
+         "delete": {
+            "title": "Delete Account",
+            "message": "Are you sure you want to delete your account?",
+            "yes": "Yes"
+         },
+         "logout": {
+            "title": "Log Out",
+            "message": "Are you sure you want to log out?",
+            "yes": "Yes"
+         }
+      }
+   },
+   "days": {
+      "Mon": "Mon",
+      "Tue": "Tue",
+      "Wed": "Wed",
+      "Thu": "Thu",
+      "Fri": "Fri",
+      "Sat": "Sat",
+      "Sun": "Sun"
+   },
+   "longDays": {
+      "Monday": "Monday",
+      "Tuesday": "Tuesday",
+      "Wednesday": "Wednesday",
+      "Thursday": "Thursday",
+      "Friday": "Friday",
+      "Saturday": "Saturday",
+      "Sunday": "Sunday"
+   },
+   "months": {
+      "January": "January",
+      "February": "February",
+      "March": "March",
+      "April": "April",
+      "May": "May",
+      "June": "June",
+      "July": "July",
+      "August": "August",
+      "September": "September",
+      "October": "October",
+      "November": "November",
+      "December": "December"
+   },
+
+   "booking": {
+      "cash": "Cash Only",
+      "select_service": "Select a Service",
+      "service_required": "Service Required",
+      "service_required_message": "You must select a service to book an appointment",
+      "payment": "Payment will be make in cash after service complition",
+      "confirm": "Confirm & Book",
+      "review": "Review & Confirm",
+      "clients": "Clients",
+      "search_clients": "Search Clients",
+      "name_required": "Name & Number are required",
+      "no_services": "{{name}} has not listed any services yet. Please let him know!",
+      "no_date_title": "Select a Date & Time",
+      "no_date_message": "You must select a date & time"
+   },
+   "service": {
+      "title": "Services",
+      "no_services": "No services available",
+      "search": "Search Services",
+      "details": "Service Details",
+      "edit": {
+         "title": "Edit Service",
+         "update": "Update Service",
+         "placeholder": "Adult Haircut",
+         "add": "Add Service",
+         "duration": "Service Duration",
+         "price": "Service Price",
+         "description": "Service Description",
+         "image": "Select an image for the service",
+         "name": "Service's name"
+      }
+   },
+   "reviews": {
+      "add": "Add Review",
+      "no_review": "No reviews",
+      "title": "Reviews",
+      "alert": {
+         "title": "No Completed Appointment",
+         "message": "You must have a completed appointment to leave a review"
+      }
+   },
+
+   "button": {
+      "book": "Book Now",
+      "cancel": "Cancel",
+      "reschedule": "Re-Schedule",
+      "continue": "Continue",
+      "update": "Update",
+      "edit": "Edit",
+      "back": "Back",
+      "save": "Save",
+      "close": "Close",
+      "confirm": "Confirm",
+      "complete": "Complete",
+      "delete": "Delete",
+      "no_action": "No Action"
+   },
+   "schedule": {
+      "name": "Final Schedule",
+      "off": "Day Off",
+      "break": "Lunch Break",
+      "startTime": "Start Time",
+      "endTime": "End Time",
+      "message": "This day is marked as Day off",
+      "button": {
+         "review": "Review & Save",
+         "update": "Update Schedule",
+         "close": "Close"
+      }
+   },
+   "appointment": {
+      "today": "Today",
+      "changes": "Changes Made",
+      "new": "New Appointments",
+      "details": {
+         "main": "Appointment Details",
+         "title": "Service Details"
+      },
+      "no_appointment": "No Appointments",
+
+      "available_today": "Appointments available today",
+      "toggle": {
+         "upcoming": "Upcoming",
+         "past": "Past"
+      },
+      "status": "Status",
+      "date": "Date",
+      "time": "Time",
+      "save": "Save Appointment",
+      "mark_completed": "Mark as Completed",
+      "filter": {
+         "title": "Filter Appointments By",
+         "Pending": "Pending",
+         "Confirmed": "Confirmed",
+         "Cancelled": "Cancelled",
+         "Completed": "Completed",
+         "No-show": "No Show",
+         "button": "Apply Filter",
+         "clear": "Clear Filters"
+      },
+      "broadcast": {
+         "heading": "Broadcast Message",
+         "title": "Title",
+         "message": "Message",
+         "placeholder": "Type a message for all your clients",
+         "button": "Send Message",
+         "verify": "Verify Message"
+      },
+      "confirmation": {
+         "cancel": {
+            "title": "Cancel Appointment",
+            "message": "Are you sure you want to cancel this appointment?",
+            "yes": "Yes"
+         }
+      }
+   },
+   "alerts": {
+      "cancel": {
+         "title": "Cancel Appointment",
+         "message": "Are you sure you want to cancel this appointment?",
+         "yes": "Yes"
+      },
+      "success": "Success",
+      "confirmed": "Appointment Confirmed",
+      "error": "Error",
+      "warning": "Warning",
+      "updated": "Updated Successfully",
+      "cannot": "Cannot Complete Appointment",
+      "cancelled": "Appointment Cancelled",
+      "completed": "Appointment Completed",
+      "info": "Info",
+      "maximum_services": "Maximum number of {{number}} services reached ",
+      "no_subscription": "{{name}} is not available for booking",
+      "booked": "Appointment Booked!",
+      "no_show": {
+         "title": "No Show",
+         "message": "Are you sure you want to mark this appointment as No Show?",
+         "yes": "Yes"
+      },
+      "conflicts": {
+         "title": "Appointment Conflict",
+         "message": "The selected time slot is already booked."
+      }
+   },
+
+   "barber": {
+      "search": "Search Barbers",
+      "title": "Barbers",
+      "rating": "rating",
+      "distance": "Distance",
+      "no_barber": "No barbers available",
+      "review": "reviews",
+      "no_review": "no reviews",
+      "about": "About {{name}}",
+      "top_services": "Top Services",
+      "no_services": "No services available",
+      "schedule": "Schedule",
+      "no_available": "is not available today",
+      "filter": "Filter Barbers",
+      "clear": "Clear",
+      "available": "Available Today",
+      "info_options": {
+         "info": "Info",
+         "gallery": "Galleria",
+         "reviews": "Reviews",
+         "services": "Services",
+         "schedule": "Schedule"
+      }
+   },
+
+   "settings": {
+      "title": "Settings",
+      "language": "Language",
+      "theme": "Theme",
+      "logout": "Logout"
+   },
+   "signup": {
+      "login": "Login",
+      "signup": "Sign Up",
+      "title": "Welcome",
+      "name": "Full Name",
+      "phone": "Phone Number",
+      "email": "Email Address",
+      "password": "Password",
+      "confirmPassword": "Confirm Password",
+      "forgot": "Forgot Password?",
+      "placeholder": {
+         "name": "Enter your full name",
+         "phone": "Enter your phone number",
+         "email": "Enter your email address",
+         "password": "Enter your password",
+         "confirmPassword": "Confirm your password"
+      },
+      "complition": {
+         "name": "Barbershop's Name",
+         "address": "Type your barbershop's address",
+         "about": "Tell us about you (optional)"
+      },
+
+      "button": "Sign Up",
+      "toggle": "Are you signin up as a Barber?"
+   },
+
+   "home": {
+      "my_barber": "My Barber",
+      "find_barber": "Find Barber",
+      "miles": "miles",
+      "signup": "Want to sign up as a Barber?",
+      "signup_title": "Sign Up",
+      "rating": "rating",
+      "estimated": "Today's Estimated",
+      "earned": "Earned",
+      "pending": "Pendiente",
+      "waiting": {
+         "completion": "Waiting for completion",
+         "confirmation": "Waiting for confirmation",
+         "cashout": "Waiting for cashout"
+      },
+      "appointment": {
+         "upcoming": "Upcoming Appointment",
+         "no_appointment": "No Appointments",
+         "no_barber": "No barber Available"
+      },
+      "greeting": "Hello, {{name}}!"
+   },
+   "subscription": {
+      "end": "End Free Trial & Subscribe Now",
+      "pay": "Subscribe",
+      "title": "Subscription",
+      "heading": "Boost Your Barber Business with FadeFlow App",
+      "button": "Subscribe Now",
+      "monthly": "Billed every month",
+      "trial_bold": "14-Day Free Trial",
+      "trial": "Try all premium features risk-free",
+      "exclusive_bold": "Exlusive Benefits",
+      "exclusive": "Get access to exclusive features and benefits, accept priority bookings, and access advanced client management tools",
+      "business_bold": "Business Insights",
+      "business": "Gain valuable insights into your business performance and client engagement, track your earnings and manage your schedule",
+      "cancel": "Cancel Anytime - No long-term commitment"
+   },
+   "sorting": {
+      "sortBy": "Sort By",
+      "date": "Date",
+      "amount": "Amount",
+      "status": "Status",
+      "customer": "Customer",
+      "search": "Search by name, status or price",
+      "name": "Search by client's name",
+      "show": {
+         "all": "Expand All",
+         "hide": "Hide All"
+      }
+   },
+   "misc": {
+      "of": "of",
+      "trial_expired": "Your trial has expired. Please subscribe to continue using the app.",
+      "created_at": "created on",
+      "subscribe": "Subscribe Now",
+      "remaining_days": "Remaining Days",
+      "add_service": "Add Service",
+      "must_subscribe": "You must subscribe in order to get appointments",
+      "free_trial": "Your Accouint is on {{days}} DaysFree-Trial",
+      "no_data": "No data available",
+      "no_available": "No Available",
+      "no_available_message": "If you are not available, client cannot book appointments with you.",
+      "no_services_added": "Please add services to get started. You wont be able to receive appointments if you dont have at least a service listed."
+   },
+   "terms": {
+      "section1": {
+         "title": "1. Introduction",
+         "message": "Welcome to FadeFlow! By using our platform,you agree to comply with and be bound by the following terms of use. Please read them carefully."
+      },
+      "section2": {
+         "title": "2. Barber Responsibilities",
+         "message": "As a barber, you are responsible for providing professional and courteous services to your clients. You agree to honor all bookings made through our app and to maintain the highest tandards of hygiene and safety."
+      },
+      "section3": {
+         "title": "3. Booking and Cancellation",
+         "message": " You must manage your availability accurately in the app. Any cancellations should be done in a timely manner, and you must notify your clients immediately if you are unable to fulfill a booking."
+      },
+      "section4": {
+         "title": "4. Payment and Refunds",
+         "message": "All payments are final and non-refundable. If a client cancels a booking, you will be responsible for refunding the client's payment. If payment is collected in cash at the store, then previous statament do not apply"
+      },
+      "section5": {
+         "title": "5. Privacy and Data Protection",
+         "message": "Your privacy is important to us. We value your privacy and will not share your personal information with any third parties without your consent."
+      },
+      "section6": {
+         "title": "6. Account Termination",
+         "message": " We reserve the right to terminate your account at any time if you fail to comply with these terms or engage in behavior detrimental to the platform or its users."
+      },
+      "section7": {
+         "title": "7. Modifications to the Terms",
+         "message": "We reserve the right to modify these terms at any time. If we make any significant changes, we will notify you by email or through the app, and continued use of the app constitutes your acceptance of the new terms"
+      },
+      "section8": {
+         "title": "8. Contact Information",
+         "message": "If you have any questions or concerns about these terms, please contact us at {{email}}"
+      }
+   },
+   "privacy": {
+      "section1": {
+         "title": "1. Introduction",
+         "message": " This Privacy Policy outlines how {{name}} collects, uses, and protects your personal information. By using our app, you consent to the data practices described in this policy."
+      },
+      "section2": {
+         "title": "2. Information Collection",
+         "message": "We collect personal information such as your name, email address, and phone number when you sign up for an account or use our app."
+      },
+      "section3": {
+         "title": "3. Information Usage",
+         "message": "We use your personal information to provide and improve our services, communicate with you, and personalize your experience."
+      },
+      "section4": {
+         "title": "4. Information Sharing",
+         "message": "We do not sell or share your personal information with third parties without your consent."
+      },
+      "section5": {
+         "title": "5. Data Security",
+         "message": "We implement security measures to protect your personal information from unauthorized access or disclosure.  However, please be aware that no method of transmission over the internet or method of electronic storage is 100% secure."
+      },
+      "section6": {
+         "title": "6. Changes to Privacy Policy",
+         "message": "We reserve the right to update this privacy policy at any time. If we make any significant changes, we will notify you by email or through the app, and continued use of the app constitutes your acceptance of the new policy."
+      },
+      "section7": {
+         "title": "7. Account Termination",
+         "message": "If you wish to terminate your account, you can do so by contacting us at {{email}} or by going to your profile section within the app. Please note that we may retain some information for audit purposes, and it is your responsibility to delete or disable your account after termination."
+      },
+      "section8": {
+         "title": "8. Contact Information",
+         "message": "If you have any questions or concerns about this privacy policy, please contact us at {{email}}"
+      }
+   }
+}

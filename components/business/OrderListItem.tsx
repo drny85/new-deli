@@ -27,7 +27,8 @@ const OrderListItem = ({ item }: Props) => {
             margin: SIZES.sm,
             flexDirection: 'row',
             justifyContent: 'space-evenly',
-            borderRadius: SIZES.md
+            borderRadius: SIZES.md,
+            paddingHorizontal: SIZES.sm
          }}>
          <NeumorphismView>
             <TouchableOpacity
