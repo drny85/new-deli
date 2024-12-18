@@ -17,6 +17,7 @@ import { useOrderFlowStore } from '@/stores/orderFlowStore'
 import { generateUniqueId } from '@/utils/generateUniqueId'
 import { router, useLocalSearchParams } from 'expo-router'
 import { useEffect, useState } from 'react'
+import { Platform } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { toast } from 'sonner-native'
 
@@ -86,7 +87,15 @@ const RestaurantCart = () => {
 
    if (loading || !restaurant || !cart) return <Loading />
    return (
-      <View style={{ flex: 1, backgroundColor, paddingTop: top }}>
+      <View
+         style={{
+            flex: 1,
+            backgroundColor,
+            paddingTop: Platform.select({
+               ios: top,
+               android: top + SIZES.md
+            })
+         }}>
          <Row align="between" containerStyle={{ paddingHorizontal: SIZES.md }}>
             <BackButton
                containerStyle={{ position: 'relative', marginTop: 0, top: 0, left: 0 }}

@@ -6,6 +6,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { FlatList, View } from 'react-native'
 import Loading from '../Loading'
 import CategoryTitle from './CategoryTitle'
+import { categoriesArray } from '@/helpers/categoriesArray'
 
 type Props = {
    products: Product[]
@@ -17,26 +18,7 @@ const AllCategoriesView = ({ onCategoryPress }: Props) => {
    const [index, setIndex] = useState<number>(0)
    const [selected, setSelected] = useState('All Categories')
    const viewRef = useRef<FlatList<Category>>(null)
-   const data = useMemo(() => {
-      // Deduplicate categories using a Set for IDs
-      const seenIds = new Set<string>()
-
-      const uniqueCategories = products
-         .map((p) => p.category)
-         .filter((category): category is { id: string; name: string } => {
-            // TypeScript narrowing with type predicate
-            if (!category || !category.id) return false // Exclude null/undefined
-            if (seenIds.has(category.id)) return false // Deduplicate by ID
-            seenIds.add(category.id)
-            return true // Valid category
-         })
-
-      // Add "All Categories" and sort alphabetically
-      return [
-         { id: 'all', name: 'All Categories' },
-         ...uniqueCategories.sort((a, b) => (a.name > b.name ? 1 : -1))
-      ]
-   }, [products])
+   const data = useMemo(() => categoriesArray(products), [products])
 
    useEffect(() => {
       viewRef.current?.scrollToIndex({

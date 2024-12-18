@@ -1,10 +1,11 @@
-import { TouchableOpacity, useColorScheme, View, ViewStyle } from 'react-native'
+import { Platform, TouchableOpacity, useColorScheme, View, ViewStyle } from 'react-native'
 import React from 'react'
 import NeoView from './NeoView'
 import { router } from 'expo-router'
 import { FontAwesome } from '@expo/vector-icons'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useThemeColor } from '@/hooks/useThemeColor'
+import { SIZES } from '@/constants/Colors'
 
 type Props = {
    onPress?: () => void
@@ -17,7 +18,16 @@ const BackButton = ({ onPress, containerStyle }: Props) => {
    return (
       <View
          style={[
-            { position: 'absolute', left: 20, top, zIndex: 10, marginTop: -6 },
+            {
+               position: 'absolute',
+               left: 20,
+               top: Platform.select({
+                  ios: top,
+                  android: top + SIZES.md
+               }),
+               zIndex: 10,
+               marginTop: -6
+            },
             containerStyle
          ]}>
          <TouchableOpacity

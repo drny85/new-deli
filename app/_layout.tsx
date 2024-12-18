@@ -73,6 +73,7 @@ export default function RootLayout() {
          SplashScreen.hide()
       }
    }, [appIsReady, loaded])
+   console.log(loaded)
 
    if (!appIsReady || !loaded) {
       return null

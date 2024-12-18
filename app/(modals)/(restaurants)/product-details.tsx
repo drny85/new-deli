@@ -24,7 +24,14 @@ import * as Haptics from 'expo-haptics'
 import { router, useLocalSearchParams } from 'expo-router'
 import { Image } from 'moti'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { Keyboard, ScrollView, StyleSheet, TouchableOpacity, useColorScheme } from 'react-native'
+import {
+   Keyboard,
+   Platform,
+   ScrollView,
+   StyleSheet,
+   TouchableOpacity,
+   useColorScheme
+} from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import NeumorphismView from '@/components/NeumorphismView'
 import { toast } from 'sonner-native'
@@ -39,6 +46,7 @@ type PropsParams = {
 
 const ProductDetail = () => {
    const { productId, businessId, itemId } = useLocalSearchParams<PropsParams>()
+   const { top } = useSafeAreaInsets()
    const backgroundColor = useThemeColor('background')
    const isDark = useColorScheme() === 'dark'
    const ascent = useThemeColor('ascent')
@@ -149,7 +157,7 @@ const ProductDetail = () => {
          description: 'Your item has been added to cart',
          duration: 2000,
          icon: <Ionicons name="cart-outline" size={28} color={textColor} />,
-         position: 'top-center'
+         position: 'bottom-center'
       })
       router.back()
    }
@@ -249,7 +257,10 @@ const ProductDetail = () => {
             style={{
                position: 'absolute',
                paddingHorizontal: SIZES.lg,
-               top: SIZES.statusBarHeight,
+               top: Platform.select({
+                  ios: top,
+                  android: top + SIZES.md
+               }),
                zIndex: 99,
                width: '100%',
                flexDirection: 'row',

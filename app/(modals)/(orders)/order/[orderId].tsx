@@ -96,18 +96,18 @@ const OrderDetails = () => {
    if (loading || !order) return <Loading />
 
    return (
-      <View style={{ flex: 1, paddingTop: top, backgroundColor }}>
-         <BackButton
-            onPress={() => {
-               if (shouldReplace) {
-                  router.replace('/orders')
-                  return
-               }
-               router.back()
-            }}
-         />
+      <View style={{ flex: 1, paddingTop: top + SIZES.sm, backgroundColor }}>
          <Row align="between" containerStyle={{ paddingHorizontal: SIZES.md }}>
-            <Text />
+            <BackButton
+               containerStyle={{ position: 'relative', top: 3, left: 0 }}
+               onPress={() => {
+                  if (shouldReplace) {
+                     router.replace('/orders')
+                     return
+                  }
+                  router.back()
+               }}
+            />
             <Text type="header" center>
                {showDetails ? 'Order Details' : 'Order Status'}
             </Text>

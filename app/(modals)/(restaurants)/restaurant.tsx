@@ -17,11 +17,13 @@ import { Feather, FontAwesome } from '@expo/vector-icons'
 import { FlashList } from '@shopify/flash-list'
 
 import { router, useLocalSearchParams } from 'expo-router'
+import React from 'react'
 import { useEffect, useMemo, useRef } from 'react'
 import {
    Dimensions,
    NativeScrollEvent,
    NativeSyntheticEvent,
+   Platform,
    StyleSheet,
    TouchableOpacity,
    useColorScheme
@@ -34,12 +36,13 @@ import Animated, {
    useAnimatedStyle,
    useSharedValue
 } from 'react-native-reanimated'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 const { height: screenHeight } = Dimensions.get('window')
 const HEADER_HEIGHT = screenHeight * 0.25 // 30% of the screen height
 const BAGDE_SIZE = 30
-const HEADER = SIZES.statusBarHeight * 2.1
 const INFO_HEIGHT = screenHeight * 0.12
+const TOP_PADDING = HEADER_HEIGHT + INFO_HEIGHT
 
 type Params = {
    restaurantId: string
@@ -47,9 +50,12 @@ type Params = {
 }
 
 const RestaurantDetails = () => {
+   const { top } = useSafeAreaInsets()
+   const HEADER = top * 2
    const scrollY = useSharedValue<number>(0)
    const backgroundColor = useThemeColor('background')
    const ascentColor = useThemeColor('ascent')
+   const textColor = useThemeColor('text')
    const { restaurantId, categoryName } = useLocalSearchParams<Params>()
    const listRef = useRef<FlashList<CategorizedProduct>>(null)
    const { restaurant, loading } = useRestaurant(restaurantId)
@@ -132,7 +138,7 @@ const RestaurantDetails = () => {
       if (index > 0) {
          // listRef.current?.scrollToIndex({ index, animated: true })
 
-         setTimeout(() => {
+         timer = setTimeout(() => {
             scrollToIndex(index)
          }, 800)
       }
@@ -190,7 +196,8 @@ const RestaurantDetails = () => {
                         position: 'sticky',
                         fontSize: 24,
                         top: 0,
-                        textAlign: 'center'
+                        textAlign: 'center',
+                        color: textColor
                      },
                      animatedHeaderTitle
                   ]}>
@@ -239,7 +246,7 @@ const RestaurantDetails = () => {
             ref={listRef}
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{
-               paddingTop: HEADER + HEADER_HEIGHT + SIZES.md,
+               paddingTop: TOP_PADDING + SIZES.md,
                paddingHorizontal: SIZES.sm,
                paddingBottom: SIZES.md
             }}
@@ -308,6 +315,7 @@ const Header = ({
    cartQuantity: number
    scrollY: SharedValue<number>
 }) => {
+   const { top } = useSafeAreaInsets()
    const textColor = useThemeColor('ascent')
    const isDark = useColorScheme() === 'dark'
    const HEADER_HEIGHT = screenHeight * 0.3
@@ -340,7 +348,10 @@ const Header = ({
             right: 0,
             paddingHorizontal: SIZES.sm,
             zIndex: 20,
-            paddingTop: SIZES.statusBarHeight,
+            paddingTop: Platform.select({
+               ios: top,
+               android: top + SIZES.sm
+            }),
             paddingBottom: SIZES.sm,
             backgroundColor: 'transparent'
          }}>
@@ -446,8 +457,7 @@ const Header = ({
 
 const styles = StyleSheet.create({
    container: {
-      flex: 1,
-      backgroundColor: '#fff'
+      flex: 1
    },
    header: {
       position: 'absolute',

@@ -2,7 +2,6 @@ import { TouchableOpacity } from 'react-native'
 import React from 'react'
 import { SIZES } from '@/constants/Colors'
 import { P_Size } from '@/shared/types'
-import NeoView from '../NeoView'
 import { useThemeColor } from '@/hooks/useThemeColor'
 import { View } from '../ThemedView'
 import { Text } from '../ThemedText'
@@ -81,18 +80,20 @@ const SizePicker = ({
                            </Text>
                         </NeumorphismView>
                      ) : (
-                        <NeoView
-                           containerStyle={{
-                              borderRadius: SIZES.lg * 1.5
-                           }}
-                           innerStyleContainer={{
+                        <View
+                           style={{
+                              padding: SIZES.sm,
                               borderRadius: SIZES.lg * 1.5,
-                              paddingHorizontal: SIZES.md,
+                              paddingHorizontal: SIZES.lg,
                               paddingVertical: SIZES.sm,
                               borderColor:
                                  selected && selected.id === p.id ? ascent : 'transparent',
                               borderWidth: 1,
-                              width: SIZES.width * 0.4
+                              width: 'auto',
+                              minWidth: SIZES.width / 3.5,
+                              justifyContent: 'center',
+                              alignItems: 'center',
+                              boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)'
                            }}>
                            <Text
                               center
@@ -101,7 +102,7 @@ const SizePicker = ({
                               }>
                               {p.size}
                            </Text>
-                        </NeoView>
+                        </View>
                      )}
                   </TouchableOpacity>
                ))}

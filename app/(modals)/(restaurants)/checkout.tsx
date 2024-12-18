@@ -32,7 +32,7 @@ import { Image } from 'expo-image'
 import { Redirect, router, useLocalSearchParams } from 'expo-router'
 import { AnimatePresence, MotiView } from 'moti'
 import { useEffect, useRef, useState } from 'react'
-import { Keyboard, ScrollView, StyleSheet, TouchableOpacity } from 'react-native'
+import { Keyboard, Platform, ScrollView, StyleSheet, TouchableOpacity } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { toast } from 'sonner-native'
 
@@ -195,7 +195,15 @@ const Checkout = () => {
          cartTotal={cart.total}
          businessName={restaurant.name}
          connectedId={restaurant.stripeAccount}>
-         <View style={{ flex: 1, paddingTop: top, backgroundColor }}>
+         <View
+            style={{
+               flex: 1,
+               paddingTop: Platform.select({
+                  ios: top,
+                  android: top + SIZES.md
+               }),
+               backgroundColor
+            }}>
             <BackButton />
             <View style={{ alignSelf: 'flex-end', marginRight: SIZES.md }}>
                <Row align="between" containerStyle={{ width: '66%' }}>

@@ -1,5 +1,5 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 import MapHeader from '@/components/maps/MapHeader'
-import NeumorphismView from '@/components/NeumorphismView'
 import PickupRestaurantsList from '@/components/restaurants/PickupRestaurantsList'
 import { View } from '@/components/ThemedView'
 import { SIZES } from '@/constants/Colors'
@@ -8,11 +8,10 @@ import { ORDER_TYPE } from '@/shared/types'
 import { useOrderFlowStore } from '@/stores/orderFlowStore'
 import { useRestaurantsStore } from '@/stores/restaurantsStore'
 import { customMapStyleLight } from '@/utils/customMap'
-import { MaterialCommunityIcons } from '@expo/vector-icons'
+import { Image } from 'expo-image'
 import { router } from 'expo-router'
-import { SymbolView } from 'expo-symbols'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { FlatList, Platform, useColorScheme } from 'react-native'
+import { FlatList } from 'react-native'
 import MapView, { Marker, MarkerPressEvent, Region } from 'react-native-maps'
 
 const CARD_HEIGHT = 220
@@ -27,7 +26,7 @@ const PickUpView = () => {
    const mapRef = useRef<MapView>(null)
    const [region, setRegion] = useState<Region>()
    const ascentColor = useThemeColor('ascent')
-   const isDark = useColorScheme() === 'dark'
+
    const { restaurants } = useRestaurantsStore()
    const { setOrderType } = useOrderFlowStore()
    const flatListRef = useRef<FlatList>(null)
@@ -123,30 +122,26 @@ const PickUpView = () => {
                         identifier={restaurant.id}
                         title={restaurant.name}
                         description={restaurant.address?.slice(0, -15)}>
-                        <NeumorphismView
-                           borderRadius={50}
+                        <View
                            style={{
-                              height: 50,
-                              width: 50,
+                              width: 60,
+                              height: 60,
+                              backgroundColor: 'white',
+                              borderRadius: 30,
                               justifyContent: 'center',
-                              alignItems: 'center'
-                           }}
-                           backgroundColor="#fff">
-                           {Platform.OS === 'ios' && (
-                              <SymbolView
-                                 name="fork.knife"
-                                 size={30}
-                                 tintColor={isDark ? '#ffffff' : ascentColor}
-                              />
-                           )}
-                           {Platform.OS !== 'ios' && (
-                              <MaterialCommunityIcons
-                                 name="silverware-fork-knife"
-                                 size={20}
-                                 color={isDark ? '#ffffff' : ascentColor}
-                              />
-                           )}
-                        </NeumorphismView>
+                              alignItems: 'center',
+                              boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)'
+                           }}>
+                           <Image
+                              source={require('@/assets/images/folks.png')}
+                              style={{
+                                 resizeMode: 'cover',
+                                 height: 50,
+                                 width: 50
+                              }}
+                              tintColor={ascentColor}
+                           />
+                        </View>
                      </Marker>
                   ))}
                </MapView>
